@@ -26,7 +26,20 @@ jobs:
           gradle-version: '8.7'
 
       - name: Build APK
-        run: gradle assembleDebug --stacktrace --info
+        run: |
+          set +e
+          gradle assembleDebug --stacktrace --info > build-error.txt 2>&1
+          RESULT=$?
+          cat build-error.txt
+          echo "BUILD_RESULT=$RESULT"
+          exit $RESULT
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PriceYar-build-log
+          path: build-error.txt
 
       - name: Upload APK
         if: success()
