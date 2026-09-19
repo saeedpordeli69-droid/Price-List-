@@ -11,17 +11,19 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
 
+    private var pageLoaded = false
+    private var pendingIncomingUri: Uri? = null
+
     companion object {
-        private const val REQUEST_CREATE_FILE = 1001
         private const val REQUEST_OPEN_FILE = 1002
     }
-
-    private var pendingExportJson: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +35,19 @@ class MainActivity : AppCompatActivity() {
         webView.settings.allowFileAccess = true
         webView.settings.allowContentAccess = true
 
-        webView.webViewClient = WebViewClient()
+        webView.webViewClient = object : WebViewClient() {
+
+            override fun onPageFinished(
+                view: WebView?,
+                url: String?
+            ) {
+                super.onPageFinished(view, url)
+
+                pageLoaded = true
+                processPendingIncomingFile()
+            }
+        }
+
         webView.webChromeClient = WebChromeClient()
 
         webView.addJavascriptInterface(
@@ -46,6 +60,69 @@ class MainActivity : AppCompatActivity() {
         webView.loadUrl(
             "file:///android_asset/index.html"
         )
+
+        handleIncomingIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+
+        setIntent(intent)
+
+        handleIncomingIntent(intent)
+    }
+
+    private fun handleIncomingIntent(
+        incomingIntent: Intent?
+    ) {
+        if (incomingIntent == null) {
+            return
+        }
+
+        val action = incomingIntent.action
+
+        var uri: Uri? = null
+
+        if (action == Intent.ACTION_VIEW) {
+
+            uri = incomingIntent.data
+
+        } else if (action == Intent.ACTION_SEND) {
+
+            uri =
+                if (android.os.Build.VERSION.SDK_INT >= 33) {
+                    incomingIntent.getParcelableExtra(
+                        Intent.EXTRA_STREAM,
+                        Uri::class.java
+                    )
+                } else {
+                    @Suppress("DEPRECATION")
+                    incomingIntent.getParcelableExtra<Uri>(
+                        Intent.EXTRA_STREAM
+                    )
+                }
+        }
+
+        if (uri != null) {
+
+            pendingIncomingUri = uri
+
+            processPendingIncomingFile()
+        }
+    }
+
+    private fun processPendingIncomingFile() {
+
+        if (!pageLoaded) {
+            return
+        }
+
+        val uri = pendingIncomingUri
+            ?: return
+
+        pendingIncomingUri = null
+
+        readImportFile(uri)
     }
 
     inner class AndroidBridge {
@@ -58,7 +135,10 @@ class MainActivity : AppCompatActivity() {
                 MODE_PRIVATE
             )
                 .edit()
-                .putString("data", json)
+                .putString(
+                    "data",
+                    json
+                )
                 .apply()
 
             updateWidget()
@@ -71,19 +151,125 @@ class MainActivity : AppCompatActivity() {
                 "priceyar",
                 MODE_PRIVATE
             )
-                .getString("data", "") ?: ""
+                .getString(
+                    "data",
+                    ""
+                ) ?: ""
         }
 
+        @JavascriptInterface
+        fun sharePriceList(
+            json: String,
+            fileName: String
+        ) {
+
+            try {
+
+                val sharedDirectory =
+                    File(
+                        cacheDir,
+                        "shared"
+                    )
+
+                if (!sharedDirectory.exists()) {
+                    sharedDirectory.mkdirs()
+                }
+
+                val safeFileName =
+                    sanitizeFileName(fileName)
+
+                val file =
+                    File(
+                        sharedDirectory,
+                        safeFileName
+                    )
+
+                file.writeText(
+                    json,
+                    Charsets.UTF_8
+                )
+
+                val uri =
+                    FileProvider.getUriForFile(
+                        this@MainActivity,
+                        "${packageName}.fileprovider",
+                        file
+                    )
+
+                val sendIntent =
+                    Intent(
+                        Intent.ACTION_SEND
+                    ).apply {
+
+                        type =
+                            "application/json"
+
+                        putExtra(
+                            Intent.EXTRA_STREAM,
+                            uri
+                        )
+
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            "لیست جدید قیمت‌ها برای به‌روزرسانی لمس کنید."
+                        )
+
+                        addFlags(
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        )
+
+                        clipData =
+                            android.content.ClipData.newRawUri(
+                                "PriceYar",
+                                uri
+                            )
+                    }
+
+                val chooser =
+                    Intent.createChooser(
+                        sendIntent,
+                        "ارسال لیست قیمت با"
+                    )
+
+                startActivity(chooser)
+
+                webView.evaluateJavascript(
+                    "window.shareStarted && window.shareStarted();",
+                    null
+                )
+
+            } catch (e: Exception) {
+
+                webView.evaluateJavascript(
+                    "window.shareFailed && window.shareFailed();",
+                    null
+                )
+            }
+        }
+
+        /*
+         * برای سازگاری با نسخه‌های قبلی HTML
+         * اگر هنوز exportPriceList صدا زده شود،
+         * همان اشتراک‌گذاری جدید انجام می‌شود.
+         */
         @JavascriptInterface
         fun exportPriceList(
             json: String,
             fileName: String
         ) {
+            sharePriceList(
+                json,
+                fileName
+            )
+        }
 
-            pendingExportJson = json
+        @JavascriptInterface
+        fun importPriceList() {
 
             val intent =
-                Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                Intent(
+                    Intent.ACTION_OPEN_DOCUMENT
+                ).apply {
 
                     addCategory(
                         Intent.CATEGORY_OPENABLE
@@ -93,34 +279,12 @@ class MainActivity : AppCompatActivity() {
                         "application/json"
 
                     putExtra(
-                        Intent.EXTRA_TITLE,
-                        fileName
-                    )
-                }
-
-            startActivityForResult(
-                intent,
-                REQUEST_CREATE_FILE
-            )
-        }
-
-        @JavascriptInterface
-        fun importPriceList() {
-
-            val intent =
-                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-
-                    addCategory(
-                        Intent.CATEGORY_OPENABLE
-                    )
-
-                    type = "application/json"
-
-                    putExtra(
                         Intent.EXTRA_MIME_TYPES,
                         arrayOf(
                             "application/json",
+                            "text/json",
                             "text/plain",
+                            "application/octet-stream",
                             "*/*"
                         )
                     )
@@ -145,22 +309,14 @@ class MainActivity : AppCompatActivity() {
         )
 
         if (
+            requestCode != REQUEST_OPEN_FILE
+        ) {
+            return
+        }
+
+        if (
             resultCode != Activity.RESULT_OK
         ) {
-
-            if (
-                requestCode ==
-                REQUEST_CREATE_FILE
-            ) {
-
-                pendingExportJson = null
-
-                webView.evaluateJavascript(
-                    "window.exportCancelled && window.exportCancelled();",
-                    null
-                )
-            }
-
             return
         }
 
@@ -168,66 +324,7 @@ class MainActivity : AppCompatActivity() {
             intentData?.data
                 ?: return
 
-        when (requestCode) {
-
-            REQUEST_CREATE_FILE -> {
-                saveExportFile(uri)
-            }
-
-            REQUEST_OPEN_FILE -> {
-                readImportFile(uri)
-            }
-        }
-    }
-
-    private fun saveExportFile(
-        uri: Uri
-    ) {
-
-        try {
-
-            val json =
-                pendingExportJson
-
-            if (json == null) {
-
-                webView.evaluateJavascript(
-                    "window.exportFailed && window.exportFailed();",
-                    null
-                )
-
-                return
-            }
-
-            contentResolver
-                .openOutputStream(uri)
-                ?.use { output ->
-
-                    output.write(
-                        json.toByteArray(
-                            Charsets.UTF_8
-                        )
-                    )
-
-                    output.flush()
-                }
-
-            pendingExportJson = null
-
-            webView.evaluateJavascript(
-                "window.exportFinished && window.exportFinished();",
-                null
-            )
-
-        } catch (e: Exception) {
-
-            pendingExportJson = null
-
-            webView.evaluateJavascript(
-                "window.exportFailed && window.exportFailed();",
-                null
-            )
-        }
+        readImportFile(uri)
     }
 
     private fun readImportFile(
@@ -241,15 +338,14 @@ class MainActivity : AppCompatActivity() {
                     .openInputStream(uri)
                     ?.use { input ->
 
-                        input.readBytes()
+                        input
+                            .readBytes()
                             .toString(
                                 Charsets.UTF_8
                             )
                     }
 
-            if (
-                text.isNullOrBlank()
-            ) {
+            if (text.isNullOrBlank()) {
 
                 webView.evaluateJavascript(
                     "window.importFailed && window.importFailed();",
@@ -278,10 +374,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun sanitizeFileName(
+        fileName: String
+    ): String {
+
+        var result =
+            fileName.replace(
+                Regex("[\\\\/:*?\"<>|]"),
+                "_"
+            )
+
+        if (
+            !result
+                .lowercase()
+                .endsWith(".json")
+        ) {
+            result += ".json"
+        }
+
+        return result
+    }
+
     private fun updateWidget() {
 
         val manager =
-            AppWidgetManager.getInstance(this)
+            AppWidgetManager.getInstance(
+                this
+            )
 
         val component =
             ComponentName(
