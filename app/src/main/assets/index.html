@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
+
 <head>
 
 <meta charset="utf-8">
@@ -22,7 +23,6 @@
 <link rel="manifest" href="manifest.json">
 
 <title>مدیریت قیمت فروشگاه</title>
-
 
 <style>
 
@@ -380,12 +380,9 @@ font-size:20px
 
 </head>
 
-
 <body>
 
-
 <main class="app">
-
 
 <div class="head">
 
@@ -405,7 +402,6 @@ class="storeMenu">
 
 </div>
 
-
 <div class="searchWrap">
 
 <span class="searchIcon">
@@ -419,7 +415,6 @@ autocomplete="off"
 placeholder="جستجوی کالا...">
 
 </div>
-
 
 <div class="quickRow">
 
@@ -438,7 +433,6 @@ onclick="toggleMore()">
 
 </div>
 
-
 <div class="section">
 
 <b id="title">
@@ -450,10 +444,8 @@ onclick="toggleMore()">
 
 </div>
 
-
 <div id="list">
 </div>
-
 
 <button
 class="back"
@@ -467,7 +459,6 @@ onclick="exportPriceList()">
 
 </button>
 
-
 <button
 class="back"
 onclick="updatePriceList()">
@@ -480,14 +471,12 @@ onclick="updatePriceList()">
 
 </button>
 
-
 <input
 id="updateFile"
 class="file"
 type="file"
 accept=".json,application/json"
 onchange="importPriceList(event)">
-
 
 <button
 class="back"
@@ -497,7 +486,6 @@ onclick="backup()">
 
 </button>
 
-
 <button
 class="back"
 onclick="file.click()">
@@ -506,14 +494,12 @@ onclick="file.click()">
 
 </button>
 
-
 <input
 id="file"
 class="file"
 type="file"
 accept=".json"
 onchange="restore(event)">
-
 
 <div class="note">
 
@@ -529,28 +515,22 @@ onchange="restore(event)">
 
 </div>
 
-
 </main>
-
 
 <div
 id="modal"
 class="modal">
 
-
 <div class="sheet">
-
 
 <h2 id="mtitle">
 افزودن کالا
 </h2>
 
-
 <input
 id="name"
 class="input"
 placeholder="نام کالا">
-
 
 <input
 id="price"
@@ -558,13 +538,11 @@ class="input"
 placeholder="قیمت"
 inputmode="numeric">
 
-
 <input
 id="buy"
 class="input"
 placeholder="قیمت خرید (اختیاری)"
 inputmode="numeric">
-
 
 <textarea
 id="desc"
@@ -572,9 +550,7 @@ class="input textarea"
 placeholder="توضیحات (اختیاری)">
 </textarea>
 
-
 <div class="actions">
-
 
 <button
 class="btn"
@@ -582,13 +558,11 @@ onclick="saveItem()">
 ذخیره
 </button>
 
-
 <button
 class="btn dark"
 onclick="closeModal()">
 انصراف
 </button>
-
 
 <button
 id="del"
@@ -597,32 +571,21 @@ onclick="deleteItem()">
 حذف
 </button>
 
-
-</div>
-
-
 </div>
 
 </div>
 
+</div>
 
 <script>
 
-
-/* =====================================================
-   تنظیمات اصلی
-   ===================================================== */
-
-const K="priceYarStoresV3";
+const K =
+"priceYarStoresV3";
 
 
-/* =====================================================
-   بارگذاری اطلاعات محلی
-   ===================================================== */
-
-let data=
+let data =
 JSON.parse(
-localStorage.getItem(K)||"null"
+localStorage.getItem(K) || "null"
 )
 ||
 {
@@ -641,51 +604,44 @@ deleted:{}
 };
 
 
-let edit=-1;
+let edit = -1;
 
-let more=false;
+let more = false;
 
 
-/* =====================================================
-   ابزار کوتاه
-   ===================================================== */
-
-const $=id=>
+const $ =
+id =>
 document.getElementById(id);
 
 
-const st=()=>
+const st =
+() =>
 data.stores[data.active];
 
-
-/* =====================================================
-   ساخت ID مخفی و یکتا
-   ===================================================== */
 
 function makeId(){
 
 if(
 window.crypto &&
-crypto.randomUUID
+window.crypto.randomUUID
 ){
 
-return crypto.randomUUID();
+return window.crypto.randomUUID();
 
 }
-
 
 return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
 .replace(
 /[xy]/g,
 c=>{
 
-let r=
+let r =
 Math.random()*16|0;
 
-let v=
+let v =
 c==="x"
-?r
-:(r&3|8);
+? r
+: (r&3|8);
 
 return v.toString(16);
 
@@ -695,30 +651,33 @@ return v.toString(16);
 }
 
 
-/* =====================================================
-   ID فروشگاه
-   ===================================================== */
-
 function ensureIds(){
 
-if(!Array.isArray(data.stores))
-data.stores=[];
+if(
+!Array.isArray(data.stores)
+){
+
+data.stores = [];
+
+}
 
 
 data.stores.forEach(
 s=>{
 
 if(!s.id)
-s.id=makeId();
+s.id = makeId();
 
 if(!Array.isArray(s.items))
-s.items=[];
+s.items = [];
 
 }
 );
 
 
-if(!data.stores.length){
+if(
+!data.stores.length
+){
 
 data.stores.push({
 
@@ -730,16 +689,12 @@ items:[]
 
 });
 
-data.active=0;
+data.active = 0;
 
 }
 
 }
 
-
-/* =====================================================
-   ID کالاها
-   ===================================================== */
 
 function ensureItemIds(){
 
@@ -747,18 +702,17 @@ data.stores.forEach(
 store=>{
 
 if(!Array.isArray(store.items))
-store.items=[];
+store.items = [];
 
 
 store.items.forEach(
 item=>{
 
 if(!item.id)
-item.id=makeId();
-
+item.id = makeId();
 
 if(!item.last)
-item.last=Date.now();
+item.last = Date.now();
 
 }
 );
@@ -768,18 +722,14 @@ item.last=Date.now();
 
 
 if(!data.deleted)
-data.deleted={};
+data.deleted = {};
 
 }
 
 
-/* =====================================================
-   تبدیل اعداد انگلیسی به فارسی
-   ===================================================== */
-
 function faDigits(value){
 
-return String(value??"")
+return String(value ?? "")
 .replace(
 /\d/g,
 d=>"۰۱۲۳۴۵۶۷۸۹"[d]
@@ -787,10 +737,6 @@ d=>"۰۱۲۳۴۵۶۷۸۹"[d]
 
 }
 
-
-/* =====================================================
-   ذخیره محلی
-   ===================================================== */
 
 function save(){
 
@@ -806,13 +752,9 @@ JSON.stringify(data)
 }
 
 
-/* =====================================================
-   ایمن‌سازی متن
-   ===================================================== */
-
 function esc(s){
 
-return String(s??"")
+return String(s ?? "")
 .replace(
 /[&<>"']/g,
 m=>({
@@ -829,59 +771,56 @@ m=>({
 }
 
 
-/* =====================================================
-   نمایش لیست
-   ===================================================== */
-
 function render(){
 
-let q=
+let q =
 $("search")
 .value
 .trim()
 .toLocaleLowerCase();
 
 
-let a=
+let a =
 st()
 .items
 .filter(
-x=>
+x =>
 !q ||
 x.name
 .toLocaleLowerCase()
 .includes(q)
 )
 .sort(
-(x,y)=>
-(y.last||0)-(x.last||0)
+(x,y) =>
+(y.last || 0) -
+(x.last || 0)
 );
 
 
-$("title").textContent=
+$("title").textContent =
 q
-?"نتایج جستجو"
-:"کالاهای اخیر";
+? "نتایج جستجو"
+: "کالاهای اخیر";
 
 
-$("count").textContent=
+$("count").textContent =
 q
-?a.length+" نتیجه"
-:st().items.length+" کالا";
+? a.length + " نتیجه"
+: st().items.length + " کالا";
 
 
-$("list").innerHTML="";
+$("list").innerHTML = "";
 
 
 if(!a.length){
 
-$("list").innerHTML=
-'<div class="empty">'+
+$("list").innerHTML =
+'<div class="empty">' +
 (
 q
-?"کالایی پیدا نشد"
-:"هنوز کالایی اضافه نشده"
-)+
+? "کالایی پیدا نشد"
+: "هنوز کالایی اضافه نشده"
+) +
 "</div>";
 
 return;
@@ -891,57 +830,57 @@ return;
 
 a.forEach(x=>{
 
-let i=
+let i =
 st().items.indexOf(x);
 
 
-let extra=
+let extra =
 more
 ?
 (
 x.buy
 ?
-'<div class="buy">قیمت خرید: '+
-esc(faDigits(x.buy))+
+'<div class="buy">قیمت خرید: ' +
+esc(faDigits(x.buy)) +
 "</div>"
-:""
-)+
+: ""
+) +
 (
 x.desc
 ?
-'<div class="sub">'+
-esc(x.desc)+
+'<div class="sub">' +
+esc(x.desc) +
 "</div>"
-:""
+: ""
 )
-:"";
+: "";
 
 
-let r=
+let r =
 document.createElement("div");
 
 
-r.className="row";
+r.className = "row";
 
 
-r.innerHTML=
-'<div class="info">'+
+r.innerHTML =
+'<div class="info">' +
 
-'<div class="name">'+
-esc(x.name)+
-"</div>"+
+'<div class="name">' +
+esc(x.name) +
+"</div>" +
 
-extra+
+extra +
 
-"</div>"+
+"</div>" +
 
-'<div class="price">'+
-esc(faDigits(x.price))+
+'<div class="price">' +
+esc(faDigits(x.price)) +
 "</div>";
 
 
-r.onclick=()=>
-openEdit(i);
+r.onclick =
+() => openEdit(i);
 
 
 $("list")
@@ -952,13 +891,9 @@ $("list")
 }
 
 
-/* =====================================================
-   منوی فروشگاه
-   ===================================================== */
+$("storeBtn").onclick = () => {
 
-$("storeBtn").onclick=()=>{
-
-let menu=
+let menu =
 $("storeMenu");
 
 
@@ -979,47 +914,43 @@ menu.classList.add("open");
 };
 
 
-/* =====================================================
-   نمایش فروشگاه‌ها
-   ===================================================== */
-
 function stores(){
 
-let m=
+let m =
 $("storeMenu");
 
 
-m.innerHTML="";
+m.innerHTML = "";
 
 
 data.stores.forEach(
 (s,i)=>{
 
-let d=
+let d =
 document.createElement("div");
 
 
-d.className=
-"storeItem"+
+d.className =
+"storeItem" +
 (
-i===data.active
-?" active"
-:""
+i === data.active
+? " active"
+: ""
 );
 
 
-d.textContent=
+d.textContent =
 (
-i===data.active
-?"✓ "
-:""
-)+
+i === data.active
+? "✓ "
+: ""
+) +
 s.name;
 
 
-d.onclick=()=>{
+d.onclick = () => {
 
-data.active=i;
+data.active = i;
 
 save();
 
@@ -1040,27 +971,27 @@ m.appendChild(d);
 );
 
 
-let actions=
+let actions =
 document.createElement("div");
 
 
-actions.className=
+actions.className =
 "storeActions";
 
 
-let add=
+let add =
 document.createElement("button");
 
 
-add.className=
+add.className =
 "storeAction addStore";
 
 
-add.textContent=
+add.textContent =
 "＋ افزودن فروشگاه";
 
 
-add.onclick=()=>{
+add.onclick = () => {
 
 $("storeMenu")
 .classList
@@ -1071,19 +1002,19 @@ addStore();
 };
 
 
-let del=
+let del =
 document.createElement("button");
 
 
-del.className=
+del.className =
 "storeAction deleteStore";
 
 
-del.textContent=
+del.textContent =
 "− حذف فروشگاه";
 
 
-del.onclick=()=>{
+del.onclick = () => {
 
 $("storeMenu")
 .classList
@@ -1103,32 +1034,27 @@ m.appendChild(actions);
 }
 
 
-/* =====================================================
-   نام فروشگاه فعال
-   ===================================================== */
-
 function updateStoreButton(){
 
 $("storeBtn")
-.textContent=
+.textContent =
 st().name;
 
 }
 
 
-/* =====================================================
-   افزودن فروشگاه
-   ===================================================== */
-
 function addStore(){
 
-let n=
+let n =
 prompt(
 "نام فروشگاه جدید را وارد کن:"
 );
 
 
-if(!n||!n.trim())
+if(
+!n ||
+!n.trim()
+)
 return;
 
 
@@ -1143,8 +1069,8 @@ items:[]
 });
 
 
-data.active=
-data.stores.length-1;
+data.active =
+data.stores.length - 1;
 
 
 save();
@@ -1156,14 +1082,10 @@ render();
 }
 
 
-/* =====================================================
-   حذف فروشگاه
-   ===================================================== */
-
 function deleteStore(){
 
 if(
-data.stores.length<=1
+data.stores.length <= 1
 ){
 
 alert(
@@ -1175,15 +1097,15 @@ return;
 }
 
 
-let name=
+let name =
 st().name;
 
 
 if(
 !confirm(
-"فروشگاه «"+
-name+
-"» حذف شود؟\n\n"+
+"فروشگاه «" +
+name +
+"» حذف شود؟\n\n" +
 "تمام کالاهای این فروشگاه هم حذف می‌شوند."
 )
 )
@@ -1197,12 +1119,12 @@ data.active,
 
 
 if(
-data.active>=
+data.active >=
 data.stores.length
 ){
 
-data.active=
-data.stores.length-1;
+data.active =
+data.stores.length - 1;
 
 }
 
@@ -1220,20 +1142,16 @@ render();
 }
 
 
-/* =====================================================
-   نمایش اطلاعات بیشتر
-   ===================================================== */
-
 function toggleMore(){
 
-more=!more;
+more = !more;
 
 
 $("moreBtn")
-.textContent=
+.textContent =
 more
-?"اطلاعات ✓"
-:"اطلاعات ○";
+? "اطلاعات ✓"
+: "اطلاعات ○";
 
 
 $("moreBtn")
@@ -1249,17 +1167,13 @@ render();
 }
 
 
-/* =====================================================
-   افزودن کالا
-   ===================================================== */
-
 function openAdd(){
 
-edit=-1;
+edit = -1;
 
 
 $("mtitle")
-.textContent=
+.textContent =
 "افزودن کالا";
 
 
@@ -1270,83 +1184,76 @@ $("mtitle")
 "desc"
 ]
 .forEach(
-x=>
-$(x).value=""
+x =>
+$(x).value = ""
 );
 
 
 $("del")
-.style.display=
+.style.display =
 "none";
 
 
 $("modal")
-.style.display=
+.style.display =
 "flex";
 
 
 setTimeout(
-()=>$("name").focus(),
+() =>
+$("name").focus(),
 80
 );
 
 }
 
 
-/* =====================================================
-   ویرایش کالا
-   ===================================================== */
-
 function openEdit(i){
 
-edit=i;
+edit = i;
 
 
-let x=
+let x =
 st().items[i];
 
 
 $("mtitle")
-.textContent=
+.textContent =
 "ویرایش کالا";
 
 
-$("name").value=
+$("name").value =
 x.name;
 
 
-$("price").value=
+$("price").value =
 x.price;
 
 
-$("buy").value=
-x.buy||"";
+$("buy").value =
+x.buy || "";
 
 
-$("desc").value=
-x.desc||"";
+$("desc").value =
+x.desc || "";
 
 
 $("del")
-.style.display=
+.style.display =
 "block";
 
 
 $("modal")
-.style.display=
+.style.display =
 "flex";
 
 }
 
 
-/* =====================================================
-   بستن پنجره
-   ===================================================== */
-
 function closeModal(){
 
 $("modal")
-.style.display=
+.style.display =
 "none";
 
 
@@ -1355,25 +1262,21 @@ render();
 }
 
 
-/* =====================================================
-   ذخیره کالا
-   ===================================================== */
-
 function saveItem(){
 
-let n=
+let n =
 $("name")
 .value
 .trim();
 
 
-let p=
+let p =
 $("price")
 .value
 .trim();
 
 
-if(!n||!p){
+if(!n || !p){
 
 alert(
 "نام و قیمت را وارد کن"
@@ -1384,25 +1287,22 @@ return;
 }
 
 
-/*
-   اگر کالا قبلاً وجود داشته باشد
-   ID قبلی حفظ می‌شود.
-
-   اگر کالا جدید باشد
-   ID مخفی و خودکار ساخته می‌شود.
-*/
-
-let old=
-edit>=0
-?st().items[edit]
-:null;
+let old =
+edit >= 0
+? st().items[edit]
+: null;
 
 
-let x={
+let itemId =
+old &&
+old.id
+? old.id
+: makeId();
 
-id:
-old?.id ||
-makeId(),
+
+let x = {
+
+id:itemId,
 
 name:n,
 
@@ -1424,13 +1324,13 @@ Date.now()
 };
 
 
-if(edit<0){
+if(edit < 0){
 
 st().items.push(x);
 
 }else{
 
-st().items[edit]=x;
+st().items[edit] = x;
 
 }
 
@@ -1442,17 +1342,13 @@ closeModal();
 }
 
 
-/* =====================================================
-   حذف کالا
-   ===================================================== */
-
 function deleteItem(){
 
-if(edit<0)
+if(edit < 0)
 return;
 
 
-let item=
+let item =
 st().items[edit];
 
 
@@ -1465,16 +1361,10 @@ return;
 
 
 if(!data.deleted)
-data.deleted={};
+data.deleted = {};
 
 
-/*
-   زمان حذف ثبت می‌شود تا حذف کالا
-   در فایل ارسالی به سایر گوشی‌ها
-   منتقل شود.
-*/
-
-data.deleted[item.id]=
+data.deleted[item.id] =
 Date.now();
 
 
@@ -1491,13 +1381,23 @@ closeModal();
 }
 
 
-/* =====================================================
-   پشتیبان‌گیری از فروشگاه فعلی
-   ===================================================== */
+function safeFileName(name){
+
+return String(name)
+.replace(
+/[\\/:*?"<>|]/g,
+"-"
+)
+.trim()
+||
+"store";
+
+}
+
 
 function backup(){
 
-let b=
+let b =
 new Blob(
 [
 JSON.stringify(
@@ -1507,23 +1407,22 @@ null,
 )
 ],
 {
-type:
-"application/json"
+type:"application/json"
 }
 );
 
 
-let a=
+let a =
 document.createElement("a");
 
 
-a.href=
+a.href =
 URL.createObjectURL(b);
 
 
-a.download=
-"backup-"+
-safeFileName(st().name)+
+a.download =
+"backup-" +
+safeFileName(st().name) +
 ".json";
 
 
@@ -1531,7 +1430,7 @@ a.click();
 
 
 setTimeout(
-()=>
+() =>
 URL.revokeObjectURL(
 a.href
 ),
@@ -1541,13 +1440,9 @@ a.href
 }
 
 
-/* =====================================================
-   بازیابی پشتیبان قدیمی
-   ===================================================== */
-
 function restore(e){
 
-let f=
+let f =
 e.target.files[0];
 
 
@@ -1555,15 +1450,15 @@ if(!f)
 return;
 
 
-let r=
+let r =
 new FileReader();
 
 
-r.onload=()=>{
+r.onload = () => {
 
 try{
 
-let x=
+let x =
 JSON.parse(
 r.result
 );
@@ -1576,26 +1471,20 @@ if(
 throw 0;
 
 
-/*
-   برای سازگاری با نسخه‌های قدیمی
-   اگر کالا ID نداشته باشد
-   خودکار ایجاد می‌شود.
-*/
-
 x.items.forEach(
 item=>{
 
 if(!item.id)
-item.id=makeId();
+item.id = makeId();
 
 if(!item.last)
-item.last=Date.now();
+item.last = Date.now();
 
 }
 );
 
 
-st().items=
+st().items =
 x.items;
 
 
@@ -1623,25 +1512,7 @@ alert(
 r.readAsText(f);
 
 
-e.target.value="";
-
-}
-
-
-/* =====================================================
-   نام مناسب برای فایل
-   ===================================================== */
-
-function safeFileName(name){
-
-return String(name)
-.replace(
-/[\\/:*?"<>|]/g,
-"-"
-)
-.trim()
-||
-"store";
+e.target.value = "";
 
 }
 
@@ -1659,15 +1530,7 @@ ensureItemIds();
 save();
 
 
-/*
-   این فایل فقط DATA است.
-   نسخه برنامه نیست.
-
-   بنابراین همه کارکنان همان APK
-   را استفاده می‌کنند.
-*/
-
-const packageData={
+const packageData = {
 
 type:
 "priceyar-price-list",
@@ -1681,20 +1544,65 @@ stores:
 data.stores,
 
 deleted:
-data.deleted||{}
+data.deleted || {}
 
 };
 
 
-const blob=
-new Blob(
-[
+const json =
 JSON.stringify(
 packageData,
 null,
 2
-)
-],
+);
+
+
+const fileName =
+"PriceYar-List-" +
+today() +
+".json";
+
+
+/*
+   اندروید فایل را با
+   پنجره ذخیره‌سازی خودش می‌سازد.
+ */
+
+if(
+window.AndroidBridge &&
+AndroidBridge.exportPriceList
+){
+
+try{
+
+AndroidBridge.exportPriceList(
+json,
+fileName
+);
+
+return;
+
+}catch(e){
+
+console.log(
+"Native export error:",
+e
+);
+
+}
+
+}
+
+
+/*
+   حالت مرورگر
+ */
+
+try{
+
+const blob =
+new Blob(
+[json],
 {
 type:
 "application/json;charset=utf-8"
@@ -1702,89 +1610,108 @@ type:
 );
 
 
-const a=
+const a =
 document.createElement("a");
 
 
-a.href=
+const url =
 URL.createObjectURL(blob);
 
 
-a.download=
-"PriceYar-List-"+
-today()+
-".json";
+a.href = url;
 
+a.download = fileName;
+
+document.body.appendChild(a);
 
 a.click();
 
+a.remove();
+
 
 setTimeout(
-()=>{
+() => {
+
 URL.revokeObjectURL(
-a.href
+url
 );
+
 },
 2000
 );
 
 
+}catch(e){
+
 alert(
-"فایل لیست قیمت آماده شد.\n\n"+
-"حالا می‌توانی آن را برای بقیه ارسال کنی."
+"امکان ساخت فایل وجود ندارد."
 );
+
+}
 
 }
 
 
 /* =====================================================
-   باز کردن انتخاب فایل برای بروزرسانی
+   باز کردن انتخاب فایل
    ===================================================== */
 
 function updatePriceList(){
 
-$("updateFile").click();
+if(
+window.AndroidBridge &&
+AndroidBridge.importPriceList
+){
+
+try{
+
+AndroidBridge.importPriceList();
+
+return;
+
+}catch(e){
+
+console.log(
+"Native import error:",
+e
+);
+
+}
+
+}
+
+
+const input =
+$("updateFile");
+
+
+input.value = "";
+
+input.click();
 
 }
 
 
 /* =====================================================
-   دریافت و ادغام لیست جدید
+   دریافت فایل از Android
    ===================================================== */
 
-function importPriceList(e){
-
-const file=
-e.target.files[0];
-
-
-if(!file)
-return;
-
-
-const reader=
-new FileReader();
-
-
-reader.onload=()=>{
+window.receiveImportedPriceList =
+function(text){
 
 try{
 
-const incoming=
-JSON.parse(
-reader.result
-);
+const incoming =
+JSON.parse(text);
 
-
-/*
-   بررسی می‌کنیم فایل واقعاً
-   فایل لیست PriceYar باشد.
-*/
 
 if(
 !incoming ||
-incoming.type!=="priceyar-price-list" ||
-!Array.isArray(incoming.stores)
+incoming.type !==
+"priceyar-price-list" ||
+!Array.isArray(
+incoming.stores
+)
 ){
 
 throw new Error(
@@ -1800,39 +1727,34 @@ ensureItemIds();
 
 
 if(!data.deleted)
-data.deleted={};
+data.deleted = {};
 
 
-let changed=0;
+let changed = 0;
 
 
-/* =================================================
+/*
    فروشگاه‌ها
-   ================================================= */
+ */
 
 incoming.stores.forEach(
-inStore=>{
-
+inStore => {
 
 if(!inStore.id)
 return;
 
 
-let localStore=
+let localStore =
 data.stores.find(
-s=>
-s.id===inStore.id
+s =>
+s.id ===
+inStore.id
 );
 
 
-/*
-   اگر فروشگاه در گوشی فعلی وجود نداشته باشد
-   اضافه می‌شود.
-*/
-
 if(!localStore){
 
-localStore={
+localStore = {
 
 id:
 inStore.id,
@@ -1850,32 +1772,24 @@ data.stores.push(
 localStore
 );
 
-
 changed++;
 
 }
 
 
-/*
-   تغییر نام فروشگاه
-*/
-
 if(
 inStore.name &&
-inStore.name!==localStore.name
+inStore.name !==
+localStore.name
 ){
 
-localStore.name=
+localStore.name =
 inStore.name;
 
 changed++;
 
 }
 
-
-/*
-   اگر لیست کالاها وجود نداشته باشد
-*/
 
 if(
 !Array.isArray(
@@ -1885,50 +1799,61 @@ inStore.items
 return;
 
 
-/* =================================================
+/*
    کالاها
-   ================================================= */
+ */
 
 inStore.items.forEach(
-remoteItem=>{
-
+remoteItem => {
 
 if(!remoteItem.id)
 return;
 
 
-let localItem=
+let localItem =
 localStore.items.find(
-x=>
-x.id===
+x =>
+x.id ===
 remoteItem.id
 );
 
 
-let remoteTime=
+let remoteTime =
 Number(
-remoteItem.last||0
+remoteItem.last || 0
 );
 
 
-let localTime=
-Number(
-localItem?.last||0
-);
+let localTime =
+localItem
+? Number(
+localItem.last || 0
+)
+: 0;
 
 
 /*
    کالای جدید
-*/
+ */
 
 if(!localItem){
 
 localStore.items.push({
 
-...remoteItem,
-
 id:
 remoteItem.id,
+
+name:
+remoteItem.name || "",
+
+price:
+remoteItem.price || "",
+
+buy:
+remoteItem.buy || "",
+
+desc:
+remoteItem.desc || "",
 
 last:
 remoteTime ||
@@ -1945,13 +1870,12 @@ return;
 
 
 /*
-   کالای موجود:
-   فقط اگر نسخه دریافت‌شده جدیدتر باشد
-   اطلاعات را تغییر می‌دهیم.
-*/
+   کالای موجود
+ */
 
 if(
-remoteTime>localTime
+remoteTime >
+localTime
 ){
 
 Object.assign(
@@ -1975,64 +1899,63 @@ changed++;
 });
 
 
-/* =====================================================
-   اعمال حذف کالاها
-   ===================================================== */
+/*
+   حذف‌ها
+ */
 
-const remoteDeleted=
-incoming.deleted||{};
+const remoteDeleted =
+incoming.deleted || {};
 
 
 Object.keys(
 remoteDeleted
 )
 .forEach(
-id=>{
+id => {
 
-
-const remoteTime=
+const remoteTime =
 Number(
-remoteDeleted[id]||0
+remoteDeleted[id] || 0
 );
 
 
-const localTime=
+const localDeletedTime =
 Number(
-data.deleted[id]||0
+data.deleted[id] || 0
 );
 
 
 if(
-remoteTime<=localTime
+remoteTime <=
+localDeletedTime
 )
 return;
 
 
-data.deleted[id]=
+data.deleted[id] =
 remoteTime;
 
 
 data.stores.forEach(
-store=>{
+store => {
 
-
-const index=
+const index =
 store.items.findIndex(
-item=>
-item.id===id
+item =>
+item.id === id
 );
 
 
-if(index>=0){
+if(index >= 0){
 
-const item=
+const item =
 store.items[index];
 
 
 if(
 Number(
-item.last||0
-)<=remoteTime
+item.last || 0
+) <= remoteTime
 ){
 
 store.items.splice(
@@ -2051,26 +1974,28 @@ changed++;
 });
 
 
-/* =====================================================
-   پاک‌سازی کالاهای حذف‌شده
-   ===================================================== */
+/*
+   پاک‌سازی
+ */
 
 data.stores.forEach(
-store=>{
+store => {
 
-store.items=
+store.items =
 store.items.filter(
-item=>{
+item => {
 
-const deletedAt=
+const deletedAt =
 Number(
-data.deleted[item.id]||0
+data.deleted[item.id] || 0
 );
 
 
-return(
+return (
 !deletedAt ||
-Number(item.last||0)>
+Number(
+item.last || 0
+) >
 deletedAt
 );
 
@@ -2093,8 +2018,8 @@ render();
 if(changed){
 
 alert(
-"لیست با موفقیت به‌روزرسانی شد.\n\n"+
-changed+
+"لیست با موفقیت به‌روزرسانی شد.\n\n" +
+changed +
 " تغییر اعمال شد."
 );
 
@@ -2107,10 +2032,10 @@ alert(
 }
 
 
-}catch(err){
+}catch(error){
 
 alert(
-"فایل انتخاب‌شده معتبر نیست.\n\n"+
+"فایل انتخاب‌شده معتبر نیست.\n\n" +
 "لطفاً فایل لیست PriceYar را انتخاب کن."
 );
 
@@ -2119,10 +2044,80 @@ alert(
 };
 
 
+/*
+   نتیجه ذخیره فایل
+ */
+
+window.exportFinished =
+function(){
+
+alert(
+"فایل لیست قیمت با موفقیت ذخیره شد.\n\n" +
+"حالا می‌توانی فایل JSON را برای بقیه ارسال کنی."
+);
+
+};
+
+
+window.exportCancelled =
+function(){
+
+};
+
+
+window.exportFailed =
+function(){
+
+alert(
+"ذخیره فایل انجام نشد.\n\n" +
+"لطفاً دوباره تلاش کن."
+);
+
+};
+
+
+window.importFailed =
+function(){
+
+alert(
+"خواندن فایل انجام نشد.\n\n" +
+"لطفاً دوباره فایل را انتخاب کن."
+);
+
+};
+
+
+/* =====================================================
+   دریافت فایل از input در حالت مرورگر
+   ===================================================== */
+
+function importPriceList(e){
+
+const file =
+e.target.files[0];
+
+
+if(!file)
+return;
+
+
+const reader =
+new FileReader();
+
+
+reader.onload = () => {
+
+window.receiveImportedPriceList(
+reader.result
+);
+
+};
+
+
 reader.readAsText(file);
 
 
-e.target.value="";
+e.target.value = "";
 
 }
 
@@ -2133,20 +2128,20 @@ e.target.value="";
 
 function today(){
 
-let d=
+let d =
 new Date();
 
 
-return d.getFullYear()+
-"-"+
+return d.getFullYear() +
+"-" +
 String(
 d.getMonth()+1
 )
 .padStart(
 2,
 "0"
-)+
-"-"+
+) +
+"-" +
 String(
 d.getDate()
 )
@@ -2172,10 +2167,10 @@ render
 $("search")
 .addEventListener(
 "focus",
-()=>{
+() => {
 
 setTimeout(
-()=>
+() =>
 $("search")
 .scrollIntoView({
 behavior:"smooth",
@@ -2189,16 +2184,17 @@ block:"start"
 
 
 /* =====================================================
-   بستن مودال با لمس بیرون
+   بستن مودال
    ===================================================== */
 
 $("modal")
 .addEventListener(
 "click",
-e=>{
+e => {
 
 if(
-e.target.id==="modal"
+e.target.id ===
+"modal"
 )
 closeModal();
 
@@ -2207,7 +2203,7 @@ closeModal();
 
 
 /* =====================================================
-   آماده‌سازی اولیه
+   آماده‌سازی
    ===================================================== */
 
 ensureIds();
@@ -2222,7 +2218,7 @@ render();
 
 
 /* =====================================================
-   دریافت اطلاعات از Native Android
+   دریافت اطلاعات Native Android
    ===================================================== */
 
 if(
@@ -2232,19 +2228,15 @@ AndroidBridge.loadData
 
 try{
 
-const native=
+const native =
 AndroidBridge.loadData();
 
 
 if(native){
 
-data=
+data =
 JSON.parse(native);
 
-
-/*
-   برای سازگاری با نسخه‌های جدید
-*/
 
 ensureIds();
 
@@ -2260,7 +2252,6 @@ JSON.stringify(data)
 updateStoreButton();
 
 render();
-
 
 }else{
 
@@ -2283,14 +2274,15 @@ e
 
 
 /* =====================================================
-   اتصال ذخیره اطلاعات به Native Android
+   اتصال ذخیره به Native Android
    ===================================================== */
 
-const originalSave=
+const originalSave =
 save;
 
 
-save=function(){
+save =
+function(){
 
 originalSave();
 
@@ -2330,22 +2322,21 @@ if(
 
 window.addEventListener(
 "load",
-()=>{
+() => {
 
 navigator.serviceWorker
 .register("sw.js")
 .catch(
-()=>{}
+() => {}
 );
 
 }
 );
 
 }
-
 
 </script>
 
-
 </body>
+
 </html>
