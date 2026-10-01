@@ -23,41 +23,50 @@ class SearchActivity : Activity() {
     private lateinit var input: EditText
     private lateinit var resultsLayout: LinearLayout
 
-    private val textColor = Color.rgb(32, 33, 36)
-    private val secondaryColor = Color.rgb(95, 99, 104)
-    private val backgroundColor = Color.WHITE
+    // Chrome Dark Mode style
+    private val backgroundColor = Color.rgb(32, 33, 36)
+    private val searchColor = Color.rgb(23, 23, 23)
+    private val cardColor = Color.rgb(48, 49, 52)
+
+    private val textColor = Color.rgb(232, 234, 237)
+    private val secondaryColor = Color.rgb(154, 160, 166)
+    private val borderColor = Color.rgb(74, 76, 80)
+    private val accentColor = Color.rgb(138, 180, 248)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.statusBarColor = Color.WHITE
-        window.navigationBarColor = Color.WHITE
+        window.statusBarColor = backgroundColor
+        window.navigationBarColor = backgroundColor
 
-        window.decorView.systemUiVisibility =
-            android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
-            android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        window.decorView.systemUiVisibility = 0
 
         val root = LinearLayout(this)
         root.orientation = LinearLayout.VERTICAL
+
         root.setPadding(
+            dp(18),
             dp(20),
-            dp(24),
-            dp(20),
-            dp(16)
+            dp(18),
+            dp(14)
         )
+
         root.setBackgroundColor(backgroundColor)
 
+        // عنوان
         val title = TextView(this)
-        title.text = "جست‌وجوی قیمت کالا"
+
+        title.text = "جستجوی قیمت کالا"
         title.textSize = 22f
         title.setTextColor(textColor)
         title.typeface = Typeface.DEFAULT_BOLD
         title.gravity = Gravity.CENTER
+
         title.setPadding(
             0,
             dp(8),
             0,
-            dp(20)
+            dp(18)
         )
 
         root.addView(
@@ -68,33 +77,47 @@ class SearchActivity : Activity() {
             )
         )
 
+        // کادر جستجو
         input = EditText(this)
-        input.hint = "نام کالا را جست‌وجو کن"
+
+        input.hint = "جستجوی کالا"
         input.setHintTextColor(secondaryColor)
         input.setTextColor(textColor)
+
         input.textSize = 17f
+
         input.setSingleLine(true)
+
         input.setPadding(
             dp(18),
             0,
             dp(18),
             0
         )
-        input.gravity = Gravity.CENTER_VERTICAL
-        input.imeOptions = EditorInfo.IME_ACTION_SEARCH
 
-        val searchBackground = GradientDrawable()
+        input.gravity = Gravity.CENTER_VERTICAL
+
+        input.imeOptions =
+            EditorInfo.IME_ACTION_SEARCH
+
+        val searchBackground =
+            GradientDrawable()
+
+        // مشکی‌تر از صفحه
         searchBackground.setColor(
-            Color.rgb(248, 249, 250)
+            searchColor
         )
+
         searchBackground.cornerRadius =
             dp(28).toFloat()
+
         searchBackground.setStroke(
             dp(1),
-            Color.rgb(218, 220, 224)
+            borderColor
         )
 
-        input.background = searchBackground
+        input.background =
+            searchBackground
 
         root.addView(
             input,
@@ -104,11 +127,18 @@ class SearchActivity : Activity() {
             )
         )
 
+        // توضیح کوچک
         val subtitle = TextView(this)
+
         subtitle.text =
-            "با وارد کردن نام کالا، قیمت آن را پیدا کن."
+            "نام کالا را وارد کنید تا قیمت آن نمایش داده شود."
+
         subtitle.textSize = 14f
-        subtitle.setTextColor(secondaryColor)
+
+        subtitle.setTextColor(
+            secondaryColor
+        )
+
         subtitle.setPadding(
             dp(8),
             dp(14),
@@ -124,10 +154,16 @@ class SearchActivity : Activity() {
             )
         )
 
-        val scrollView = ScrollView(this)
-        scrollView.isFillViewport = true
+        // نتایج
+        val scrollView =
+            ScrollView(this)
 
-        resultsLayout = LinearLayout(this)
+        scrollView.isFillViewport =
+            true
+
+        resultsLayout =
+            LinearLayout(this)
+
         resultsLayout.orientation =
             LinearLayout.VERTICAL
 
@@ -151,16 +187,17 @@ class SearchActivity : Activity() {
         setContentView(root)
 
         showMessage(
-            "برای جست‌وجو، نام کالا را وارد کن."
+            "برای جستجو، نام کالا را وارد کنید."
         )
 
         input.requestFocus()
 
         input.postDelayed({
 
-            val imm = getSystemService(
-                Context.INPUT_METHOD_SERVICE
-            ) as InputMethodManager
+            val imm =
+                getSystemService(
+                    Context.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
 
             imm.showSoftInput(
                 input,
@@ -169,6 +206,7 @@ class SearchActivity : Activity() {
 
         }, 250)
 
+        // جستجوی لحظه‌ای
         input.addTextChangedListener(
             object : TextWatcher {
 
@@ -177,7 +215,8 @@ class SearchActivity : Activity() {
                     start: Int,
                     count: Int,
                     after: Int
-                ) {}
+                ) {
+                }
 
                 override fun onTextChanged(
                     s: CharSequence?,
@@ -185,15 +224,19 @@ class SearchActivity : Activity() {
                     before: Int,
                     count: Int
                 ) {
-                    search(s.toString())
+                    search(
+                        s.toString()
+                    )
                 }
 
                 override fun afterTextChanged(
                     s: Editable?
-                ) {}
+                ) {
+                }
             }
         )
 
+        // دکمه Search کیبورد
         input.setOnEditorActionListener {
                 _,
                 actionId,
@@ -204,9 +247,10 @@ class SearchActivity : Activity() {
                 EditorInfo.IME_ACTION_SEARCH
             ) {
 
-                val imm = getSystemService(
-                    Context.INPUT_METHOD_SERVICE
-                ) as InputMethodManager
+                val imm =
+                    getSystemService(
+                        Context.INPUT_METHOD_SERVICE
+                    ) as InputMethodManager
 
                 imm.hideSoftInputFromWindow(
                     input.windowToken,
@@ -220,34 +264,43 @@ class SearchActivity : Activity() {
                 true
 
             } else {
+
                 false
             }
         }
     }
 
-    private fun search(query: String) {
+    private fun search(
+        query: String
+    ) {
 
-        val q = query.trim()
+        val q =
+            query.trim()
 
         if (q.isEmpty()) {
+
             showMessage(
-                "برای جست‌وجو، نام کالا را وارد کن."
+                "برای جستجو، نام کالا را وارد کنید."
             )
+
             return
         }
 
-        val json = getSharedPreferences(
-            "priceyar",
-            MODE_PRIVATE
-        ).getString(
-            "data",
-            ""
-        ) ?: ""
+        val json =
+            getSharedPreferences(
+                "priceyar",
+                MODE_PRIVATE
+            ).getString(
+                "data",
+                ""
+            ) ?: ""
 
         if (json.isEmpty()) {
+
             showMessage(
                 "هنوز اطلاعاتی ذخیره نشده است."
             )
+
             return
         }
 
@@ -257,44 +310,59 @@ class SearchActivity : Activity() {
                 org.json.JSONObject(json)
 
             val stores =
-                data.optJSONArray("stores")
+                data.optJSONArray(
+                    "stores"
+                )
 
             if (
                 stores == null ||
                 stores.length() == 0
             ) {
+
                 showMessage(
-                    "فروشگاهی برای جست‌وجو وجود ندارد."
+                    "فروشگاهی برای جستجو وجود ندارد."
                 )
+
                 return
             }
 
             val active =
-                data.optInt("active", 0)
+                data.optInt(
+                    "active",
+                    0
+                )
 
             if (
                 active < 0 ||
                 active >= stores.length()
             ) {
+
                 showMessage(
                     "فروشگاه انتخاب‌شده معتبر نیست."
                 )
+
                 return
             }
 
             val store =
-                stores.getJSONObject(active)
+                stores.getJSONObject(
+                    active
+                )
 
             val items =
-                store.optJSONArray("items")
+                store.optJSONArray(
+                    "items"
+                )
 
             if (
                 items == null ||
                 items.length() == 0
             ) {
+
                 showMessage(
                     "در این فروشگاه کالایی ثبت نشده است."
                 )
+
                 return
             }
 
@@ -339,6 +407,7 @@ class SearchActivity : Activity() {
             }
 
             if (found == 0) {
+
                 showMessage(
                     "کالایی با این نام پیدا نشد."
                 )
@@ -357,22 +426,24 @@ class SearchActivity : Activity() {
         price: String
     ) {
 
-        val card = LinearLayout(this)
+        val card =
+            LinearLayout(this)
+
         card.orientation =
             LinearLayout.VERTICAL
 
         card.setPadding(
             dp(18),
-            dp(14),
+            dp(15),
             dp(18),
-            dp(14)
+            dp(15)
         )
 
         val cardBackground =
             GradientDrawable()
 
         cardBackground.setColor(
-            Color.WHITE
+            cardColor
         )
 
         cardBackground.cornerRadius =
@@ -380,7 +451,7 @@ class SearchActivity : Activity() {
 
         cardBackground.setStroke(
             dp(1),
-            Color.rgb(218, 220, 224)
+            borderColor
         )
 
         card.background =
@@ -389,11 +460,16 @@ class SearchActivity : Activity() {
         val nameView =
             TextView(this)
 
-        nameView.text = name
-        nameView.textSize = 18f
+        nameView.text =
+            name
+
+        nameView.textSize =
+            18f
+
         nameView.setTextColor(
             textColor
         )
+
         nameView.typeface =
             Typeface.DEFAULT_BOLD
 
@@ -407,9 +483,11 @@ class SearchActivity : Activity() {
                 "قیمت ثبت نشده"
             }
 
-        priceView.textSize = 16f
+        priceView.textSize =
+            16f
+
         priceView.setTextColor(
-            Color.rgb(26, 115, 232)
+            accentColor
         )
 
         priceView.setPadding(
@@ -538,6 +616,6 @@ class SearchActivity : Activity() {
         return (
             value *
                 resources.displayMetrics.density
-        ).toInt()
+            ).toInt()
     }
 }
