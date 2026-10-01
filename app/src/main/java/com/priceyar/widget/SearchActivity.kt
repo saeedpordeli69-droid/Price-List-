@@ -18,12 +18,12 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 
-class SearchActivity : Activity() {
+class SearchActivity : Activity {
 
     private lateinit var input: EditText
     private lateinit var resultsLayout: LinearLayout
 
-    // Chrome Dark Mode style
+    // رنگ‌بندی حالت تاریک
     private val backgroundColor = Color.rgb(32, 33, 36)
     private val searchColor = Color.rgb(23, 23, 23)
     private val cardColor = Color.rgb(48, 49, 52)
@@ -38,30 +38,26 @@ class SearchActivity : Activity() {
 
         window.statusBarColor = backgroundColor
         window.navigationBarColor = backgroundColor
-
         window.decorView.systemUiVisibility = 0
 
+        // صفحه اصلی
         val root = LinearLayout(this)
         root.orientation = LinearLayout.VERTICAL
-
         root.setPadding(
             dp(18),
             dp(20),
             dp(18),
             dp(14)
         )
-
         root.setBackgroundColor(backgroundColor)
 
         // عنوان
         val title = TextView(this)
-
         title.text = "جستجوی قیمت کالا"
         title.textSize = 22f
         title.setTextColor(textColor)
         title.typeface = Typeface.DEFAULT_BOLD
         title.gravity = Gravity.CENTER
-
         title.setPadding(
             0,
             dp(8),
@@ -77,17 +73,14 @@ class SearchActivity : Activity() {
             )
         )
 
-        // کادر جستجو
+        // نوار جستجو
         input = EditText(this)
-
         input.hint = "جستجوی کالا"
         input.setHintTextColor(secondaryColor)
         input.setTextColor(textColor)
-
         input.textSize = 17f
 
         input.setSingleLine(true)
-
         input.setPadding(
             dp(18),
             0,
@@ -96,28 +89,17 @@ class SearchActivity : Activity() {
         )
 
         input.gravity = Gravity.CENTER_VERTICAL
+        input.imeOptions = EditorInfo.IME_ACTION_SEARCH
 
-        input.imeOptions =
-            EditorInfo.IME_ACTION_SEARCH
-
-        val searchBackground =
-            GradientDrawable()
-
-        // مشکی‌تر از صفحه
-        searchBackground.setColor(
-            searchColor
-        )
-
-        searchBackground.cornerRadius =
-            dp(28).toFloat()
-
+        val searchBackground = GradientDrawable()
+        searchBackground.setColor(searchColor)
+        searchBackground.cornerRadius = dp(28).toFloat()
         searchBackground.setStroke(
             dp(1),
             borderColor
         )
 
-        input.background =
-            searchBackground
+        input.background = searchBackground
 
         root.addView(
             input,
@@ -127,45 +109,13 @@ class SearchActivity : Activity() {
             )
         )
 
-        // توضیح کوچک
-        val subtitle = TextView(this)
+        // فضای نتایج
+        // هیچ متن راهنمای اولیه‌ای اینجا قرار نمی‌گیرد.
+        val scrollView = ScrollView(this)
+        scrollView.isFillViewport = true
 
-        subtitle.text =
-            "نام کالا را وارد کنید تا قیمت آن نمایش داده شود."
-
-        subtitle.textSize = 14f
-
-        subtitle.setTextColor(
-            secondaryColor
-        )
-
-        subtitle.setPadding(
-            dp(8),
-            dp(14),
-            dp(8),
-            dp(12)
-        )
-
-        root.addView(
-            subtitle,
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        )
-
-        // نتایج
-        val scrollView =
-            ScrollView(this)
-
-        scrollView.isFillViewport =
-            true
-
-        resultsLayout =
-            LinearLayout(this)
-
-        resultsLayout.orientation =
-            LinearLayout.VERTICAL
+        resultsLayout = LinearLayout(this)
+        resultsLayout.orientation = LinearLayout.VERTICAL
 
         scrollView.addView(
             resultsLayout,
@@ -186,18 +136,16 @@ class SearchActivity : Activity() {
 
         setContentView(root)
 
-        showMessage(
-            "برای جستجو، نام کالا را وارد کنید."
-        )
+        // عمداً showMessage اولیه حذف شده است.
+        // صفحه بعد از باز شدن فقط عنوان و نوار جستجو را نشان می‌دهد.
 
         input.requestFocus()
 
         input.postDelayed({
 
             val imm =
-                getSystemService(
-                    Context.INPUT_METHOD_SERVICE
-                ) as InputMethodManager
+                getSystemService(Context.INPUT_METHOD_SERVICE)
+                        as InputMethodManager
 
             imm.showSoftInput(
                 input,
@@ -206,7 +154,7 @@ class SearchActivity : Activity() {
 
         }, 250)
 
-        // جستجوی لحظه‌ای
+        // جستجو هنگام تایپ
         input.addTextChangedListener(
             object : TextWatcher {
 
@@ -224,8 +172,9 @@ class SearchActivity : Activity() {
                     before: Int,
                     count: Int
                 ) {
-                    search(
-                        s.toString()
+
+                    searchProducts(
+                        s?.toString()?.trim() ?: ""
                     )
                 }
 
@@ -237,28 +186,14 @@ class SearchActivity : Activity() {
         )
 
         // دکمه Search کیبورد
-        input.setOnEditorActionListener {
-                _,
-                actionId,
-                _ ->
+        input.setOnEditorActionListener { _, actionId, _ ->
 
             if (
-                actionId ==
-                EditorInfo.IME_ACTION_SEARCH
+                actionId == EditorInfo.IME_ACTION_SEARCH
             ) {
 
-                val imm =
-                    getSystemService(
-                        Context.INPUT_METHOD_SERVICE
-                    ) as InputMethodManager
-
-                imm.hideSoftInputFromWindow(
-                    input.windowToken,
-                    0
-                )
-
-                search(
-                    input.text.toString()
+                searchProducts(
+                    input.text.toString().trim()
                 )
 
                 true
@@ -270,109 +205,72 @@ class SearchActivity : Activity() {
         }
     }
 
-    private fun search(
-        query: String
-    ) {
+    /**
+     * جستجوی کالاها
+     */
+    private fun searchProducts(query: String) {
 
-        val q =
-            query.trim()
+        resultsLayout.removeAllViews()
 
-        if (q.isEmpty()) {
-
-            showMessage(
-                "برای جستجو، نام کالا را وارد کنید."
-            )
-
+        if (query.isBlank()) {
             return
         }
 
-        val json =
-            getSharedPreferences(
-                "priceyar",
-                MODE_PRIVATE
-            ).getString(
-                "data",
-                ""
-            ) ?: ""
+        val prefs = getSharedPreferences(
+            "priceyar",
+            Context.MODE_PRIVATE
+        )
 
-        if (json.isEmpty()) {
+        val json = prefs.getString(
+            "data",
+            null
+        )
 
-            showMessage(
-                "هنوز اطلاعاتی ذخیره نشده است."
-            )
-
+        if (json.isNullOrBlank()) {
             return
         }
 
         try {
 
-            val data =
+            val rootObject =
                 org.json.JSONObject(json)
 
             val stores =
-                data.optJSONArray(
-                    "stores"
-                )
+                rootObject.optJSONArray("stores")
+                    ?: return
 
-            if (
-                stores == null ||
-                stores.length() == 0
-            ) {
-
-                showMessage(
-                    "فروشگاهی برای جستجو وجود ندارد."
-                )
-
-                return
-            }
-
-            val active =
-                data.optInt(
-                    "active",
+            var activeStoreIndex =
+                rootObject.optInt(
+                    "activeStore",
                     0
                 )
 
             if (
-                active < 0 ||
-                active >= stores.length()
+                activeStoreIndex < 0 ||
+                activeStoreIndex >= stores.length()
             ) {
+                activeStoreIndex = 0
+            }
 
-                showMessage(
-                    "فروشگاه انتخاب‌شده معتبر نیست."
-                )
-
+            if (stores.length() == 0) {
                 return
             }
 
             val store =
-                stores.getJSONObject(
-                    active
-                )
+                stores.optJSONObject(
+                    activeStoreIndex
+                ) ?: return
 
             val items =
-                store.optJSONArray(
-                    "items"
-                )
+                store.optJSONArray("items")
+                    ?: return
 
-            if (
-                items == null ||
-                items.length() == 0
-            ) {
-
-                showMessage(
-                    "در این فروشگاه کالایی ثبت نشده است."
-                )
-
-                return
-            }
-
-            resultsLayout.removeAllViews()
+            val normalizedQuery =
+                query.trim().lowercase()
 
             var found = 0
 
-            for (
-                i in 0 until items.length()
-            ) {
+            for (i in 0 until items.length()) {
 
                 val item =
                     items.optJSONObject(i)
@@ -384,11 +282,13 @@ class SearchActivity : Activity() {
                         ""
                     )
 
+                if (name.isBlank()) {
+                    continue
+                }
+
                 if (
-                    name.contains(
-                        q,
-                        ignoreCase = true
-                    )
+                    name.lowercase()
+                        .contains(normalizedQuery)
                 ) {
 
                     val price =
@@ -407,9 +307,8 @@ class SearchActivity : Activity() {
             }
 
             if (found == 0) {
-
                 showMessage(
-                    "کالایی با این نام پیدا نشد."
+                    "کالایی پیدا نشد."
                 )
             }
 
@@ -421,98 +320,74 @@ class SearchActivity : Activity() {
         }
     }
 
+    /**
+     * اضافه کردن نتیجه جستجو
+     */
     private fun addResult(
         name: String,
         price: String
     ) {
 
         val card =
-            LinearLayout(this)
+            TextView(this)
 
-        card.orientation =
-            LinearLayout.VERTICAL
+        val resultText =
+            if (price.isNotBlank()) {
 
+                "$name  •  $price تومان"
+
+            } else {
+
+                name
+            }
+
+        card.text = resultText
+        card.textSize = 16f
+        card.setTextColor(textColor)
+        card.gravity = Gravity.CENTER_VERTICAL
         card.setPadding(
             dp(18),
-            dp(15),
+            dp(16),
             dp(18),
-            dp(15)
+            dp(16)
         )
 
-        val cardBackground =
+        val background =
             GradientDrawable()
 
-        cardBackground.setColor(
+        background.setColor(
             cardColor
         )
 
-        cardBackground.cornerRadius =
+        background.cornerRadius =
             dp(16).toFloat()
 
-        cardBackground.setStroke(
+        background.setStroke(
             dp(1),
             borderColor
         )
 
-        card.background =
-            cardBackground
+        card.background = background
 
-        val nameView =
-            TextView(this)
+        val params =
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dp(58)
+            )
 
-        nameView.text =
-            name
-
-        nameView.textSize =
-            18f
-
-        nameView.setTextColor(
-            textColor
-        )
-
-        nameView.typeface =
-            Typeface.DEFAULT_BOLD
-
-        val priceView =
-            TextView(this)
-
-        priceView.text =
-            if (price.isNotBlank()) {
-                "$price تومان"
-            } else {
-                "قیمت ثبت نشده"
-            }
-
-        priceView.textSize =
-            16f
-
-        priceView.setTextColor(
-            accentColor
-        )
-
-        priceView.setPadding(
+        params.setMargins(
             0,
             dp(8),
             0,
             0
         )
 
-        card.addView(
-            nameView,
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
+        resultsLayout.addView(
+            card,
+            params
         )
 
-        card.addView(
-            priceView,
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        )
-
+        // انتخاب کالا
         card.setOnClickListener {
 
             updateWidget(
@@ -522,53 +397,35 @@ class SearchActivity : Activity() {
 
             finish()
         }
-
-        val params =
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-
-        params.bottomMargin =
-            dp(10)
-
-        resultsLayout.addView(
-            card,
-            params
-        )
     }
 
+    /**
+     * پیام فقط زمانی نمایش داده می‌شود
+     * که واقعاً لازم باشد.
+     */
     private fun showMessage(
         message: String
     ) {
 
-        resultsLayout.removeAllViews()
-
-        val messageView =
+        val text =
             TextView(this)
 
-        messageView.text =
-            message
-
-        messageView.textSize =
-            16f
-
-        messageView.setTextColor(
+        text.text = message
+        text.textSize = 15f
+        text.setTextColor(
             secondaryColor
         )
 
-        messageView.gravity =
-            Gravity.CENTER
-
-        messageView.setPadding(
-            dp(12),
+        text.gravity = Gravity.CENTER
+        text.setPadding(
+            dp(10),
             dp(30),
-            dp(12),
-            dp(30)
+            dp(10),
+            dp(10)
         )
 
         resultsLayout.addView(
-            messageView,
+            text,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -576,15 +433,16 @@ class SearchActivity : Activity() {
         )
     }
 
+    /**
+     * نمایش نتیجه انتخاب‌شده روی ویجت
+     */
     private fun updateWidget(
         name: String,
         price: String
     ) {
 
         val manager =
-            AppWidgetManager.getInstance(
-                this
-            )
+            AppWidgetManager.getInstance(this)
 
         val component =
             ComponentName(
@@ -609,9 +467,7 @@ class SearchActivity : Activity() {
         }
     }
 
-    private fun dp(
-        value: Int
-    ): Int {
+    private fun dp(value: Int): Int {
 
         return (
             value *
@@ -619,3 +475,17 @@ class SearchActivity : Activity() {
             ).toInt()
     }
 }
+
+نتیجه این تغییر
+
+وقتی روی نوار جستجوی ویجت بزنی، صفحه فقط این‌ها را دارد:
+
+جستجوی قیمت کالا
+
+[ جستجوی کالا ]
+
+و هیچ متن راهنمای اولیه‌ای زیر آن نمایش داده نمی‌شود.
+
+اگر چیزی تایپ کنی، نتایج ظاهر می‌شوند. اگر کالایی پیدا نشود، فقط همان موقع پیام «کالایی پیدا نشد.» نمایش داده می‌شود.
+
+بعد از این تغییر، مرحله بعدی را می‌توانیم روی خود ویجت انجام بدهیم: نوار جستجوی تیره داخل زمینه خاکستری + لوگوی "$" + سه دایره "+"، "؟" و "سند".
