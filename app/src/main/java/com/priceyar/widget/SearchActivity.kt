@@ -43,21 +43,25 @@ class SearchActivity : Activity {
         // صفحه اصلی
         val root = LinearLayout(this)
         root.orientation = LinearLayout.VERTICAL
+
         root.setPadding(
             dp(18),
             dp(20),
             dp(18),
             dp(14)
         )
+
         root.setBackgroundColor(backgroundColor)
 
         // عنوان
         val title = TextView(this)
+
         title.text = "جستجوی قیمت کالا"
         title.textSize = 22f
         title.setTextColor(textColor)
         title.typeface = Typeface.DEFAULT_BOLD
         title.gravity = Gravity.CENTER
+
         title.setPadding(
             0,
             dp(8),
@@ -75,12 +79,14 @@ class SearchActivity : Activity {
 
         // نوار جستجو
         input = EditText(this)
+
         input.hint = "جستجوی کالا"
         input.setHintTextColor(secondaryColor)
         input.setTextColor(textColor)
         input.textSize = 17f
 
         input.setSingleLine(true)
+
         input.setPadding(
             dp(18),
             0,
@@ -92,8 +98,12 @@ class SearchActivity : Activity {
         input.imeOptions = EditorInfo.IME_ACTION_SEARCH
 
         val searchBackground = GradientDrawable()
+
         searchBackground.setColor(searchColor)
-        searchBackground.cornerRadius = dp(28).toFloat()
+
+        searchBackground.cornerRadius =
+            dp(28).toFloat()
+
         searchBackground.setStroke(
             dp(1),
             borderColor
@@ -110,12 +120,15 @@ class SearchActivity : Activity {
         )
 
         // فضای نتایج
-        // هیچ متن راهنمای اولیه‌ای اینجا قرار نمی‌گیرد.
+        // هیچ متن راهنمایی در ابتدا نمایش داده نمی‌شود.
         val scrollView = ScrollView(this)
+
         scrollView.isFillViewport = true
 
         resultsLayout = LinearLayout(this)
-        resultsLayout.orientation = LinearLayout.VERTICAL
+
+        resultsLayout.orientation =
+            LinearLayout.VERTICAL
 
         scrollView.addView(
             resultsLayout,
@@ -136,16 +149,15 @@ class SearchActivity : Activity {
 
         setContentView(root)
 
-        // عمداً showMessage اولیه حذف شده است.
-        // صفحه بعد از باز شدن فقط عنوان و نوار جستجو را نشان می‌دهد.
-
+        // باز کردن خودکار کیبورد
         input.requestFocus()
 
         input.postDelayed({
 
             val imm =
-                getSystemService(Context.INPUT_METHOD_SERVICE)
-                        as InputMethodManager
+                getSystemService(
+                    Context.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
 
             imm.showSoftInput(
                 input,
@@ -186,10 +198,14 @@ class SearchActivity : Activity {
         )
 
         // دکمه Search کیبورد
-        input.setOnEditorActionListener { _, actionId, _ ->
+        input.setOnEditorActionListener {
+                _,
+                actionId,
+                _ ->
 
             if (
-                actionId == EditorInfo.IME_ACTION_SEARCH
+                actionId ==
+                EditorInfo.IME_ACTION_SEARCH
             ) {
 
                 searchProducts(
@@ -208,7 +224,9 @@ class SearchActivity : Activity {
     /**
      * جستجوی کالاها
      */
-    private fun searchProducts(query: String) {
+    private fun searchProducts(
+        query: String
+    ) {
 
         resultsLayout.removeAllViews()
 
@@ -216,15 +234,17 @@ class SearchActivity : Activity {
             return
         }
 
-        val prefs = getSharedPreferences(
-            "priceyar",
-            Context.MODE_PRIVATE
-        )
+        val prefs =
+            getSharedPreferences(
+                "priceyar",
+                Context.MODE_PRIVATE
+            )
 
-        val json = prefs.getString(
-            "data",
-            null
-        )
+        val json =
+            prefs.getString(
+                "data",
+                null
+            )
 
         if (json.isNullOrBlank()) {
             return
@@ -236,8 +256,9 @@ class SearchActivity : Activity {
                 org.json.JSONObject(json)
 
             val stores =
-                rootObject.optJSONArray("stores")
-                    ?: return
+                rootObject.optJSONArray(
+                    "stores"
+                ) ?: return
 
             var activeStoreIndex =
                 rootObject.optInt(
@@ -262,8 +283,9 @@ class SearchActivity : Activity {
                 ) ?: return
 
             val items =
-                store.optJSONArray("items")
-                    ?: return
+                store.optJSONArray(
+                    "items"
+                ) ?: return
 
             val normalizedQuery =
                 query.trim().lowercase()
@@ -307,6 +329,7 @@ class SearchActivity : Activity {
             }
 
             if (found == 0) {
+
                 showMessage(
                     "کالایی پیدا نشد."
                 )
@@ -328,8 +351,7 @@ class SearchActivity : Activity {
         price: String
     ) {
 
-        val card =
-            TextView(this)
+        val card = TextView(this)
 
         val resultText =
             if (price.isNotBlank()) {
@@ -345,6 +367,7 @@ class SearchActivity : Activity {
         card.textSize = 16f
         card.setTextColor(textColor)
         card.gravity = Gravity.CENTER_VERTICAL
+
         card.setPadding(
             dp(18),
             dp(16),
@@ -355,9 +378,7 @@ class SearchActivity : Activity {
         val background =
             GradientDrawable()
 
-        background.setColor(
-            cardColor
-        )
+        background.setColor(cardColor)
 
         background.cornerRadius =
             dp(16).toFloat()
@@ -400,8 +421,7 @@ class SearchActivity : Activity {
     }
 
     /**
-     * پیام فقط زمانی نمایش داده می‌شود
-     * که واقعاً لازم باشد.
+     * نمایش پیام فقط در صورت نیاز
      */
     private fun showMessage(
         message: String
@@ -417,6 +437,7 @@ class SearchActivity : Activity {
         )
 
         text.gravity = Gravity.CENTER
+
         text.setPadding(
             dp(10),
             dp(30),
@@ -467,7 +488,9 @@ class SearchActivity : Activity {
         }
     }
 
-    private fun dp(value: Int): Int {
+    private fun dp(
+        value: Int
+    ): Int {
 
         return (
             value *
@@ -476,16 +499,4 @@ class SearchActivity : Activity {
     }
 }
 
-نتیجه این تغییر
-
-وقتی روی نوار جستجوی ویجت بزنی، صفحه فقط این‌ها را دارد:
-
-جستجوی قیمت کالا
-
-[ جستجوی کالا ]
-
-و هیچ متن راهنمای اولیه‌ای زیر آن نمایش داده نمی‌شود.
-
-اگر چیزی تایپ کنی، نتایج ظاهر می‌شوند. اگر کالایی پیدا نشود، فقط همان موقع پیام «کالایی پیدا نشد.» نمایش داده می‌شود.
-
-بعد از این تغییر، مرحله بعدی را می‌توانیم روی خود ویجت انجام بدهیم: نوار جستجوی تیره داخل زمینه خاکستری + لوگوی "$" + سه دایره "+"، "؟" و "سند".
+این نسخه دو نوشته اضافی را ندارد و هنگام باز شدن صفحه فقط عنوان و نوار جستجو را نشان می‌دهد.
