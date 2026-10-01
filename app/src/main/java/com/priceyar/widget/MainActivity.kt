@@ -2,7 +2,6 @@ package com.priceyar.widget
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -247,11 +246,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        /*
-         * برای سازگاری با نسخه‌های قبلی HTML
-         * اگر هنوز exportPriceList صدا زده شود،
-         * همان اشتراک‌گذاری جدید انجام می‌شود.
-         */
         @JavascriptInterface
         fun exportPriceList(
             json: String,
@@ -396,30 +390,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateWidget() {
-
-        val manager =
-            AppWidgetManager.getInstance(
-                this
-            )
-
-        val component =
-            ComponentName(
-                this,
-                PriceWidgetProvider::class.java
-            )
-
-        val ids =
-            manager.getAppWidgetIds(
-                component
-            )
-
-        for (id in ids) {
-
-            PriceWidgetProvider.updateWidget(
-                this,
-                manager,
-                id
-            )
-        }
+        PriceWidgetProvider.updateWidget(this)
     }
 }
