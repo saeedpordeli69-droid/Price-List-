@@ -3,81 +3,192 @@ package com.priceyar.widget
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.Gravity
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.content.Context
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
-import android.graphics.Color
-import android.view.Gravity
 
 class SearchActivity : Activity() {
 
     private lateinit var input: EditText
-    private lateinit var result: TextView
+    private lateinit var resultsLayout: LinearLayout
+
+    private val textColor = Color.rgb(32, 33, 36)
+    private val secondaryColor = Color.rgb(95, 99, 104)
+    private val backgroundColor = Color.WHITE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        window.statusBarColor = Color.WHITE
+        window.navigationBarColor = Color.WHITE
+        window.decorView.systemUiVisibility =
+            android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or
+            android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+
         val root = LinearLayout(this)
         root.orientation = LinearLayout.VERTICAL
-        root.setPadding(30, 40, 30, 30)
-        root.setBackgroundColor(Color.BLACK)
+        root.setPadding(dp(20), dp(24), dp(20), dp(16))
+        root.setBackgroundColor(backgroundColor)
 
+        // عنوان صفحه
+        val title = TextView(this)
+        title.text = "جست‌وجوی قیمت کالا"
+        title.textSize = 22f
+        title.setTextColor(textColor)
+        title.typeface = Typeface.DEFAULT_BOLD
+        title.gravity = Gravity.CENTER
+        title.setPadding(0, dp(8), 0, dp(20))
+
+        root.addView(
+            title,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+
+        // کادر جست‌وجو
         input = EditText(this)
-        input.hint = "نام کالا را جستجو کن"
-        input.setHintTextColor(Color.GRAY)
-        input.setTextColor(Color.WHITE)
-        input.setTextSize(18f)
+        input.hint = "نام کالا را جست‌وجو کن"
+        input.setHintTextColor(secondaryColor)
+        input.setTextColor(textColor)
+        input.textSize = 17f
         input.setSingleLine(true)
+        input.setPadding(dp(18), 0, dp(18), 0)
+        input.gravity = Gravity.CENTER_VERTICAL
+        input.imeOptions = EditorInfo.IME_ACTION_SEARCH
 
-        result = TextView(this)
-        result.setTextColor(Color.WHITE)
-        result.setTextSize(22f)
-        result.gravity = Gravity.CENTER
-        result.setPadding(10, 40, 10, 40)
+        val searchBackground = GradientDrawable()
+        searchBackground.setColor(Color.rgb(248, 249, 250))
+        searchBackground.cornerRadius = dp(28).toFloat()
+        searchBackground.setStroke(dp(1), Color.rgb(218, 220, 224))
+        input.background = searchBackground
 
         root.addView(
             input,
             LinearLayout.LayoutParams(
-                -1,
-                60
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dp(56)
+            )
+        )
+
+        // متن راهنما
+        val subtitle = TextView(this)
+        subtitle.text = "با وارد کردن نام کالا، قیمت آن را پیدا کن."
+        subtitle.textSize = 14f
+        subtitle.setTextColor(secondaryColor)
+        subtitle.setPadding(dp(8), dp(14), dp(8), dp(12))
+
+        root.addView(
+            subtitle,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+
+        // بخش نتایج قابل پیمایش
+        val scrollView = ScrollView(this)
+        scrollView.isFillViewport = true
+
+        resultsLayout = LinearLayout(this)
+        resultsLayout.orientation = LinearLayout.VERTICAL
+
+        scrollView.addView(
+            resultsLayout,
+            ScrollView.LayoutParams(
+                ScrollView.LayoutParams.MATCH_PARENT,
+                ScrollView.LayoutParams.WRAP_CONTENT
             )
         )
 
         root.addView(
-            result,
+            scrollView,
             LinearLayout.LayoutParams(
-                -1,
-                -2
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                0,
+                1f
             )
         )
 
         setContentView(root)
 
+        showMessage("برای جست‌وجو، نام کالا را وارد کن.")
+
         input.requestFocus()
 
-        input.setOnEditorActionListener { _, _, _ ->
-            search()
-            true
-        }
+        input.postDelayed({
+            val imm = getSystemService(
+                Context.INPUT_METHOD_SERVICE
+            ) as InputMethodManager
 
-        input.setOnKeyListener { _, keyCode, event ->
-            if (keyCode == android.view.KeyEvent.KEYCODE_ENTER &&
-                event.action == android.view.KeyEvent.ACTION_UP) {
-                search()
+            imm.showSoftInput(
+                input,
+                InputMethodManager.SHOW_IMPLICIT
+            )
+        }, 250)
+
+        // جست‌وجوی زنده هنگام تایپ
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {}
+
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                search(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        input.setOnEditorActionListener { _, actionId, _ ->
+
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                val imm = getSystemService(
+                    Context.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
+
+                imm.hideSoftInputFromWindow(
+                    input.windowToken,
+                    0
+                )
+
+                search(input.text.toString())
                 true
+
             } else {
                 false
             }
         }
     }
 
-    private fun search() {
+    private fun search(query: String) {
 
-        val q = input.text.toString().trim()
+        val q = query.trim()
 
         if (q.isEmpty()) {
-            result.text = "نام کالا را وارد کن"
+            showMessage("برای جست‌وجو، نام کالا را وارد کن.")
             return
         }
 
@@ -87,91 +198,167 @@ class SearchActivity : Activity() {
         ).getString("data", "") ?: ""
 
         if (json.isEmpty()) {
-            result.text = "هنوز اطلاعاتی ذخیره نشده"
+            showMessage("هنوز اطلاعاتی ذخیره نشده است.")
             return
         }
 
         try {
 
-            val stores =
-                org.json.JSONObject(json)
-                    .getJSONArray("stores")
+            val data = org.json.JSONObject(json)
+            val stores = data.optJSONArray("stores")
 
-            val active =
-                org.json.JSONObject(json)
-                    .getInt("active")
+            if (stores == null || stores.length() == 0) {
+                showMessage("فروشگاهی برای جست‌وجو وجود ندارد.")
+                return
+            }
 
-            val items =
-                stores
-                    .getJSONObject(active)
-                    .getJSONArray("items")
+            val active = data.optInt("active", 0)
 
-            var found = false
+            if (active < 0 || active >= stores.length()) {
+                showMessage("فروشگاه انتخاب‌شده معتبر نیست.")
+                return
+            }
+
+            val store = stores.getJSONObject(active)
+            val items = store.optJSONArray("items")
+
+            if (items == null || items.length() == 0) {
+                showMessage("در این فروشگاه کالایی ثبت نشده است.")
+                return
+            }
+
+            resultsLayout.removeAllViews()
+
+            var found = 0
 
             for (i in 0 until items.length()) {
 
-                val item = items.getJSONObject(i)
+                val item = items.optJSONObject(i) ?: continue
+                val name = item.optString("name", "")
 
-                val name =
-                    item.optString("name")
+                if (name.contains(q, ignoreCase = true)) {
 
-                if (name.contains(q, true)) {
+                    val price = item.optString("price", "")
 
-                    val price =
-                        item.optString("price")
+                    addResult(name, price)
 
-                    result.text =
-                        "$name\n\n$price"
-
-                    found = true
-
-                    updateWidget(
-                        name,
-                        price
-                    )
-
-                    break
+                    found++
                 }
             }
 
-            if (!found) {
-                result.text = "کالایی پیدا نشد"
+            if (found == 0) {
+                showMessage("کالایی با این نام پیدا نشد.")
             }
 
         } catch (_: Exception) {
-
-            result.text =
-                "خطا در خواندن اطلاعات"
+            showMessage("خطا در خواندن اطلاعات کالاها.")
         }
     }
 
-    private fun updateWidget(
-        name: String,
-        price: String
-    ) {
+    private fun addResult(name: String, price: String) {
 
-        val manager =
-            AppWidgetManager.getInstance(this)
+        val card = LinearLayout(this)
+        card.orientation = LinearLayout.VERTICAL
+        card.setPadding(dp(18), dp(14), dp(18), dp(14))
 
-        val component =
-            ComponentName(
-                this,
-                PriceWidgetProvider::class.java
+        val cardBackground = GradientDrawable()
+        cardBackground.setColor(Color.WHITE)
+        cardBackground.cornerRadius = dp(16).toFloat()
+        cardBackground.setStroke(dp(1), Color.rgb(218, 220, 224))
+        card.background = cardBackground
+
+        val nameView = TextView(this)
+        nameView.text = name
+        nameView.textSize = 18f
+        nameView.setTextColor(textColor)
+        nameView.typeface = Typeface.DEFAULT_BOLD
+
+        val priceView = TextView(this)
+        priceView.text = if (price.isNotBlank()) {
+            "$price تومان"
+        } else {
+            "قیمت ثبت نشده"
+        }
+
+        priceView.textSize = 16f
+        priceView.setTextColor(Color.rgb(26, 115, 232))
+        priceView.setPadding(0, dp(8), 0, 0)
+
+        card.addView(
+            nameView,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
             )
+        )
 
-        val ids =
-            manager.getAppWidgetIds(component)
+        card.addView(
+            priceView,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+
+        // با لمس نتیجه، اطلاعات آن روی ویجت نمایش داده می‌شود
+        card.setOnClickListener {
+            updateWidget(name, price)
+        }
+
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        params.bottomMargin = dp(10)
+
+        resultsLayout.addView(card, params)
+    }
+
+    private fun showMessage(message: String) {
+
+        resultsLayout.removeAllViews()
+
+        val messageView = TextView(this)
+        messageView.text = message
+        messageView.textSize = 16f
+        messageView.setTextColor(secondaryColor)
+        messageView.gravity = Gravity.CENTER
+        messageView.setPadding(dp(12), dp(30), dp(12), dp(30))
+
+        resultsLayout.addView(
+            messageView,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
+    }
+
+    private fun updateWidget(name: String, price: String) {
+
+        val manager = AppWidgetManager.getInstance(this)
+
+        val component = ComponentName(
+            this,
+            PriceWidgetProvider::class.java
+        )
+
+        val ids = manager.getAppWidgetIds(component)
 
         for (id in ids) {
 
-            PriceWidgetProvider
-                .showResult(
-                    this,
-                    manager,
-                    id,
-                    name,
-                    price
-                )
+            PriceWidgetProvider.showResult(
+                this,
+                manager,
+                id,
+                name,
+                price
+            )
         }
+    }
+
+    private fun dp(value: Int): Int {
+        return (value * resources.displayMetrics.density).toInt()
     }
 }
