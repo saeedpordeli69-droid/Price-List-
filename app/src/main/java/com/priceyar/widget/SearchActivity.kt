@@ -23,82 +23,32 @@ class SearchActivity : Activity() {
     private lateinit var input: EditText
     private lateinit var resultsLayout: LinearLayout
 
-    private val backgroundColor =
-        Color.rgb(32, 33, 36)
+    private val backgroundColor = Color.rgb(32, 33, 36)
+    private val searchColor = Color.rgb(23, 23, 23)
+    private val cardColor = Color.rgb(48, 49, 52)
+    private val textColor = Color.rgb(232, 234, 237)
+    private val secondaryColor = Color.rgb(154, 160, 166)
+    private val borderColor = Color.rgb(74, 76, 80)
 
-    private val searchColor =
-        Color.rgb(23, 23, 23)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    private val cardColor =
-        Color.rgb(48, 49, 52)
-
-    private val textColor =
-        Color.rgb(232, 234, 237)
-
-    private val secondaryColor =
-        Color.rgb(154, 160, 166)
-
-    private val borderColor =
-        Color.rgb(74, 76, 80)
-
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-
-        super.onCreate(
-            savedInstanceState
-        )
-
-        window.statusBarColor =
-            backgroundColor
-
-        window.navigationBarColor =
-            backgroundColor
-
+        window.statusBarColor = backgroundColor
+        window.navigationBarColor = backgroundColor
         window.decorView.systemUiVisibility = 0
 
-        val root =
-            LinearLayout(this)
+        val root = LinearLayout(this)
+        root.orientation = LinearLayout.VERTICAL
+        root.setPadding(dp(18), dp(20), dp(18), dp(14))
+        root.setBackgroundColor(backgroundColor)
 
-        root.orientation =
-            LinearLayout.VERTICAL
-
-        root.setPadding(
-            dp(18),
-            dp(20),
-            dp(18),
-            dp(14)
-        )
-
-        root.setBackgroundColor(
-            backgroundColor
-        )
-
-        val title =
-            TextView(this)
-
-        title.text =
-            "جستجوی قیمت کالا"
-
-        title.textSize =
-            22f
-
-        title.setTextColor(
-            textColor
-        )
-
-        title.typeface =
-            Typeface.DEFAULT_BOLD
-
-        title.gravity =
-            Gravity.CENTER
-
-        title.setPadding(
-            0,
-            dp(8),
-            0,
-            dp(18)
-        )
+        val title = TextView(this)
+        title.text = "جستجوی قیمت کالا"
+        title.textSize = 22f
+        title.setTextColor(textColor)
+        title.typeface = Typeface.DEFAULT_BOLD
+        title.gravity = Gravity.CENTER
+        title.setPadding(0, dp(8), 0, dp(18))
 
         root.addView(
             title,
@@ -108,57 +58,22 @@ class SearchActivity : Activity() {
             )
         )
 
-        input =
-            EditText(this)
+        input = EditText(this)
+        input.hint = "جستجوی کالا"
+        input.setHintTextColor(secondaryColor)
+        input.setTextColor(textColor)
+        input.textSize = 17f
+        input.setSingleLine(true)
+        input.setPadding(dp(18), 0, dp(18), 0)
+        input.gravity = Gravity.CENTER_VERTICAL
+        input.imeOptions = EditorInfo.IME_ACTION_SEARCH
 
-        input.hint =
-            "جستجوی کالا"
+        val searchBackground = GradientDrawable()
+        searchBackground.setColor(searchColor)
+        searchBackground.cornerRadius = dp(28).toFloat()
+        searchBackground.setStroke(dp(1), borderColor)
 
-        input.setHintTextColor(
-            secondaryColor
-        )
-
-        input.setTextColor(
-            textColor
-        )
-
-        input.textSize =
-            17f
-
-        input.setSingleLine(
-            true
-        )
-
-        input.setPadding(
-            dp(18),
-            0,
-            dp(18),
-            0
-        )
-
-        input.gravity =
-            Gravity.CENTER_VERTICAL
-
-        input.imeOptions =
-            EditorInfo.IME_ACTION_SEARCH
-
-        val searchBackground =
-            GradientDrawable()
-
-        searchBackground.setColor(
-            searchColor
-        )
-
-        searchBackground.cornerRadius =
-            dp(28).toFloat()
-
-        searchBackground.setStroke(
-            dp(1),
-            borderColor
-        )
-
-        input.background =
-            searchBackground
+        input.background = searchBackground
 
         root.addView(
             input,
@@ -168,17 +83,11 @@ class SearchActivity : Activity() {
             )
         )
 
-        val scrollView =
-            ScrollView(this)
+        val scrollView = ScrollView(this)
+        scrollView.isFillViewport = true
 
-        scrollView.isFillViewport =
-            true
-
-        resultsLayout =
-            LinearLayout(this)
-
-        resultsLayout.orientation =
-            LinearLayout.VERTICAL
+        resultsLayout = LinearLayout(this)
+        resultsLayout.orientation = LinearLayout.VERTICAL
 
         scrollView.addView(
             resultsLayout,
@@ -202,7 +111,6 @@ class SearchActivity : Activity() {
         input.requestFocus()
 
         input.postDelayed({
-
             val imm =
                 getSystemService(
                     Context.INPUT_METHOD_SERVICE
@@ -212,7 +120,6 @@ class SearchActivity : Activity() {
                 input,
                 InputMethodManager.SHOW_IMPLICIT
             )
-
         }, 250)
 
         input.addTextChangedListener(
@@ -232,10 +139,8 @@ class SearchActivity : Activity() {
                     before: Int,
                     count: Int
                 ) {
-
                     searchProducts(
-                        s?.toString()?.trim()
-                            ?: ""
+                        s?.toString()?.trim() ?: ""
                     )
                 }
 
@@ -246,20 +151,12 @@ class SearchActivity : Activity() {
             }
         )
 
-        input.setOnEditorActionListener {
-                _,
-                actionId,
-                _ ->
+        input.setOnEditorActionListener { _, actionId, _ ->
 
-            if (
-                actionId ==
-                EditorInfo.IME_ACTION_SEARCH
-            ) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
                 searchProducts(
-                    input.text
-                        .toString()
-                        .trim()
+                    input.text.toString().trim()
                 )
 
                 true
@@ -271,9 +168,7 @@ class SearchActivity : Activity() {
         }
     }
 
-    private fun searchProducts(
-        query: String
-    ) {
+    private fun searchProducts(query: String) {
 
         resultsLayout.removeAllViews()
 
@@ -298,9 +193,7 @@ class SearchActivity : Activity() {
         }
 
         val infoMode =
-            PriceWidgetProvider.isInfoModeEnabled(
-                this
-            )
+            PriceWidgetProvider.isInfoModeEnabled(this)
 
         try {
 
@@ -308,9 +201,12 @@ class SearchActivity : Activity() {
                 org.json.JSONObject(json)
 
             val stores =
-                rootObject.optJSONArray(
-                    "stores"
-                ) ?: return
+                rootObject.optJSONArray("stores")
+                    ?: return
+
+            if (stores.length() == 0) {
+                return
+            }
 
             var activeStoreIndex =
                 rootObject.optInt(
@@ -320,17 +216,9 @@ class SearchActivity : Activity() {
 
             if (
                 activeStoreIndex < 0 ||
-                activeStoreIndex >=
-                stores.length()
+                activeStoreIndex >= stores.length()
             ) {
-
                 activeStoreIndex = 0
-            }
-
-            if (
-                stores.length() == 0
-            ) {
-                return
             }
 
             val store =
@@ -339,20 +227,15 @@ class SearchActivity : Activity() {
                 ) ?: return
 
             val items =
-                store.optJSONArray(
-                    "items"
-                ) ?: return
+                store.optJSONArray("items")
+                    ?: return
 
             val normalizedQuery =
-                query
-                    .trim()
-                    .lowercase()
+                query.trim().lowercase()
 
             var found = 0
 
-            for (
-                i in 0 until items.length()
-            ) {
+            for (i in 0 until items.length()) {
 
                 val item =
                     items.optJSONObject(i)
@@ -369,11 +252,9 @@ class SearchActivity : Activity() {
                 }
 
                 if (
-                    name
-                        .lowercase()
-                        .contains(
-                            normalizedQuery
-                        )
+                    name.lowercase().contains(
+                        normalizedQuery
+                    )
                 ) {
 
                     val price =
@@ -382,11 +263,27 @@ class SearchActivity : Activity() {
                             ""
                         )
 
-                    val description =
+                    var description =
                         item.optString(
                             "description",
                             ""
                         )
+
+                    if (description.isBlank()) {
+                        description =
+                            item.optString(
+                                "desc",
+                                ""
+                            )
+                    }
+
+                    if (description.isBlank()) {
+                        description =
+                            item.optString(
+                                "details",
+                                ""
+                            )
+                    }
 
                     addResult(
                         name,
@@ -400,10 +297,7 @@ class SearchActivity : Activity() {
             }
 
             if (found == 0) {
-
-                showMessage(
-                    "کالایی پیدا نشد."
-                )
+                showMessage("کالایی پیدا نشد.")
             }
 
         } catch (_: Exception) {
@@ -421,14 +315,10 @@ class SearchActivity : Activity() {
         infoMode: Boolean
     ) {
 
-        val card =
-            LinearLayout(this)
+        val card = LinearLayout(this)
 
-        card.orientation =
-            LinearLayout.VERTICAL
-
-        card.gravity =
-            Gravity.CENTER_VERTICAL
+        card.orientation = LinearLayout.VERTICAL
+        card.gravity = Gravity.CENTER_VERTICAL
 
         card.setPadding(
             dp(18),
@@ -437,39 +327,23 @@ class SearchActivity : Activity() {
             dp(12)
         )
 
-        val background =
-            GradientDrawable()
+        val background = GradientDrawable()
 
-        background.setColor(
-            cardColor
-        )
-
-        background.cornerRadius =
-            dp(16).toFloat()
-
+        background.setColor(cardColor)
+        background.cornerRadius = dp(16).toFloat()
         background.setStroke(
             dp(1),
             borderColor
         )
 
-        card.background =
-            background
+        card.background = background
 
-        val nameText =
-            TextView(this)
+        val nameText = TextView(this)
 
-        nameText.text =
-            name
-
-        nameText.textSize =
-            16f
-
-        nameText.setTextColor(
-            textColor
-        )
-
-        nameText.typeface =
-            Typeface.DEFAULT_BOLD
+        nameText.text = name
+        nameText.textSize = 16f
+        nameText.setTextColor(textColor)
+        nameText.typeface = Typeface.DEFAULT_BOLD
 
         card.addView(
             nameText,
@@ -481,18 +355,11 @@ class SearchActivity : Activity() {
 
         if (price.isNotBlank()) {
 
-            val priceText =
-                TextView(this)
+            val priceText = TextView(this)
 
-            priceText.text =
-                "$price تومان"
-
-            priceText.textSize =
-                15f
-
-            priceText.setTextColor(
-                textColor
-            )
+            priceText.text = "$price تومان"
+            priceText.textSize = 15f
+            priceText.setTextColor(textColor)
 
             priceText.setPadding(
                 0,
@@ -521,22 +388,20 @@ class SearchActivity : Activity() {
             descriptionText.text =
                 description
 
-            descriptionText.textSize =
-                14f
-
+            descriptionText.textSize = 14f
             descriptionText.setTextColor(
                 secondaryColor
             )
 
             descriptionText.setPadding(
                 0,
-                dp(6),
+                dp(8),
                 0,
                 0
             )
 
-            descriptionText.maxLines =
-                5
+            descriptionText.maxLines = 10
+            descriptionText.ellipsize = null
 
             card.addView(
                 descriptionText,
@@ -576,25 +441,14 @@ class SearchActivity : Activity() {
         }
     }
 
-    private fun showMessage(
-        message: String
-    ) {
+    private fun showMessage(message: String) {
 
-        val text =
-            TextView(this)
+        val text = TextView(this)
 
-        text.text =
-            message
-
-        text.textSize =
-            15f
-
-        text.setTextColor(
-            secondaryColor
-        )
-
-        text.gravity =
-            Gravity.CENTER
+        text.text = message
+        text.textSize = 15f
+        text.setTextColor(secondaryColor)
+        text.gravity = Gravity.CENTER
 
         text.setPadding(
             dp(10),
@@ -618,9 +472,7 @@ class SearchActivity : Activity() {
     ) {
 
         val manager =
-            AppWidgetManager.getInstance(
-                this
-            )
+            AppWidgetManager.getInstance(this)
 
         val component =
             ComponentName(
@@ -645,9 +497,7 @@ class SearchActivity : Activity() {
         }
     }
 
-    private fun dp(
-        value: Int
-    ): Int {
+    private fun dp(value: Int): Int {
 
         return (
             value *
