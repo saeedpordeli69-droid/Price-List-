@@ -18,6 +18,9 @@ class PriceWidgetProvider : AppWidgetProvider() {
         private const val PREFS_NAME = "priceyar"
         private const val INFO_MODE_KEY = "widgetInfoMode"
 
+        private const val ACTION_TOGGLE_INFO =
+            "com.priceyar.widget.TOGGLE_INFO"
+
         fun updateWidget(context: Context) {
 
             val manager =
@@ -156,7 +159,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
-            // روشن / خاموش کردن حالت اطلاعات
+            // حالت اطلاعات
             views.setOnClickPendingIntent(
                 R.id.widgetHelpButton,
                 createInfoTogglePendingIntent(
@@ -164,6 +167,35 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     appWidgetId
                 )
             )
+
+            // نمایش وضعیت دکمه اطلاعات
+            val infoEnabled =
+                isInfoModeEnabled(context)
+
+            if (infoEnabled) {
+
+                views.setInt(
+                    R.id.widgetHelpButton,
+                    "setColorFilter",
+                    android.graphics.Color.rgb(
+                        100,
+                        180,
+                        255
+                    )
+                )
+
+            } else {
+
+                views.setInt(
+                    R.id.widgetHelpButton,
+                    "setColorFilter",
+                    android.graphics.Color.rgb(
+                        232,
+                        234,
+                        237
+                    )
+                )
+            }
 
             return views
         }
@@ -226,16 +258,15 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 Intent(
                     context,
                     PriceWidgetProvider::class.java
-                ).apply {
+                )
 
-                    action =
-                        "com.priceyar.widget.TOGGLE_INFO"
+            intent.action =
+                ACTION_TOGGLE_INFO
 
-                    putExtra(
-                        AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        appWidgetId
-                    )
-                }
+            intent.putExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                appWidgetId
+            )
 
             return PendingIntent.getBroadcast(
                 context,
@@ -246,7 +277,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
             )
         }
 
-        fun toggleInfoMode(
+        private fun toggleInfoMode(
             context: Context
         ) {
 
@@ -294,8 +325,8 @@ class PriceWidgetProvider : AppWidgetProvider() {
     ) {
 
         if (
-            intent.action ==
-            "com.priceyar.widget.TOGGLE_INFO"
+            ACTION_TOGGLE_INFO ==
+            intent.action
         ) {
 
             toggleInfoMode(context)
