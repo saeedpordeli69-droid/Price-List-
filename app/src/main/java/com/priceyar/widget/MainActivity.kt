@@ -1,6 +1,7 @@
 package com.priceyar.widget
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -192,87 +193,41 @@ class MainActivity : AppCompatActivity() {
             fileName: String
         ) {
 
-            try {
+            runOnUiThread {
 
-                val sharedDirectory =
-                    File(
-                        cacheDir,
-                        "shared"
-                    )
-
-                if (!sharedDirectory.exists()) {
-                    sharedDirectory.mkdirs()
-                }
-
-                val safeFileName =
-                    sanitizeFileName(fileName)
-
-                val file =
-                    File(
-                        sharedDirectory,
-                        safeFileName
-                    )
-
-                file.writeText(
-                    json,
-                    Charsets.UTF_8
-                )
-
-                val uri =
-                    FileProvider.getUriForFile(
-                        this@MainActivity,
-                        "${packageName}.fileprovider",
-                        file
-                    )
-
-                val sendIntent =
-                    Intent(
-                        Intent.ACTION_SEND
-                    ).apply {
-
-                        type =
-                            "application/json"
-
-                        putExtra(
-                            Intent.EXTRA_STREAM,
-                            uri
+                AlertDialog.Builder(this@MainActivity)
+                    .setTitle("ارسال لیست قیمت")
+                    .setItems(
+                        arrayOf(
+                            "👤 ویژه فروشندگان",
+                            "🔐 ویژه مدیریت"
                         )
+                    ) { _, which ->
 
-                        putExtra(
-                            Intent.EXTRA_TEXT,
-                            "لیست جدید قیمت‌ها برای به‌روزرسانی لمس کنید."
-                        )
+                        when (which) {
 
-                        addFlags(
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        )
+                            0 -> {
+                                sharePriceListFile(
+                                    json,
+                                    fileName,
+                                    "ویژه فروشندگان"
+                                )
+                            }
 
-                        clipData =
-                            android.content.ClipData.newRawUri(
-                                "PriceYar",
-                                uri
-                            )
+                            1 -> {
+                                sharePriceListFile(
+                                    json,
+                                    fileName,
+                                    "ویژه مدیریت"
+                                )
+                            }
+                        }
                     }
-
-                val chooser =
-                    Intent.createChooser(
-                        sendIntent,
-                        "ارسال لیست قیمت با"
+                    .setNegativeButton(
+                        "انصراف",
+                        null
                     )
-
-                startActivity(chooser)
-
-                webView.evaluateJavascript(
-                    "window.shareStarted && window.shareStarted();",
-                    null
-                )
-
-            } catch (e: Exception) {
-
-                webView.evaluateJavascript(
-                    "window.shareFailed && window.shareFailed();",
-                    null
-                )
+                    .show()
             }
         }
 
@@ -317,6 +272,96 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(
                 intent,
                 REQUEST_OPEN_FILE
+            )
+        }
+    }
+
+    private fun sharePriceListFile(
+        json: String,
+        fileName: String,
+        modeName: String
+    ) {
+
+        try {
+
+            val sharedDirectory =
+                File(
+                    cacheDir,
+                    "shared"
+                )
+
+            if (!sharedDirectory.exists()) {
+                sharedDirectory.mkdirs()
+            }
+
+            val safeFileName =
+                sanitizeFileName(fileName)
+
+            val file =
+                File(
+                    sharedDirectory,
+                    safeFileName
+                )
+
+            file.writeText(
+                json,
+                Charsets.UTF_8
+            )
+
+            val uri =
+                FileProvider.getUriForFile(
+                    this,
+                    "${packageName}.fileprovider",
+                    file
+                )
+
+            val sendIntent =
+                Intent(
+                    Intent.ACTION_SEND
+                ).apply {
+
+                    type =
+                        "application/json"
+
+                    putExtra(
+                        Intent.EXTRA_STREAM,
+                        uri
+                    )
+
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "لیست قیمت - $modeName"
+                    )
+
+                    addFlags(
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+
+                    clipData =
+                        android.content.ClipData.newRawUri(
+                            "PriceYar",
+                            uri
+                        )
+                }
+
+            val chooser =
+                Intent.createChooser(
+                    sendIntent,
+                    "ارسال لیست قیمت با"
+                )
+
+            startActivity(chooser)
+
+            webView.evaluateJavascript(
+                "window.shareStarted && window.shareStarted();",
+                null
+            )
+
+        } catch (e: Exception) {
+
+            webView.evaluateJavascript(
+                "window.shareFailed && window.shareFailed();",
+                null
             )
         }
     }
