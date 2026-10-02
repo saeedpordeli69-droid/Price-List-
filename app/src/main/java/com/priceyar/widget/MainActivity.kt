@@ -276,7 +276,7 @@ class MainActivity : AppCompatActivity() {
 
             webView.post {
 
-                val json =
+                val rawJson =
                     getSharedPreferences(
                         "priceyar",
                         MODE_PRIVATE
@@ -287,9 +287,52 @@ class MainActivity : AppCompatActivity() {
                         )
                         ?: ""
 
-                if (json.isBlank()) {
+                if (rawJson.isBlank()) {
                     return@post
                 }
+
+                val json =
+                    try {
+
+                        val rawRoot =
+                            org.json.JSONObject(rawJson)
+
+                        val packageRoot =
+                            org.json.JSONObject()
+
+                        packageRoot.put(
+                            "type",
+                            "priceyar-price-list"
+                        )
+
+                        packageRoot.put(
+                            "version",
+                            1
+                        )
+
+                        packageRoot.put(
+                            "createdAt",
+                            System.currentTimeMillis()
+                        )
+
+                        packageRoot.put(
+                            "stores",
+                            rawRoot.optJSONArray("stores")
+                                ?: org.json.JSONArray()
+                        )
+
+                        packageRoot.put(
+                            "deleted",
+                            rawRoot.optJSONObject("deleted")
+                                ?: org.json.JSONObject()
+                        )
+
+                        packageRoot.toString(2)
+
+                    } catch (e: Exception) {
+
+                        return@post
+                    }
 
                 sharePriceListFile(
                     json,
