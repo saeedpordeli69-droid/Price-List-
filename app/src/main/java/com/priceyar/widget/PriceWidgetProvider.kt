@@ -29,6 +29,9 @@ class PriceWidgetProvider : AppWidgetProvider() {
         const val ACTION_ADD_PRODUCT =
             "com.priceyar.widget.ADD_PRODUCT"
 
+        const val ACTION_CHOOSE_SHARE_MODE =
+            "com.priceyar.widget.CHOOSE_SHARE_MODE"
+
         fun updateWidget(context: Context) {
 
             val manager =
@@ -158,7 +161,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
-            // افزودن مستقیم کالا
+            // افزودن کالا
             views.setOnClickPendingIntent(
                 R.id.widgetAddButton,
                 createAddProductPendingIntent(
@@ -305,18 +308,18 @@ class PriceWidgetProvider : AppWidgetProvider() {
             val intent =
                 Intent(
                     context,
-                    PriceWidgetProvider::class.java
+                    MainActivity::class.java
                 )
 
             intent.action =
-                ACTION_SHARE_LIST
+                ACTION_CHOOSE_SHARE_MODE
 
-            intent.putExtra(
-                AppWidgetManager.EXTRA_APPWIDGET_ID,
-                appWidgetId
-            )
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
 
-            return PendingIntent.getBroadcast(
+            return PendingIntent.getActivity(
                 context,
                 appWidgetId + 30000,
                 intent,
