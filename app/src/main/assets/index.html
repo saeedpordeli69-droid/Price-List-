@@ -12,7 +12,10 @@
 <title>مدیریت قیمت فروشگاه</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+box-sizing:border-box
+}
+
 html,body{
 margin:0;
 padding:0;
@@ -20,10 +23,26 @@ background:#000;
 color:#fff;
 font-family:system-ui,-apple-system,"Noto Sans Arabic","Noto Sans",sans-serif
 }
-body{min-height:100vh}
-.app{max-width:680px;margin:auto;padding:15px 14px 35px}
-.head{margin-bottom:15px}
-.storeBox{position:relative;width:100%}
+
+body{
+min-height:100vh
+}
+
+.app{
+max-width:680px;
+margin:auto;
+padding:15px 14px 35px
+}
+
+.head{
+margin-bottom:15px
+}
+
+.storeBox{
+position:relative;
+width:100%
+}
+
 .storeBtn{
 width:100%;
 height:57px;
@@ -37,6 +56,7 @@ text-align:center;
 padding:0 45px;
 position:relative
 }
+
 .storeBtn:after{
 content:"⋮";
 position:absolute;
@@ -47,6 +67,7 @@ color:#aaa;
 font-size:27px;
 font-weight:700
 }
+
 .storeMenu{
 display:none;
 position:absolute;
@@ -60,14 +81,22 @@ border-radius:15px;
 padding:8px;
 box-shadow:0 15px 40px #000
 }
-.storeMenu.open{display:block}
+
+.storeMenu.open{
+display:block
+}
+
 .storeItem{
 padding:13px;
 border-radius:10px;
 font-size:16px;
 margin-bottom:4px
 }
-.storeItem.active{background:#252525}
+
+.storeItem.active{
+background:#252525
+}
+
 .storeActions{
 display:flex;
 gap:8px;
@@ -75,6 +104,7 @@ margin-top:8px;
 border-top:1px solid #292929;
 padding-top:8px
 }
+
 .storeAction{
 flex:1;
 height:46px;
@@ -85,9 +115,21 @@ color:#fff;
 font-size:15px;
 font-weight:800
 }
-.storeAction.addStore{background:#fff;color:#000}
-.storeAction.deleteStore{background:#351010;color:#fff}
-.searchWrap{position:relative}
+
+.storeAction.addStore{
+background:#fff;
+color:#000
+}
+
+.storeAction.deleteStore{
+background:#351010;
+color:#fff
+}
+
+.searchWrap{
+position:relative
+}
+
 .search{
 width:100%;
 height:58px;
@@ -99,7 +141,11 @@ font-size:18px;
 padding:0 52px 0 18px;
 outline:0
 }
-.search:focus{border-color:#666}
+
+.search:focus{
+border-color:#666
+}
+
 .searchIcon{
 position:absolute;
 right:17px;
@@ -108,8 +154,15 @@ color:#aaa;
 font-size:25px;
 pointer-events:none
 }
-.quickRow{display:flex;gap:8px;margin-top:10px}
-.add,.more{
+
+.quickRow{
+display:flex;
+gap:8px;
+margin-top:10px
+}
+
+.add,
+.more{
 flex:1;
 width:auto;
 height:51px;
@@ -118,15 +171,36 @@ border-radius:14px;
 font-size:16px;
 font-weight:800
 }
-.add{background:#fff;color:#000;border:0}
-.more{background:#151515;color:#fff;border:1px solid #333}
-.more.on{background:#351010;border-color:#351010;color:#fff}
+
+.add{
+background:#fff;
+color:#000;
+border:0
+}
+
+.more{
+background:#151515;
+color:#fff;
+border:1px solid #333
+}
+
+.more.on{
+background:#351010;
+border-color:#351010;
+color:#fff
+}
+
 .section{
 display:flex;
 justify-content:space-between;
 margin:23px 5px 8px
 }
-.section span{font-size:12px;color:#777}
+
+.section span{
+font-size:12px;
+color:#777
+}
+
 .row{
 background:#101010;
 border:1px solid #252525;
@@ -138,7 +212,12 @@ display:flex;
 gap:12px;
 align-items:center
 }
-.info{flex:1;min-width:0}
+
+.info{
+flex:1;
+min-width:0
+}
+
 .name{
 font-size:21px;
 font-weight:850;
@@ -146,18 +225,27 @@ white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis
 }
-.sub,.buy{
+
+.sub,
+.buy{
 font-size:12px;
 color:#888;
 margin-top:4px;
 line-height:1.7
 }
+
 .price{
 font-size:21px;
 font-weight:850;
 white-space:nowrap
 }
-.empty{text-align:center;color:#888;padding:42px 10px}
+
+.empty{
+text-align:center;
+color:#888;
+padding:42px 10px
+}
+
 .back{
 width:100%;
 height:46px;
@@ -167,6 +255,7 @@ color:#aaa;
 background:#111;
 border:1px solid #333
 }
+
 .note{
 text-align:center;
 color:#666;
@@ -174,7 +263,11 @@ font-size:11px;
 margin-top:8px;
 line-height:1.8
 }
-.file{display:none}
+
+.file{
+display:none
+}
+
 .modal{
 display:none;
 position:fixed;
@@ -183,6 +276,7 @@ background:#000c;
 align-items:flex-end;
 z-index:50
 }
+
 .sheet{
 width:min(680px,100%);
 background:#111;
@@ -190,7 +284,11 @@ border:1px solid #333;
 border-radius:22px 22px 0 0;
 padding:20px 18px 28px
 }
-h2{margin:0 0 12px}
+
+h2{
+margin:0 0 12px
+}
+
 .input{
 width:100%;
 height:53px;
@@ -203,12 +301,19 @@ padding:0 14px;
 margin:5px 0;
 outline:0
 }
+
 .textarea{
 height:82px;
 padding-top:12px;
 resize:none
 }
-.actions{display:flex;gap:8px;margin-top:9px}
+
+.actions{
+display:flex;
+gap:8px;
+margin-top:9px
+}
+
 .btn{
 flex:1;
 height:51px;
@@ -218,14 +323,50 @@ background:#fff;
 color:#000;
 font-weight:800
 }
-.dark{background:#252525;color:#fff;border:1px solid #444}
-.danger{background:#351010;color:#fff}
+
+.dark{
+background:#252525;
+color:#fff;
+border:1px solid #444
+}
+
+.danger{
+background:#351010;
+color:#fff
+}
+
+.modeBadge{
+text-align:center;
+font-size:11px;
+color:#777;
+margin-top:8px
+}
+
+.modeBadge.seller{
+color:#aaa
+}
 
 @media(max-width:430px){
-.app{padding-left:10px;padding-right:10px}
-.storeBtn{font-size:21px}
-.add,.more{font-size:14px}
-.name,.price{font-size:20px}
+
+.app{
+padding-left:10px;
+padding-right:10px
+}
+
+.storeBtn{
+font-size:21px
+}
+
+.add,
+.more{
+font-size:14px
+}
+
+.name,
+.price{
+font-size:20px
+}
+
 }
 </style>
 </head>
@@ -235,149 +376,226 @@ font-weight:800
 <main class="app">
 
 <div class="head">
+
 <div class="storeBox">
 
-<button class="storeBtn" id="storeBtn"></button>
+<button
+class="storeBtn"
+id="storeBtn">
+</button>
 
-<div id="storeMenu" class="storeMenu"></div>
+<div
+id="storeMenu"
+class="storeMenu">
+</div>
 
 </div>
+
+<div
+id="modeBadge"
+class="modeBadge">
 </div>
+
+</div>
+
 
 <div class="searchWrap">
 
-<span class="searchIcon">⌕</span>
+<span class="searchIcon">
+⌕
+</span>
 
 <input
 id="search"
 class="search"
 autocomplete="off"
-placeholder="جستجوی کالا..."
->
+placeholder="جستجوی کالا...">
 
 </div>
 
+
 <div class="quickRow">
 
-<button class="add" onclick="openAdd()">＋ افزودن کالا</button>
+<button
+class="add"
+onclick="openAdd()">
+＋ افزودن کالا
+</button>
 
-<button class="more" id="moreBtn" onclick="toggleMore()">
+<button
+class="more"
+id="moreBtn"
+onclick="toggleMore()">
 اطلاعات ○
 </button>
 
 </div>
 
+
 <div class="section">
 
-<b id="title">کالاهای اخیر</b>
+<b id="title">
+کالاهای اخیر
+</b>
 
-<span id="count"></span>
+<span id="count">
+</span>
 
 </div>
 
-<div id="list"></div>
 
-<button class="back" onclick="exportPriceList()">
-<span style="color:#fff">➤</span>
+<div id="list">
+</div>
+
+
+<button
+class="back"
+onclick="exportPriceList()">
+<span style="color:#fff">
+➤
+</span>
 ارسال لیست
 </button>
 
-<button class="back" onclick="updatePriceList()">
-<span style="color:#fff">↻</span>
+
+<button
+class="back"
+onclick="updatePriceList()">
+<span style="color:#fff">
+↻
+</span>
 به‌روزرسانی لیست
 </button>
+
 
 <input
 id="updateFile"
 class="file"
 type="file"
 accept=".json,application/json"
-onchange="importPriceList(event)"
->
+onchange="importPriceList(event)">
 
-<button class="back" onclick="backup()">
+
+<button
+class="back"
+onclick="backup()">
 پشتیبان‌گیری از این مغازه
 </button>
 
-<button class="back" onclick="file.click()">
+
+<button
+class="back"
+onclick="file.click()">
 بازیابی قیمت‌ها
 </button>
+
 
 <input
 id="file"
 class="file"
 type="file"
 accept=".json"
-onchange="restore(event)"
->
+onchange="restore(event)">
+
 
 <div class="note">
+
 اطلاعات این برنامه روی همین دستگاه ذخیره می‌شود.
+
 <br>
+
 برای فرستادن تغییرات به دیگران از «ارسال لیست» استفاده کن.
+
 <br>
+
 دریافت‌کننده می‌تواند فایل ارسالی را لمس کند تا PriceYar آن را خودکار دریافت و به‌روزرسانی کند.
+
 </div>
 
 </main>
 
-<div id="modal" class="modal">
+
+<div
+id="modal"
+class="modal">
 
 <div class="sheet">
 
-<h2 id="mtitle">افزودن کالا</h2>
+<h2 id="mtitle">
+افزودن کالا
+</h2>
 
-<input id="name" class="input" placeholder="نام کالا">
+
+<input
+id="name"
+class="input"
+placeholder="نام کالا">
+
 
 <input
 id="price"
 class="input"
 placeholder="قیمت"
-inputmode="numeric"
->
+inputmode="numeric">
+
+
+<div id="buyWrap">
 
 <input
 id="buy"
 class="input"
 placeholder="قیمت خرید (اختیاری)"
-inputmode="numeric"
->
+inputmode="numeric">
+
+</div>
+
 
 <textarea
 id="desc"
 class="input textarea"
-placeholder="توضیحات (اختیاری)"
-></textarea>
+placeholder="توضیحات (اختیاری)">
+</textarea>
+
 
 <div class="actions">
 
-<button class="btn" onclick="saveItem()">
+<button
+class="btn"
+onclick="saveItem()">
 ذخیره
 </button>
 
-<button class="btn dark" onclick="closeModal()">
+<button
+class="btn dark"
+onclick="closeModal()">
 انصراف
 </button>
 
 <button
 id="del"
 class="btn danger"
-onclick="deleteItem()"
->
+onclick="deleteItem()">
 حذف
 </button>
 
 </div>
 
 </div>
+
 </div>
+
 
 <script>
 
 const K="priceYarStoresV3";
 
+const MODE_KEY="priceYarAppMode";
+
+
 let data=
-JSON.parse(localStorage.getItem(K)||"null")
+JSON.parse(
+localStorage.getItem(K)||"null"
+)
 ||
 {
 active:0,
@@ -391,56 +609,184 @@ items:[]
 deleted:{}
 };
 
+
+let appMode=
+localStorage.getItem(MODE_KEY)
+||
+"management";
+
+
 let edit=-1;
+
 let more=false;
 
-const $=id=>document.getElementById(id);
 
-const st=()=>data.stores[data.active];
+const $=id=>
+document.getElementById(id);
+
+
+const st=()=>
+data.stores[data.active];
+
+
+function isSeller(){
+
+return appMode==="seller";
+
+}
+
+
+function isManagement(){
+
+return appMode!=="seller";
+
+}
+
+
+function setMode(mode){
+
+appMode=
+mode==="seller"
+?
+"seller"
+:
+"management";
+
+localStorage.setItem(
+MODE_KEY,
+appMode
+);
+
+applyMode();
+
+}
+
+
+function applyMode(){
+
+const seller=isSeller();
+
+const buyWrap=$("buyWrap");
+
+if(buyWrap){
+
+buyWrap.style.display=
+seller
+?
+"none"
+:
+"block";
+
+}
+
+
+if(seller){
+
+$("modeBadge").textContent=
+"حالت فروشندگان";
+
+$("modeBadge").classList.add("seller");
+
+$("moreBtn").textContent=
+more
+?
+"اطلاعات ✓"
+:
+"اطلاعات ○";
+
+}else{
+
+$("modeBadge").textContent=
+"حالت مدیریت";
+
+$("modeBadge").classList.remove("seller");
+
+}
+
+
+if(seller){
+
+$("buy").value="";
+
+}
+
+
+render();
+
+}
+
 
 function makeId(){
 
-if(window.crypto&&window.crypto.randomUUID){
+if(
+window.crypto&&
+window.crypto.randomUUID
+){
+
 return window.crypto.randomUUID();
+
 }
 
-return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
-.replace(/[xy]/g,c=>{
+return
+"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+.replace(
+/[xy]/g,
+c=>{
 
-let r=Math.random()*16|0;
+let r=
+Math.random()*16|0;
 
-let v=c==="x"
-?r
-:(r&3|8);
+let v=
+c==="x"
+?
+r
+:
+(r&3|8);
 
 return v.toString(16);
 
-});
+}
+);
 
 }
+
 
 function ensureIds(){
 
 if(!Array.isArray(data.stores)){
+
 data.stores=[];
+
 }
 
-data.stores.forEach(s=>{
 
-if(!s.id)s.id=makeId();
+data.stores.forEach(
+s=>{
 
-if(!Array.isArray(s.items))
+if(!s.id){
+
+s.id=makeId();
+
+}
+
+if(!Array.isArray(s.items)){
+
 s.items=[];
 
+}
+
 });
+
 
 if(!data.stores.length){
 
-data.stores.push({
+data.stores.push(
+{
 id:makeId(),
 name:"سوپر مارکت سلطانی",
 items:[]
-});
+}
+);
 
 data.active=0;
 
@@ -448,41 +794,105 @@ data.active=0;
 
 }
 
+
 function ensureItemIds(){
 
-data.stores.forEach(store=>{
+data.stores.forEach(
+store=>{
 
-if(!Array.isArray(store.items))
+if(!Array.isArray(store.items)){
+
 store.items=[];
 
-store.items.forEach(item=>{
+}
 
-if(!item.id)
+store.items.forEach(
+item=>{
+
+if(!item.id){
+
 item.id=makeId();
 
-if(!item.last)
+}
+
+if(!item.last){
+
 item.last=Date.now();
 
-});
+}
 
 });
 
-if(!data.deleted)
+});
+
+
+if(!data.deleted){
+
 data.deleted={};
 
 }
 
-function faDigits(value){
+}
 
-return String(value??"")
-.replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
+
+function cleanSellerData(){
+
+if(!isSeller()){
+
+return;
 
 }
+
+
+data.stores.forEach(
+store=>{
+
+if(!Array.isArray(store.items)){
+
+return;
+
+}
+
+store.items.forEach(
+item=>{
+
+delete item.buy;
+
+delete item.buyPrice;
+
+delete item.purchasePrice;
+
+});
+
+});
+
+}
+
+
+function faDigits(value){
+
+return String(
+value??""
+)
+.replace(
+/\d/g,
+d=>"۰۱۲۳۴۵۶۷۸۹"[d]
+);
+
+}
+
 
 function save(){
 
 ensureIds();
+
 ensureItemIds();
+
+if(isSeller()){
+
+cleanSellerData();
+
+}
 
 localStorage.setItem(
 K,
@@ -491,12 +901,16 @@ JSON.stringify(data)
 
 }
 
+
 function esc(s){
 
-return String(s??"")
+return String(
+s??""
+)
 .replace(
 /[&<>"']/g,
-m=>({
+m=>
+({
 "&":"&amp;",
 "<":"&lt;",
 ">":"&gt;",
@@ -507,7 +921,13 @@ m=>({
 
 }
 
+
 function render(){
+
+ensureIds();
+
+ensureItemIds();
+
 
 let q=
 $("search")
@@ -515,13 +935,14 @@ $("search")
 .trim()
 .toLocaleLowerCase();
 
+
 let a=
 st()
 .items
 .filter(
 x=>
 !q||
-x.name
+String(x.name||"")
 .toLocaleLowerCase()
 .includes(q)
 )
@@ -531,25 +952,36 @@ x.name
 (x.last||0)
 );
 
+
 $("title").textContent=
 q
-?"نتایج جستجو"
-:"کالاهای اخیر";
+?
+"نتایج جستجو"
+:
+"کالاهای اخیر";
+
 
 $("count").textContent=
 q
-?a.length+" نتیجه"
-:st().items.length+" کالا";
+?
+a.length+" نتیجه"
+:
+st().items.length+" کالا";
+
 
 $("list").innerHTML="";
+
 
 if(!a.length){
 
 $("list").innerHTML=
 '<div class="empty">'+
-(q
-?"کالایی پیدا نشد"
-:"هنوز کالایی اضافه نشده"
+(
+q
+?
+"کالایی پیدا نشد"
+:
+"هنوز کالایی اضافه نشده"
 )+
 "</div>";
 
@@ -557,33 +989,51 @@ return;
 
 }
 
-a.forEach(x=>{
 
-let i=st().items.indexOf(x);
+a.forEach(
+x=>{
 
-let extra=
-more
-?
-(
-(x.buy
-?
-'<div class="buy">قیمت خرید: '+
+let i=
+st().items.indexOf(x);
+
+
+let extra="";
+
+
+if(more){
+
+if(
+!isSeller() &&
+x.buy
+){
+
+extra+=
+'<div class="buy">'+
+"قیمت خرید: "+
 esc(faDigits(x.buy))+
-"</div>"
-:"")
-+
-(x.desc
-?
+"</div>";
+
+}
+
+
+if(x.desc){
+
+extra+=
 '<div class="sub">'+
 esc(x.desc)+
-"</div>"
-:"")
-)
-:"";
+"</div>";
 
-let r=document.createElement("div");
+}
+
+}
+
+
+let r=
+document.createElement("div");
+
 
 r.className="row";
+
 
 r.innerHTML=
 '<div class="info">'+
@@ -596,19 +1046,28 @@ extra+
 esc(faDigits(x.price))+
 "</div>";
 
-r.onclick=()=>openEdit(i);
 
-$("list").appendChild(r);
+r.onclick=()=>
+openEdit(i);
+
+
+$("list")
+.appendChild(r);
 
 });
 
 }
 
+
 $("storeBtn").onclick=()=>{
 
-let menu=$("storeMenu");
+let menu=
+$("storeMenu");
 
-if(menu.classList.contains("open")){
+
+if(
+menu.classList.contains("open")
+){
 
 menu.classList.remove("open");
 
@@ -622,23 +1081,41 @@ menu.classList.add("open");
 
 };
 
+
 function stores(){
 
-let m=$("storeMenu");
+let m=
+$("storeMenu");
 
 m.innerHTML="";
 
-data.stores.forEach((s,i)=>{
 
-let d=document.createElement("div");
+data.stores.forEach(
+(s,i)=>{
+
+let d=
+document.createElement("div");
 
 d.className=
 "storeItem"+
-(i===data.active?" active":"");
+(
+i===data.active
+?
+" active"
+:
+""
+);
 
 d.textContent=
-(i===data.active?"✓ ":"")+
+(
+i===data.active
+?
+"✓ "
+:
+""
+)+
 s.name;
+
 
 d.onclick=()=>{
 
@@ -647,8 +1124,7 @@ data.active=i;
 save();
 
 $("storeMenu")
-.classList
-.remove("open");
+.classList.remove("open");
 
 updateStoreButton();
 
@@ -656,14 +1132,18 @@ render();
 
 };
 
+
 m.appendChild(d);
 
 });
 
+
 let actions=
 document.createElement("div");
 
-actions.className="storeActions";
+actions.className=
+"storeActions";
+
 
 let add=
 document.createElement("button");
@@ -677,12 +1157,12 @@ add.textContent=
 add.onclick=()=>{
 
 $("storeMenu")
-.classList
-.remove("open");
+.classList.remove("open");
 
 addStore();
 
 };
+
 
 let del=
 document.createElement("button");
@@ -696,19 +1176,21 @@ del.textContent=
 del.onclick=()=>{
 
 $("storeMenu")
-.classList
-.remove("open");
+.classList.remove("open");
 
 deleteStore();
 
 };
 
+
 actions.appendChild(add);
+
 actions.appendChild(del);
 
 m.appendChild(actions);
 
 }
+
 
 function updateStoreButton(){
 
@@ -717,6 +1199,7 @@ st().name;
 
 }
 
+
 function addStore(){
 
 let n=
@@ -724,21 +1207,29 @@ prompt(
 "نام فروشگاه جدید را وارد کن:"
 );
 
-if(!n||!n.trim())
+
+if(
+!n||
+!n.trim()
+){
+
 return;
 
-data.stores.push({
+}
 
+
+data.stores.push(
+{
 id:makeId(),
-
 name:n.trim(),
-
 items:[]
+}
+);
 
-});
 
 data.active=
 data.stores.length-1;
+
 
 save();
 
@@ -748,9 +1239,12 @@ render();
 
 }
 
+
 function deleteStore(){
 
-if(data.stores.length<=1){
+if(
+data.stores.length<=1
+){
 
 alert(
 "حداقل یک فروشگاه باید باقی بماند."
@@ -760,7 +1254,10 @@ return;
 
 }
 
-let name=st().name;
+
+let name=
+st().name;
+
 
 if(
 !confirm(
@@ -769,16 +1266,22 @@ name+
 "» حذف شود؟\n\n"+
 "تمام کالاهای این فروشگاه هم حذف می‌شوند."
 )
-)
+){
+
 return;
+
+}
+
 
 data.stores.splice(
 data.active,
 1
 );
 
+
 if(
-data.active>=data.stores.length
+data.active>=
+data.stores.length
 ){
 
 data.active=
@@ -786,7 +1289,9 @@ data.stores.length-1;
 
 }
 
+
 ensureIds();
+
 ensureItemIds();
 
 save();
@@ -797,73 +1302,115 @@ render();
 
 }
 
+
 function toggleMore(){
 
 more=!more;
 
+
 $("moreBtn").textContent=
 more
-?"اطلاعات ✓"
-:"اطلاعات ○";
+?
+"اطلاعات ✓"
+:
+"اطلاعات ○";
+
 
 $("moreBtn")
-.classList
-.toggle("on",more);
+.classList.toggle(
+"on",
+more
+);
+
 
 render();
 
 }
 
+
 function openAdd(){
 
 edit=-1;
 
+
 $("mtitle").textContent=
 "افزودن کالا";
 
-["name","price","buy","desc"]
-.forEach(
-x=>$(x).value=""
-);
 
-$("del").style.display="none";
+$("name").value="";
+
+$("price").value="";
+
+$("buy").value="";
+
+$("desc").value="";
+
+
+$("del").style.display=
+"none";
+
+
+applyMode();
+
 
 $("modal").style.display=
 "flex";
 
+
 setTimeout(
-()=>$("name").focus(),
+()=>
+$("name").focus(),
 80
 );
 
 }
 
+
 function openEdit(i){
 
 edit=i;
 
-let x=st().items[i];
+
+let x=
+st().items[i];
+
 
 $("mtitle").textContent=
 "ویرایش کالا";
 
-$("name").value=x.name;
 
-$("price").value=x.price;
+$("name").value=
+x.name||"";
+
+
+$("price").value=
+x.price||"";
+
 
 $("buy").value=
-x.buy||"";
+isSeller()
+?
+""
+:
+(x.buy||"");
+
 
 $("desc").value=
 x.desc||"";
 
+
 $("del").style.display=
 "block";
+
+
+applyMode();
+
 
 $("modal").style.display=
 "flex";
 
 }
+
 
 function closeModal(){
 
@@ -874,17 +1421,16 @@ render();
 
 }
 
+
 function saveItem(){
 
 let n=
-$("name")
-.value
-.trim();
+$("name").value.trim();
+
 
 let p=
-$("price")
-.value
-.trim();
+$("price").value.trim();
+
 
 if(!n||!p){
 
@@ -896,37 +1442,49 @@ return;
 
 }
 
+
 let old=
 edit>=0
-?st().items[edit]
-:null;
+?
+st().items[edit]
+:
+null;
+
 
 let itemId=
 old&&old.id
-?old.id
-:makeId();
+?
+old.id
+:
+makeId();
 
-let x={
 
+let x;
+
+
+if(isSeller()){
+
+x={
 id:itemId,
-
 name:n,
-
 price:p,
-
-buy:
-$("buy")
-.value
-.trim(),
-
-desc:
-$("desc")
-.value
-.trim(),
-
+desc:$("desc").value.trim(),
 last:Date.now()
-
 };
+
+}else{
+
+x={
+id:itemId,
+name:n,
+price:p,
+buy:$("buy").value.trim(),
+desc:$("desc").value.trim(),
+last:Date.now()
+};
+
+}
+
 
 if(edit<0){
 
@@ -934,9 +1492,16 @@ st().items.push(x);
 
 }else{
 
+if(isSeller()&&old){
+
+x.buy=old.buy;
+
+}
+
 st().items[edit]=x;
 
 }
+
 
 save();
 
@@ -944,35 +1509,54 @@ closeModal();
 
 }
 
+
 function deleteItem(){
 
-if(edit<0)
+if(edit<0){
+
 return;
+
+}
+
 
 let item=
 st().items[edit];
 
+
 if(
-!confirm("این کالا حذف شود؟")
+!confirm(
+"این کالا حذف شود؟"
 )
+){
+
 return;
 
-if(!data.deleted)
+}
+
+
+if(!data.deleted){
+
 data.deleted={};
+
+}
+
 
 data.deleted[item.id]=
 Date.now();
+
 
 st().items.splice(
 edit,
 1
 );
 
+
 save();
 
 closeModal();
 
 }
+
 
 function safeFileName(name){
 
@@ -987,52 +1571,88 @@ return String(name)
 
 }
 
+
 function backup(){
+
+let backupStore=
+JSON.parse(
+JSON.stringify(st())
+);
+
+
+if(isSeller()){
+
+backupStore.items.forEach(
+item=>{
+
+delete item.buy;
+
+delete item.buyPrice;
+
+delete item.purchasePrice;
+
+});
+
+}
+
 
 let b=
 new Blob(
 [
 JSON.stringify(
-st(),
+backupStore,
 null,
 2
 )
 ],
 {
-type:
-"application/json"
+type:"application/json"
 }
 );
+
 
 let a=
 document.createElement("a");
 
+
 a.href=
 URL.createObjectURL(b);
+
 
 a.download=
 "backup-"+
 safeFileName(st().name)+
 ".json";
 
+
 a.click();
 
+
 setTimeout(
-()=>URL.revokeObjectURL(a.href),
+()=>
+URL.revokeObjectURL(a.href),
 1000
 );
 
 }
 
+
 function restore(e){
 
-let f=e.target.files[0];
+let f=
+e.target.files[0];
 
-if(!f)
+
+if(!f){
+
 return;
+
+}
+
 
 let r=
 new FileReader();
+
 
 r.onload=()=>{
 
@@ -1041,34 +1661,66 @@ try{
 let x=
 JSON.parse(r.result);
 
+
 if(
 !x||
 !Array.isArray(x.items)
-)
+){
+
 throw 0;
 
-x.items.forEach(item=>{
+}
 
-if(!item.id)
+
+x.items.forEach(
+item=>{
+
+if(!item.id){
+
 item.id=makeId();
 
-if(!item.last)
+}
+
+if(!item.last){
+
 item.last=Date.now();
+
+}
 
 });
 
-st().items=x.items;
+
+if(isSeller()){
+
+x.items.forEach(
+item=>{
+
+delete item.buy;
+
+delete item.buyPrice;
+
+delete item.purchasePrice;
+
+});
+
+}
+
+
+st().items=
+x.items;
+
 
 save();
 
 render();
 
+
 alert(
 "قیمت‌ها بازیابی شدند"
 );
 
-}
-catch(_){
+
+}catch(_){
 
 alert(
 "فایل پشتیبان معتبر نیست"
@@ -1078,36 +1730,37 @@ alert(
 
 };
 
+
 r.readAsText(f);
+
 
 e.target.value="";
 
 }
 
+
 function exportPriceList(){
 
 ensureIds();
+
 ensureItemIds();
 
 save();
 
+
 const packageData={
-
-type:
-"priceyar-price-list",
-
+type:"priceyar-price-list",
 version:1,
-
-createdAt:
-Date.now(),
-
-stores:
-data.stores,
-
-deleted:
-data.deleted||{}
-
+createdAt:Date.now(),
+shareMode:isSeller()
+?
+"seller"
+:
+"management",
+stores:data.stores,
+deleted:data.deleted||{}
 };
+
 
 const json=
 JSON.stringify(
@@ -1116,8 +1769,10 @@ null,
 2
 );
 
+
 const fileName=
 "لیست جدید قیمت‌ها - برای به‌روزرسانی لمس کنید.json";
+
 
 if(
 window.AndroidBridge&&
@@ -1133,8 +1788,7 @@ fileName
 
 return;
 
-}
-catch(e){
+}catch(e){
 
 console.log(
 "Native share error:",
@@ -1144,6 +1798,7 @@ e
 }
 
 }
+
 
 if(
 window.AndroidBridge&&
@@ -1159,8 +1814,7 @@ fileName
 
 return;
 
-}
-catch(e){
+}catch(e){
 
 console.log(
 "Native export error:",
@@ -1170,6 +1824,7 @@ e
 }
 
 }
+
 
 try{
 
@@ -1182,11 +1837,14 @@ type:
 }
 );
 
+
 const a=
 document.createElement("a");
 
+
 const url=
 URL.createObjectURL(blob);
+
 
 a.href=url;
 
@@ -1198,6 +1856,7 @@ a.click();
 
 a.remove();
 
+
 setTimeout(
 ()=>{
 URL.revokeObjectURL(url);
@@ -1205,8 +1864,8 @@ URL.revokeObjectURL(url);
 2000
 );
 
-}
-catch(e){
+
+}catch(e){
 
 alert(
 "امکان ساخت فایل وجود ندارد."
@@ -1215,6 +1874,7 @@ alert(
 }
 
 }
+
 
 function updatePriceList(){
 
@@ -1229,8 +1889,7 @@ AndroidBridge.importPriceList();
 
 return;
 
-}
-catch(e){
+}catch(e){
 
 console.log(
 "Native import error:",
@@ -1241,8 +1900,10 @@ e
 
 }
 
+
 const input=
 $("updateFile");
+
 
 input.value="";
 
@@ -1251,40 +1912,14 @@ input.click();
 }
 
 
-/*
-==================================================
-دریافت و ادغام فایل قیمت
-==================================================
-
-قانون:
-
-فایل فروشنده:
-- نام کالا آپدیت می‌شود
-- قیمت فروش آپدیت می‌شود
-- توضیحات آپدیت می‌شود
-- قیمت خرید موجود روی دستگاه حفظ می‌شود
-
-فایل مدیریت:
-- نام کالا آپدیت می‌شود
-- قیمت فروش آپدیت می‌شود
-- توضیحات آپدیت می‌شود
-- قیمت خرید نیز آپدیت می‌شود
-
-برای فایل‌های جدید:
-اگر فایل فروشنده باشد،
-قیمت خرید خالی خواهد بود.
-
-برای سازگاری با نسخه فعلی MainActivity:
-اگر shareMode وجود نداشته باشد،
-از ساختار خود فایل تشخیص داده می‌شود.
-*/
-
-window.receiveImportedPriceList=function(text){
+window.receiveImportedPriceList=
+function(text){
 
 try{
 
 const incoming=
 JSON.parse(text);
+
 
 if(
 !incoming||
@@ -1296,33 +1931,9 @@ throw new Error("invalid");
 
 }
 
-ensureIds();
-ensureItemIds();
-
-if(!data.deleted)
-data.deleted={};
-
-let changed=0;
-
-
-/*
-==================================================
-تشخیص فایل فروشنده / مدیریت
-==================================================
-
-اگر MainActivity مقدار shareMode را
-در فایل گذاشته باشد، همان ملاک قطعی است.
-
-اگر shareMode وجود نداشته باشد،
-برای سازگاری با فایل‌های فعلی:
-
-اگر تمام کالاهای فایل فاقد فیلد buy باشند،
-فایل فروشنده محسوب می‌شود.
-
-در غیر این صورت فایل مدیریتی محسوب می‌شود.
-*/
 
 let isSellerFile=false;
+
 
 if(
 incoming.shareMode==="seller"
@@ -1330,17 +1941,16 @@ incoming.shareMode==="seller"
 
 isSellerFile=true;
 
-}
-else if(
+}else if(
 incoming.shareMode==="management"
 ){
 
 isSellerFile=false;
 
-}
-else{
+}else{
 
 let allItems=[];
+
 
 incoming.stores.forEach(
 store=>{
@@ -1358,16 +1968,16 @@ store.items
 
 });
 
-if(
-allItems.length>0
-){
+
+if(allItems.length>0){
 
 isSellerFile=
 allItems.every(
 item=>
-!Object.prototype
-.hasOwnProperty
-.call(item,"buy")
+!Object.prototype.hasOwnProperty.call(
+item,
+"buy"
+)
 );
 
 }
@@ -1375,55 +1985,65 @@ item=>
 }
 
 
-/*
-==================================================
-ادغام فروشگاه‌ها
-==================================================
-*/
+setMode(
+isSellerFile
+?
+"seller"
+:
+"management"
+);
+
+
+ensureIds();
+
+ensureItemIds();
+
+
+if(!data.deleted){
+
+data.deleted={};
+
+}
+
+
+let changed=0;
+
 
 incoming.stores.forEach(
 inStore=>{
 
-if(!inStore.id)
+if(!inStore.id){
+
 return;
+
+}
+
 
 let localStore=
 data.stores.find(
-s=>s.id===inStore.id
+s=>
+s.id===inStore.id
 );
 
-
-/*
-فروشگاه جدید
-*/
 
 if(!localStore){
 
 localStore={
-
-id:
-inStore.id,
-
-name:
-inStore.name||
-"فروشگاه",
-
+id:inStore.id,
+name:inStore.name||"فروشگاه",
 items:[]
-
 };
+
 
 data.stores.push(
 localStore
 );
 
+
 changed++;
 
 }
 
-
-/*
-نام فروشگاه
-*/
 
 if(
 inStore.name&&
@@ -1439,29 +2059,25 @@ changed++;
 
 
 if(
-!Array.isArray(inStore.items)
+!Array.isArray(
+inStore.items
 )
+){
+
 return;
 
+}
 
-/*
-==================================================
-ادغام کالاها
-==================================================
-*/
 
 inStore.items.forEach(
 remoteItem=>{
 
-if(!remoteItem.id)
+if(!remoteItem.id){
+
 return;
 
+}
 
-/*
-اگر کالا در لیست حذف‌شده‌های محلی بود،
-ولی دوباره در فایل دریافتی آمده،
-علامت حذف آن را بردار.
-*/
 
 if(
 data.deleted&&
@@ -1475,24 +2091,18 @@ remoteItem.id
 }
 
 
-/*
-پیدا کردن کالای موجود
-*/
-
 let localItem=
 localStore.items.find(
-x=>x.id===remoteItem.id
+x=>
+x.id===remoteItem.id
 );
 
-
-/*
-زمان‌ها
-*/
 
 const remoteTime=
 Number(
 remoteItem.last||0
 );
+
 
 const localTime=
 localItem
@@ -1500,42 +2110,36 @@ localItem
 Number(
 localItem.last||0
 )
-:0;
+:
+0;
 
-
-/*
-==================================================
-کالای جدید
-==================================================
-*/
 
 if(!localItem){
 
-localStore.items.push({
-
-id:
-remoteItem.id,
-
-name:
-remoteItem.name||"",
-
-price:
-remoteItem.price||"",
-
-buy:
-isSellerFile
-?""
-:
-(remoteItem.buy||""),
-
-desc:
-remoteItem.desc||"",
-
+let newItem={
+id:remoteItem.id,
+name:remoteItem.name||"",
+price:remoteItem.price||"",
+desc:remoteItem.desc||"",
 last:
 remoteTime||
 Date.now()
+};
 
-});
+
+if(!isSellerFile){
+
+newItem.buy=
+remoteItem.buy||
+"";
+
+}
+
+
+localStore.items.push(
+newItem
+);
+
 
 changed++;
 
@@ -1544,30 +2148,24 @@ return;
 }
 
 
-/*
-==================================================
-کالای موجود
-==================================================
-*/
-
 const remoteName=
 remoteItem.name||"";
+
 
 const remotePrice=
 remoteItem.price||"";
 
+
 const remoteDesc=
 remoteItem.desc||"";
+
 
 const remoteBuy=
 remoteItem.buy||"";
 
+
 let different=false;
 
-
-/*
-نام
-*/
 
 if(
 localItem.name!==remoteName
@@ -1581,10 +2179,6 @@ different=true;
 }
 
 
-/*
-قیمت فروش
-*/
-
 if(
 localItem.price!==remotePrice
 ){
@@ -1597,10 +2191,6 @@ different=true;
 }
 
 
-/*
-توضیحات
-*/
-
 if(
 localItem.desc!==remoteDesc
 ){
@@ -1612,35 +2202,6 @@ different=true;
 
 }
 
-
-/*
-==================================================
-قیمت خرید
-==================================================
-
-این قسمت مهم است:
-
-اگر فایل فروشنده باشد:
-قیمت خرید فعلی دستگاه دست نمی‌خورد.
-
-مثال:
-
-دستگاه مدیریت:
-بستنی
-قیمت فروش: 4
-قیمت خرید: 3
-
-فایل فروشنده:
-بستنی
-قیمت فروش: 4.5
-
-نتیجه:
-قیمت فروش = 4.5
-قیمت خرید = 3
-
-اما اگر فایل مدیریت باشد:
-قیمت خرید فایل نیز اعمال می‌شود.
-*/
 
 if(
 !isSellerFile&&
@@ -1655,12 +2216,6 @@ different=true;
 }
 
 
-/*
-==================================================
-ثبت زمان تغییر
-==================================================
-*/
-
 if(different){
 
 localItem.last=
@@ -1671,8 +2226,7 @@ Date.now()
 
 changed++;
 
-}
-else if(
+}else if(
 remoteTime>localTime
 ){
 
@@ -1686,54 +2240,60 @@ remoteTime;
 });
 
 
-/*
-==================================================
-اعمال حذف‌های موجود در فایل
-==================================================
-*/
-
 const remoteDeleted=
 incoming.deleted||{};
+
 
 Object.keys(
 remoteDeleted
 )
-.forEach(id=>{
+.forEach(
+id=>{
 
 const remoteTime=
 Number(
 remoteDeleted[id]||0
 );
 
+
 const localDeletedTime=
 Number(
 data.deleted[id]||0
 );
 
+
 if(
 remoteTime<=localDeletedTime
-)
+){
+
 return;
+
+}
+
 
 data.deleted[id]=
 remoteTime;
+
 
 data.stores.forEach(
 store=>{
 
 const index=
 store.items.findIndex(
-item=>item.id===id
+item=>
+item.id===id
 );
+
 
 if(index>=0){
 
 const item=
 store.items[index];
 
+
 if(
-Number(item.last||0)<=
-remoteTime
+Number(item.last||0)
+<=remoteTime
 ){
 
 store.items.splice(
@@ -1752,12 +2312,6 @@ changed++;
 });
 
 
-/*
-==================================================
-پاکسازی کالاهای حذف‌شده
-==================================================
-*/
-
 data.stores.forEach(
 store=>{
 
@@ -1770,10 +2324,10 @@ Number(
 data.deleted[item.id]||0
 );
 
+
 return(
 !deletedAt||
-Number(item.last||0)>
-deletedAt
+Number(item.last||0)>deletedAt
 );
 
 });
@@ -1781,11 +2335,12 @@ deletedAt
 });
 
 
-/*
-==================================================
-ذخیره نهایی
-==================================================
-*/
+if(isSellerFile){
+
+cleanSellerData();
+
+}
+
 
 ensureIds();
 
@@ -1795,14 +2350,8 @@ save();
 
 updateStoreButton();
 
-render();
+applyMode();
 
-
-/*
-==================================================
-پیام نتیجه
-==================================================
-*/
 
 if(changed){
 
@@ -1820,13 +2369,14 @@ alert(
 
 }
 
-}
-catch(error){
+
+}catch(error){
 
 console.log(
 "Import error:",
 error
 );
+
 
 alert(
 "فایل انتخاب‌شده معتبر نیست.\n\n"+
@@ -1838,7 +2388,8 @@ alert(
 };
 
 
-window.exportFinished=function(){
+window.exportFinished=
+function(){
 
 alert(
 "فایل لیست قیمت با موفقیت آماده شد.\n\n"+
@@ -1847,9 +2398,13 @@ alert(
 
 };
 
-window.exportCancelled=function(){};
 
-window.exportFailed=function(){
+window.exportCancelled=
+function(){};
+
+
+window.exportFailed=
+function(){
 
 alert(
 "ارسال یا آماده‌سازی فایل انجام نشد.\n\n"+
@@ -1858,7 +2413,9 @@ alert(
 
 };
 
-window.importFailed=function(){
+
+window.importFailed=
+function(){
 
 alert(
 "خواندن فایل انجام نشد.\n\n"+
@@ -1873,19 +2430,27 @@ function importPriceList(e){
 const file=
 e.target.files[0];
 
-if(!file)
+
+if(!file){
+
 return;
+
+}
+
 
 const reader=
 new FileReader();
 
-reader.onload=()=>{
+
+reader.onload=()=>
+{
 
 window.receiveImportedPriceList(
 reader.result
 );
 
 };
+
 
 reader.readAsText(file);
 
@@ -1896,17 +2461,23 @@ e.target.value="";
 
 function today(){
 
-let d=new Date();
+let d=
+new Date();
 
-return d.getFullYear()+
+
+return(
+d.getFullYear()+
 "-"+
 String(
 d.getMonth()+1
-).padStart(2,"0")+
+)
+.padStart(2,"0")+
 "-"+
 String(
 d.getDate()
-).padStart(2,"0");
+)
+.padStart(2,"0")
+);
 
 }
 
@@ -1945,8 +2516,11 @@ e=>{
 
 if(
 e.target.id==="modal"
-)
+){
+
 closeModal();
+
+}
 
 });
 
@@ -1959,7 +2533,7 @@ save();
 
 updateStoreButton();
 
-render();
+applyMode();
 
 
 if(
@@ -1972,19 +2546,23 @@ try{
 const native=
 AndroidBridge.loadData();
 
+
 if(native){
 
 data=
 JSON.parse(native);
 
+
 ensureIds();
 
 ensureItemIds();
+
 
 localStorage.setItem(
 K,
 JSON.stringify(data)
 );
+
 
 updateStoreButton();
 
@@ -1998,8 +2576,7 @@ JSON.stringify(data)
 
 }
 
-}
-catch(e){
+}catch(e){
 
 console.log(
 "Native load error:",
@@ -2011,11 +2588,14 @@ e
 }
 
 
-const originalSave=save;
+const originalSave=
+save;
+
 
 save=function(){
 
 originalSave();
+
 
 try{
 
@@ -2030,8 +2610,7 @@ JSON.stringify(data)
 
 }
 
-}
-catch(e){
+}catch(e){
 
 console.log(
 "Native save error:",
@@ -2044,7 +2623,8 @@ e
 
 
 if(
-"serviceWorker" in navigator
+"serviceWorker"
+in navigator
 ){
 
 window.addEventListener(
