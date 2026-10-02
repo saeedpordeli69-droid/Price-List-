@@ -8,7 +8,6 @@
     android:background="#303134"
     android:padding="8dp">
 
-    <!-- کادر جستجو -->
     <LinearLayout
         android:id="@+id/widgetSearchArea"
         android:layout_width="match_parent"
@@ -50,7 +49,6 @@
 
     </LinearLayout>
 
-    <!-- میانبرها -->
     <LinearLayout
         android:id="@+id/widgetShortcuts"
         android:layout_width="match_parent"
@@ -63,36 +61,33 @@
             android:id="@+id/widgetAddButton"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_margin="4dp"
             android:gravity="center"
             android:text="+"
             android:textColor="#E8EAED"
-            android:textSize="25sp"
+            android:textSize="24sp"
             android:background="@drawable/widget_circle_button" />
 
         <TextView
             android:id="@+id/widgetHelpButton"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_margin="4dp"
             android:gravity="center"
             android:text="?"
             android:textColor="#E8EAED"
-            android:textSize="21sp"
+            android:textSize="20sp"
             android:background="@drawable/widget_circle_button" />
 
         <TextView
             android:id="@+id/widgetShareButton"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_margin="4dp"
             android:gravity="center"
             android:text="☷"
             android:textColor="#E8EAED"
-            android:textSize="22sp"
+            android:textSize="21sp"
             android:background="@drawable/widget_circle_button" />
 
     </LinearLayout>
