@@ -15,6 +15,9 @@ class PriceWidgetProvider : AppWidgetProvider() {
 
         private const val DEFAULT_TEXT = "جستجوی کالا"
 
+        private const val PREFS_NAME = "priceyar"
+        private const val INFO_MODE_KEY = "widgetInfoMode"
+
         fun updateWidget(context: Context) {
 
             val manager =
@@ -135,7 +138,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     layout
                 )
 
-            // جستجوی معمولی
+            // جستجو
             views.setOnClickPendingIntent(
                 R.id.widgetSearchArea,
                 createSearchPendingIntent(
@@ -153,10 +156,10 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
-            // جستجو همراه با توضیحات
+            // روشن / خاموش کردن حالت اطلاعات
             views.setOnClickPendingIntent(
                 R.id.widgetHelpButton,
-                createInfoPendingIntent(
+                createInfoTogglePendingIntent(
                     context,
                     appWidgetId
                 )
@@ -214,7 +217,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
             )
         }
 
-        private fun createInfoPendingIntent(
+        private fun createInfoTogglePendingIntent(
             context: Context,
             appWidgetId: Int
         ): PendingIntent {
@@ -222,19 +225,19 @@ class PriceWidgetProvider : AppWidgetProvider() {
             val intent =
                 Intent(
                     context,
-                    SearchActivity::class.java
-                )
+                    PriceWidgetProvider::class.java
+                ).apply {
 
-            intent.putExtra(
-                "showDescription",
-                true
-            )
+                    action =
+                        "com.priceyar.widget.TOGGLE_INFO"
 
-            intent.flags =
-                Intent.FLAG_ACTIVITY_NEW_TASK or
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    putExtra(
+                        AppWidgetManager.EXTRA_APPWIDGET_ID,
+                        appWidgetId
+                    )
+                }
 
-            return PendingIntent.getActivity(
+            return PendingIntent.getBroadcast(
                 context,
                 appWidgetId + 20000,
                 intent,
@@ -242,6 +245,68 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     PendingIntent.FLAG_IMMUTABLE
             )
         }
+
+        fun toggleInfoMode(
+            context: Context
+        ) {
+
+            val prefs =
+                context.getSharedPreferences(
+                    PREFS_NAME,
+                    Context.MODE_PRIVATE
+                )
+
+            val current =
+                prefs.getBoolean(
+                    INFO_MODE_KEY,
+                    false
+                )
+
+            prefs.edit()
+                .putBoolean(
+                    INFO_MODE_KEY,
+                    !current
+                )
+                .apply()
+
+            updateWidget(context)
+        }
+
+        fun isInfoModeEnabled(
+            context: Context
+        ): Boolean {
+
+            return context
+                .getSharedPreferences(
+                    PREFS_NAME,
+                    Context.MODE_PRIVATE
+                )
+                .getBoolean(
+                    INFO_MODE_KEY,
+                    false
+                )
+        }
+    }
+
+    override fun onReceive(
+        context: Context,
+        intent: Intent
+    ) {
+
+        if (
+            intent.action ==
+            "com.priceyar.widget.TOGGLE_INFO"
+        ) {
+
+            toggleInfoMode(context)
+
+            return
+        }
+
+        super.onReceive(
+            context,
+            intent
+        )
     }
 
     override fun onUpdate(
