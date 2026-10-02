@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private var pageLoaded = false
     private var pendingIncomingUri: Uri? = null
     private var pendingOpenAdd = false
+    private var pendingChooseShareMode = false
 
     companion object {
         private const val REQUEST_OPEN_FILE = 1002
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
 
                 processPendingIncomingFile()
                 processPendingOpenAdd()
+                processPendingChooseShareMode()
             }
         }
 
@@ -77,6 +79,7 @@ class MainActivity : AppCompatActivity() {
     private fun handleIncomingIntent(
         incomingIntent: Intent?
     ) {
+
         if (incomingIntent == null) {
             return
         }
@@ -91,6 +94,16 @@ class MainActivity : AppCompatActivity() {
             processPendingOpenAdd()
         }
 
+        if (
+            incomingIntent.action ==
+            PriceWidgetProvider.ACTION_CHOOSE_SHARE_MODE
+        ) {
+
+            pendingChooseShareMode = true
+
+            processPendingChooseShareMode()
+        }
+
         val action = incomingIntent.action
 
         var uri: Uri? = null
@@ -103,11 +116,14 @@ class MainActivity : AppCompatActivity() {
 
             uri =
                 if (android.os.Build.VERSION.SDK_INT >= 33) {
+
                     incomingIntent.getParcelableExtra(
                         Intent.EXTRA_STREAM,
                         Uri::class.java
                     )
+
                 } else {
+
                     @Suppress("DEPRECATION")
                     incomingIntent.getParcelableExtra<Uri>(
                         Intent.EXTRA_STREAM
@@ -141,14 +157,97 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private fun processPendingChooseShareMode() {
+
+        if (!pageLoaded) {
+            return
+        }
+
+        if (!pendingChooseShareMode) {
+            return
+        }
+
+        pendingChooseShareMode = false
+
+        showShareModeDialog()
+    }
+
+    private fun showShareModeDialog() {
+
+        val json =
+            webView.evaluateJavascript(
+                """
+                (function(){
+                    try {
+                        return JSON.stringify(window.exportDataForAndroid ? window.exportDataForAndroid() : "");
+                    } catch(e) {
+                        return "";
+                    }
+                })();
+                """.trimIndent()
+            ) {
+                result ->
+
+                // این قسمت عمداً خالی است.
+            }
+
+        showShareModeDialogWithoutData()
+    }
+
+    private fun showShareModeDialogWithoutData() {
+
+        AlertDialog.Builder(this)
+            .setTitle("ارسال لیست قیمت")
+            .setItems(
+                arrayOf(
+                    "👤 ویژه فروشندگان",
+                    "🔐 ویژه مدیریت"
+                )
+            ) { _, which ->
+
+                when (which) {
+
+                    0 -> {
+
+                        webView.evaluateJavascript(
+                            """
+                            window.AndroidBridge &&
+                            window.AndroidBridge.requestShareMode &&
+                            window.AndroidBridge.requestShareMode("seller");
+                            """.trimIndent(),
+                            null
+                        )
+                    }
+
+                    1 -> {
+
+                        webView.evaluateJavascript(
+                            """
+                            window.AndroidBridge &&
+                            window.AndroidBridge.requestShareMode &&
+                            window.AndroidBridge.requestShareMode("management");
+                            """.trimIndent(),
+                            null
+                        )
+                    }
+                }
+            }
+            .setNegativeButton(
+                "انصراف",
+                null
+            )
+            .show()
+    }
+
     private fun processPendingIncomingFile() {
 
         if (!pageLoaded) {
             return
         }
 
-        val uri = pendingIncomingUri
-            ?: return
+        val uri =
+            pendingIncomingUri
+                ?: return
 
         pendingIncomingUri = null
 
@@ -188,6 +287,40 @@ class MainActivity : AppCompatActivity() {
         }
 
         @JavascriptInterface
+        fun requestShareMode(
+            mode: String
+        ) {
+
+            webView.post {
+
+                val json =
+                    getSharedPreferences(
+                        "priceyar",
+                        MODE_PRIVATE
+                    )
+                        .getString(
+                            "data",
+                            ""
+                        )
+                        ?: ""
+
+                if (json.isBlank()) {
+                    return@post
+                }
+
+                sharePriceListFile(
+                    json,
+                    "PriceYar-PriceList.json",
+                    if (mode == "seller") {
+                        "ویژه فروشندگان"
+                    } else {
+                        "ویژه مدیریت"
+                    }
+                )
+            }
+        }
+
+        @JavascriptInterface
         fun sharePriceList(
             json: String,
             fileName: String
@@ -195,39 +328,10 @@ class MainActivity : AppCompatActivity() {
 
             runOnUiThread {
 
-                AlertDialog.Builder(this@MainActivity)
-                    .setTitle("ارسال لیست قیمت")
-                    .setItems(
-                        arrayOf(
-                            "👤 ویژه فروشندگان",
-                            "🔐 ویژه مدیریت"
-                        )
-                    ) { _, which ->
-
-                        when (which) {
-
-                            0 -> {
-                                sharePriceListFile(
-                                    json,
-                                    fileName,
-                                    "ویژه فروشندگان"
-                                )
-                            }
-
-                            1 -> {
-                                sharePriceListFile(
-                                    json,
-                                    fileName,
-                                    "ویژه مدیریت"
-                                )
-                            }
-                        }
-                    }
-                    .setNegativeButton(
-                        "انصراف",
-                        null
-                    )
-                    .show()
+                showShareModeDialogForData(
+                    json,
+                    fileName
+                )
             }
         }
 
@@ -236,6 +340,7 @@ class MainActivity : AppCompatActivity() {
             json: String,
             fileName: String
         ) {
+
             sharePriceList(
                 json,
                 fileName
@@ -274,6 +379,48 @@ class MainActivity : AppCompatActivity() {
                 REQUEST_OPEN_FILE
             )
         }
+    }
+
+    private fun showShareModeDialogForData(
+        json: String,
+        fileName: String
+    ) {
+
+        AlertDialog.Builder(this)
+            .setTitle("ارسال لیست قیمت")
+            .setItems(
+                arrayOf(
+                    "👤 ویژه فروشندگان",
+                    "🔐 ویژه مدیریت"
+                )
+            ) { _, which ->
+
+                when (which) {
+
+                    0 -> {
+
+                        sharePriceListFile(
+                            json,
+                            fileName,
+                            "ویژه فروشندگان"
+                        )
+                    }
+
+                    1 -> {
+
+                        sharePriceListFile(
+                            json,
+                            fileName,
+                            "ویژه مدیریت"
+                        )
+                    }
+                }
+            }
+            .setNegativeButton(
+                "انصراف",
+                null
+            )
+            .show()
     }
 
     private fun sharePriceListFile(
@@ -371,6 +518,7 @@ class MainActivity : AppCompatActivity() {
         resultCode: Int,
         intentData: Intent?
     ) {
+
         super.onActivityResult(
             requestCode,
             resultCode,
