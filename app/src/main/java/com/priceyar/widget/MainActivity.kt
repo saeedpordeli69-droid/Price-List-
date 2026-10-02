@@ -174,25 +174,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showShareModeDialog() {
 
-        webView.evaluateJavascript(
-            """
-            (function(){
-                try {
-                    return JSON.stringify(
-                        window.exportDataForAndroid
-                        ? window.exportDataForAndroid()
-                        : ""
-                    );
-                } catch(e) {
-                    return "";
-                }
-            })();
-            """.trimIndent()
-        ) {
-            _ ->
-
-            showShareModeDialogWithoutData()
-        }
+        showShareModeDialogWithoutData()
     }
 
     private fun showShareModeDialogWithoutData() {
@@ -372,6 +354,7 @@ class MainActivity : AppCompatActivity() {
                             "application/octet-stream",
                             "*/*"
                         )
+                    )
                 }
 
             startActivityForResult(
@@ -453,8 +436,6 @@ class MainActivity : AppCompatActivity() {
                             items.optJSONObject(j)
                                 ?: continue
 
-                        // اطلاعات خرید به طور کامل
-                        // از فایل فروشندگان حذف می‌شود.
                         item.remove("buy")
                         item.remove("buyPrice")
                         item.remove("purchasePrice")
@@ -479,16 +460,9 @@ class MainActivity : AppCompatActivity() {
         try {
 
             val outputJson =
-                if (
-                    modeName ==
-                    "ویژه فروشندگان"
-                ) {
-
+                if (modeName == "ویژه فروشندگان") {
                     prepareSellerJson(json)
-
                 } else {
-
-                    // مدیریت همان اطلاعات کامل را دریافت می‌کند.
                     json
                 }
 
