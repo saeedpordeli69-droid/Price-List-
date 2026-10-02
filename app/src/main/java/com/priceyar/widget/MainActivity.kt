@@ -174,24 +174,25 @@ class MainActivity : AppCompatActivity() {
 
     private fun showShareModeDialog() {
 
-        val json =
-            webView.evaluateJavascript(
-                """
-                (function(){
-                    try {
-                        return JSON.stringify(window.exportDataForAndroid ? window.exportDataForAndroid() : "");
-                    } catch(e) {
-                        return "";
-                    }
-                })();
-                """.trimIndent()
-            ) {
-                result ->
+        webView.evaluateJavascript(
+            """
+            (function(){
+                try {
+                    return JSON.stringify(
+                        window.exportDataForAndroid
+                        ? window.exportDataForAndroid()
+                        : ""
+                    );
+                } catch(e) {
+                    return "";
+                }
+            })();
+            """.trimIndent()
+        ) {
+            _ ->
 
-                // این قسمت عمداً خالی است.
-            }
-
-        showShareModeDialogWithoutData()
+            showShareModeDialogWithoutData()
+        }
     }
 
     private fun showShareModeDialogWithoutData() {
@@ -371,7 +372,6 @@ class MainActivity : AppCompatActivity() {
                             "application/octet-stream",
                             "*/*"
                         )
-                    )
                 }
 
             startActivityForResult(
@@ -423,6 +423,53 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun prepareSellerJson(
+        json: String
+    ): String {
+
+        return try {
+
+            val root =
+                org.json.JSONObject(json)
+
+            val stores =
+                root.optJSONArray("stores")
+
+            if (stores != null) {
+
+                for (i in 0 until stores.length()) {
+
+                    val store =
+                        stores.optJSONObject(i)
+                            ?: continue
+
+                    val items =
+                        store.optJSONArray("items")
+                            ?: continue
+
+                    for (j in 0 until items.length()) {
+
+                        val item =
+                            items.optJSONObject(j)
+                                ?: continue
+
+                        // اطلاعات خرید به طور کامل
+                        // از فایل فروشندگان حذف می‌شود.
+                        item.remove("buy")
+                        item.remove("buyPrice")
+                        item.remove("purchasePrice")
+                    }
+                }
+            }
+
+            root.toString(2)
+
+        } catch (e: Exception) {
+
+            json
+        }
+    }
+
     private fun sharePriceListFile(
         json: String,
         fileName: String,
@@ -430,6 +477,20 @@ class MainActivity : AppCompatActivity() {
     ) {
 
         try {
+
+            val outputJson =
+                if (
+                    modeName ==
+                    "ویژه فروشندگان"
+                ) {
+
+                    prepareSellerJson(json)
+
+                } else {
+
+                    // مدیریت همان اطلاعات کامل را دریافت می‌کند.
+                    json
+                }
 
             val sharedDirectory =
                 File(
@@ -451,7 +512,7 @@ class MainActivity : AppCompatActivity() {
                 )
 
             file.writeText(
-                json,
+                outputJson,
                 Charsets.UTF_8
             )
 
