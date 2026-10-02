@@ -263,6 +263,28 @@ class SearchActivity : Activity() {
                             ""
                         )
 
+                    var buyPrice =
+                        item.optString(
+                            "buyPrice",
+                            ""
+                        )
+
+                    if (buyPrice.isBlank()) {
+                        buyPrice =
+                            item.optString(
+                                "buy",
+                                ""
+                            )
+                    }
+
+                    if (buyPrice.isBlank()) {
+                        buyPrice =
+                            item.optString(
+                                "purchasePrice",
+                                ""
+                            )
+                    }
+
                     var description =
                         item.optString(
                             "description",
@@ -288,6 +310,7 @@ class SearchActivity : Activity() {
                     addResult(
                         name,
                         price,
+                        buyPrice,
                         description,
                         infoMode
                     )
@@ -311,6 +334,7 @@ class SearchActivity : Activity() {
     private fun addResult(
         name: String,
         price: String,
+        buyPrice: String,
         description: String,
         infoMode: Boolean
     ) {
@@ -357,7 +381,7 @@ class SearchActivity : Activity() {
 
             val priceText = TextView(this)
 
-            priceText.text = "$price تومان"
+            priceText.text = "قیمت فروش: $price تومان"
             priceText.textSize = 15f
             priceText.setTextColor(textColor)
 
@@ -370,6 +394,32 @@ class SearchActivity : Activity() {
 
             card.addView(
                 priceText,
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+            )
+        }
+
+        if (buyPrice.isNotBlank()) {
+
+            val buyPriceText = TextView(this)
+
+            buyPriceText.text =
+                "قیمت خرید: $buyPrice تومان"
+
+            buyPriceText.textSize = 15f
+            buyPriceText.setTextColor(textColor)
+
+            buyPriceText.setPadding(
+                0,
+                dp(4),
+                0,
+                0
+            )
+
+            card.addView(
+                buyPriceText,
                 LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
