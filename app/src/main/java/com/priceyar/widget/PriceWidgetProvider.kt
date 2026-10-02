@@ -47,7 +47,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 manager.getAppWidgetIds(component)
 
             for (id in ids) {
-
                 updateSingleWidget(
                     context,
                     manager,
@@ -152,7 +151,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     layout
                 )
 
-            // جستجو
             views.setOnClickPendingIntent(
                 R.id.widgetSearchArea,
                 createSearchPendingIntent(
@@ -161,7 +159,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
-            // افزودن کالا
             views.setOnClickPendingIntent(
                 R.id.widgetAddButton,
                 createAddProductPendingIntent(
@@ -170,7 +167,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
-            // حالت اطلاعات
             views.setOnClickPendingIntent(
                 R.id.widgetHelpButton,
                 createInfoTogglePendingIntent(
@@ -179,7 +175,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
-            // ارسال لیست
             views.setOnClickPendingIntent(
                 R.id.widgetShareButton,
                 createShareListPendingIntent(
@@ -188,7 +183,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
-            // وضعیت دکمه اطلاعات
             val infoEnabled =
                 isInfoModeEnabled(context)
 
@@ -233,7 +227,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
 
             intent.flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK
 
             return PendingIntent.getActivity(
                 context,
@@ -420,12 +414,9 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     )
 
                 val sendIntent =
-                    Intent(
-                        Intent.ACTION_SEND
-                    ).apply {
+                    Intent(Intent.ACTION_SEND).apply {
 
-                        type =
-                            "application/json"
+                        type = "application/json"
 
                         putExtra(
                             Intent.EXTRA_STREAM,
@@ -437,10 +428,11 @@ class PriceWidgetProvider : AppWidgetProvider() {
                         )
 
                         clipData =
-                            android.content.ClipData.newRawUri(
-                                "PriceYar",
-                                uri
-                            )
+                            android.content.ClipData
+                                .newRawUri(
+                                    "PriceYar",
+                                    uri
+                                )
                     }
 
                 val chooser =
@@ -473,7 +465,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
         ) {
 
             toggleInfoMode(context)
-
             return
         }
 
@@ -483,7 +474,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
         ) {
 
             sharePriceList(context)
-
             return
         }
 
@@ -546,7 +536,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
     ) {
 
         super.onEnabled(context)
-
         updateWidget(context)
     }
 
