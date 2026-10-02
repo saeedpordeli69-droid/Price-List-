@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
+import androidx.core.content.FileProvider
+import java.io.File
 
 class PriceWidgetProvider : AppWidgetProvider() {
 
@@ -20,6 +22,9 @@ class PriceWidgetProvider : AppWidgetProvider() {
 
         private const val ACTION_TOGGLE_INFO =
             "com.priceyar.widget.TOGGLE_INFO"
+
+        private const val ACTION_SHARE_LIST =
+            "com.priceyar.widget.SHARE_LIST"
 
         fun updateWidget(context: Context) {
 
@@ -168,6 +173,15 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
+            // ارسال لیست
+            views.setOnClickPendingIntent(
+                R.id.widgetShareButton,
+                createShareListPendingIntent(
+                    context,
+                    appWidgetId
+                )
+            )
+
             // نمایش وضعیت دکمه اطلاعات
             val infoEnabled =
                 isInfoModeEnabled(context)
@@ -277,6 +291,34 @@ class PriceWidgetProvider : AppWidgetProvider() {
             )
         }
 
+        private fun createShareListPendingIntent(
+            context: Context,
+            appWidgetId: Int
+        ): PendingIntent {
+
+            val intent =
+                Intent(
+                    context,
+                    PriceWidgetProvider::class.java
+                )
+
+            intent.action =
+                ACTION_SHARE_LIST
+
+            intent.putExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                appWidgetId
+            )
+
+            return PendingIntent.getBroadcast(
+                context,
+                appWidgetId + 30000,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
         private fun toggleInfoMode(
             context: Context
         ) {
@@ -317,6 +359,98 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     false
                 )
         }
+
+        private fun sharePriceList(
+            context: Context
+        ) {
+
+            val prefs =
+                context.getSharedPreferences(
+                    PREFS_NAME,
+                    Context.MODE_PRIVATE
+                )
+
+            val json =
+                prefs.getString(
+                    "data",
+                    ""
+                )
+
+            if (json.isNullOrBlank()) {
+                return
+            }
+
+            try {
+
+                val sharedDirectory =
+                    File(
+                        context.cacheDir,
+                        "shared"
+                    )
+
+                if (!sharedDirectory.exists()) {
+                    sharedDirectory.mkdirs()
+                }
+
+                val file =
+                    File(
+                        sharedDirectory,
+                        "PriceYar-PriceList.json"
+                    )
+
+                file.writeText(
+                    json,
+                    Charsets.UTF_8
+                )
+
+                val uri =
+                    FileProvider.getUriForFile(
+                        context,
+                        "${context.packageName}.fileprovider",
+                        file
+                    )
+
+                val sendIntent =
+                    Intent(
+                        Intent.ACTION_SEND
+                    ).apply {
+
+                        type =
+                            "application/json"
+
+                        putExtra(
+                            Intent.EXTRA_STREAM,
+                            uri
+                        )
+
+                        addFlags(
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        )
+
+                        clipData =
+                            android.content.ClipData.newRawUri(
+                                "PriceYar",
+                                uri
+                            )
+                    }
+
+                val chooser =
+                    Intent.createChooser(
+                        sendIntent,
+                        "ارسال لیست قیمت با"
+                    )
+
+                chooser.addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+                )
+
+                context.startActivity(
+                    chooser
+                )
+
+            } catch (_: Exception) {
+            }
+        }
     }
 
     override fun onReceive(
@@ -330,6 +464,16 @@ class PriceWidgetProvider : AppWidgetProvider() {
         ) {
 
             toggleInfoMode(context)
+
+            return
+        }
+
+        if (
+            ACTION_SHARE_LIST ==
+            intent.action
+        ) {
+
+            sharePriceList(context)
 
             return
         }
