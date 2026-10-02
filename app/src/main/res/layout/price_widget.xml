@@ -53,39 +53,36 @@
     </LinearLayout>
 
     <!-- افزودن -->
-    <TextView
+    <ImageView
         android:id="@+id/widgetAddButton"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:layout_marginStart="6dp"
-        android:gravity="center"
-        android:text="+"
-        android:textColor="#E8EAED"
-        android:textSize="23sp"
+        android:padding="9dp"
+        android:src="@drawable/ic_add"
+        android:contentDescription="افزودن"
         android:background="@drawable/widget_circle_button" />
 
     <!-- اطلاعات -->
-    <TextView
+    <ImageView
         android:id="@+id/widgetHelpButton"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:layout_marginStart="6dp"
-        android:gravity="center"
-        android:text="ⓘ"
-        android:textColor="#E8EAED"
-        android:textSize="21sp"
+        android:padding="9dp"
+        android:src="@drawable/ic_info"
+        android:contentDescription="اطلاعات"
         android:background="@drawable/widget_circle_button" />
 
     <!-- لیست -->
-    <TextView
+    <ImageView
         android:id="@+id/widgetShareButton"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:layout_marginStart="6dp"
-        android:gravity="center"
-        android:text="☷"
-        android:textColor="#E8EAED"
-        android:textSize="21sp"
+        android:padding="9dp"
+        android:src="@drawable/ic_list"
+        android:contentDescription="ارسال لیست"
         android:background="@drawable/widget_circle_button" />
 
 </LinearLayout>
