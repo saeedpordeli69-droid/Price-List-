@@ -168,6 +168,21 @@ class SearchActivity : Activity() {
         }
     }
 
+    override fun onBackPressed() {
+
+        val imm =
+            getSystemService(
+                Context.INPUT_METHOD_SERVICE
+            ) as InputMethodManager
+
+        imm.hideSoftInputFromWindow(
+            input.windowToken,
+            0
+        )
+
+        finish()
+    }
+
     private fun searchProducts(query: String) {
 
         resultsLayout.removeAllViews()
