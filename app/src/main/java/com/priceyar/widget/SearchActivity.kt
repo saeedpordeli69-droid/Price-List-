@@ -23,12 +23,6 @@ class SearchActivity : Activity() {
     private lateinit var input: EditText
     private lateinit var resultsLayout: LinearLayout
 
-    private val showDescription: Boolean
-        get() = intent.getBooleanExtra(
-            "showDescription",
-            false
-        )
-
     private val backgroundColor =
         Color.rgb(32, 33, 36)
 
@@ -50,6 +44,7 @@ class SearchActivity : Activity() {
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
+
         super.onCreate(
             savedInstanceState
         )
@@ -83,13 +78,10 @@ class SearchActivity : Activity() {
             TextView(this)
 
         title.text =
-            if (showDescription) {
-                "جستجوی اطلاعات کالا"
-            } else {
-                "جستجوی قیمت کالا"
-            }
+            "جستجوی قیمت کالا"
 
-        title.textSize = 22f
+        title.textSize =
+            22f
 
         title.setTextColor(
             textColor
@@ -120,11 +112,7 @@ class SearchActivity : Activity() {
             EditText(this)
 
         input.hint =
-            if (showDescription) {
-                "جستجوی کالا برای نمایش اطلاعات"
-            } else {
-                "جستجوی کالا"
-            }
+            "جستجوی کالا"
 
         input.setHintTextColor(
             secondaryColor
@@ -134,9 +122,12 @@ class SearchActivity : Activity() {
             textColor
         )
 
-        input.textSize = 17f
+        input.textSize =
+            17f
 
-        input.setSingleLine(true)
+        input.setSingleLine(
+            true
+        )
 
         input.setPadding(
             dp(18),
@@ -306,6 +297,11 @@ class SearchActivity : Activity() {
             return
         }
 
+        val infoMode =
+            PriceWidgetProvider.isInfoModeEnabled(
+                this
+            )
+
         try {
 
             val rootObject =
@@ -395,7 +391,8 @@ class SearchActivity : Activity() {
                     addResult(
                         name,
                         price,
-                        description
+                        description,
+                        infoMode
                     )
 
                     found++
@@ -420,7 +417,8 @@ class SearchActivity : Activity() {
     private fun addResult(
         name: String,
         price: String,
-        description: String
+        description: String,
+        infoMode: Boolean
     ) {
 
         val card =
@@ -513,7 +511,7 @@ class SearchActivity : Activity() {
         }
 
         if (
-            showDescription &&
+            infoMode &&
             description.isNotBlank()
         ) {
 
