@@ -381,7 +381,9 @@ class SearchActivity : Activity() {
 
             val priceText = TextView(this)
 
-            priceText.text = "قیمت فروش: $price تومان"
+            priceText.text =
+                "قیمت فروش: $price تومان"
+
             priceText.textSize = 15f
             priceText.setTextColor(textColor)
 
@@ -401,7 +403,10 @@ class SearchActivity : Activity() {
             )
         }
 
-        if (buyPrice.isNotBlank()) {
+        if (
+            infoMode &&
+            buyPrice.isNotBlank()
+        ) {
 
             val buyPriceText = TextView(this)
 
