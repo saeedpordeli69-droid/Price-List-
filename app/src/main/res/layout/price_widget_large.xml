@@ -19,14 +19,6 @@
         android:paddingEnd="14dp">
 
         <ImageView
-            android:id="@+id/widgetDollarIcon"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginEnd="9dp"
-            android:src="@drawable/ic_dollar"
-            android:contentDescription="PriceYar" />
-
-        <ImageView
             android:id="@+id/widgetSearchIcon"
             android:layout_width="21dp"
             android:layout_height="21dp"
