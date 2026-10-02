@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widgetRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#303134"
+    android:padding="6dp">
+
+    <!-- نوار جستجو -->
+    <LinearLayout
+        android:id="@+id/widgetSearchArea"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/widget_search_line"
+        android:paddingStart="12dp"
+        android:paddingEnd="14dp">
+
+        <ImageView
+            android:id="@+id/widgetDollarIcon"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="9dp"
+            android:src="@drawable/ic_dollar"
+            android:contentDescription="PriceYar" />
+
+        <ImageView
+            android:id="@+id/widgetSearchIcon"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:layout_marginEnd="9dp"
+            android:src="@drawable/ic_search"
+            android:tint="#B8BBC0"
+            android:contentDescription="جستجو" />
+
+        <TextView
+            android:id="@+id/widgetSearchText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="جستجوی کالا"
+            android:textColor="#E8EAED"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+    </LinearLayout>
+
+    <!-- گزینه‌ها در حالت بزرگ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/widgetAddButton"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="6dp"
+            android:padding="9dp"
+            android:src="@drawable/ic_add"
+            android:contentDescription="افزودن"
+            android:background="@drawable/widget_circle_button" />
+
+        <ImageView
+            android:id="@+id/widgetHelpButton"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:padding="9dp"
+            android:src="@drawable/ic_info"
+            android:contentDescription="اطلاعات"
+            android:background="@drawable/widget_circle_button" />
+
+        <ImageView
+            android:id="@+id/widgetShareButton"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="6dp"
+            android:padding="9dp"
+            android:src="@drawable/ic_list"
+            android:contentDescription="ارسال لیست"
+            android:background="@drawable/widget_circle_button" />
+
+    </LinearLayout>
+
+</LinearLayout>
