@@ -1,7 +1,6 @@
 package com.priceyar.widget
 
 import android.app.Activity
-import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     private var pageLoaded = false
     private var pendingIncomingUri: Uri? = null
+    private var pendingOpenAdd = false
 
     companion object {
         private const val REQUEST_OPEN_FILE = 1002
@@ -43,7 +43,9 @@ class MainActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
 
                 pageLoaded = true
+
                 processPendingIncomingFile()
+                processPendingOpenAdd()
             }
         }
 
@@ -78,6 +80,16 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        if (
+            incomingIntent.action ==
+            PriceWidgetProvider.ACTION_ADD_PRODUCT
+        ) {
+
+            pendingOpenAdd = true
+
+            processPendingOpenAdd()
+        }
+
         val action = incomingIntent.action
 
         var uri: Uri? = null
@@ -108,6 +120,24 @@ class MainActivity : AppCompatActivity() {
 
             processPendingIncomingFile()
         }
+    }
+
+    private fun processPendingOpenAdd() {
+
+        if (!pageLoaded) {
+            return
+        }
+
+        if (!pendingOpenAdd) {
+            return
+        }
+
+        pendingOpenAdd = false
+
+        webView.evaluateJavascript(
+            "window.openAdd && window.openAdd();",
+            null
+        )
     }
 
     private fun processPendingIncomingFile() {
