@@ -1847,6 +1847,29 @@ if(!remoteItem.id)
 return;
 
 
+/*
+   اگر کالا در فایل دریافتی وجود دارد،
+   یعنی این کالا در لیست فرستنده وجود دارد.
+
+   پس اگر روی این دستگاه قبلاً حذف شده بود،
+   علامت حذف محلی پاک می‌شود تا کالا
+   بتواند دوباره از فایل دریافتی برگردد.
+ */
+
+if(
+data.deleted &&
+data.deleted[remoteItem.id]
+){
+
+delete data.deleted[
+remoteItem.id
+];
+
+changed++;
+
+}
+
+
 let localItem =
 localStore.items.find(
 x =>
@@ -1897,7 +1920,6 @@ remoteTime ||
 Date.now()
 
 });
-
 
 changed++;
 
