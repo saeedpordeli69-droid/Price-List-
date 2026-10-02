@@ -18,7 +18,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 
-class SearchActivity : Activity {
+class SearchActivity : Activity() {
 
     private lateinit var input: EditText
     private lateinit var resultsLayout: LinearLayout
@@ -30,7 +30,6 @@ class SearchActivity : Activity {
     private val textColor = Color.rgb(232, 234, 237)
     private val secondaryColor = Color.rgb(154, 160, 166)
     private val borderColor = Color.rgb(74, 76, 80)
-    private val accentColor = Color.rgb(138, 180, 248)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -173,9 +172,7 @@ class SearchActivity : Activity {
 
         input.setOnEditorActionListener { _, actionId, _ ->
 
-            if (
-                actionId == EditorInfo.IME_ACTION_SEARCH
-            ) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
                 searchProducts(
                     input.text.toString().trim()
@@ -184,15 +181,12 @@ class SearchActivity : Activity {
                 true
 
             } else {
-
                 false
             }
         }
     }
 
-    private fun searchProducts(
-        query: String
-    ) {
+    private fun searchProducts(query: String) {
 
         resultsLayout.removeAllViews()
 
