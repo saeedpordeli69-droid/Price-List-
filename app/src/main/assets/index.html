@@ -53,7 +53,7 @@ border:1px solid #333;
 font-size:23px;
 font-weight:850;
 text-align:center;
-padding:0 45px;
+padding:5px 45px 0;
 position:relative
 }
 
@@ -62,7 +62,7 @@ content:"⋮";
 position:absolute;
 left:18px;
 top:50%;
-transform:translateY(-55%);
+transform:translateY(-45%);
 color:#aaa;
 font-size:27px;
 font-weight:700
@@ -172,22 +172,25 @@ font-size:16px;
 font-weight:800
 }
 
+/* افزودن کالا */
 .add{
-background:#fff;
-color:#000;
-border:0
-}
-
-.more{
-background:#151515;
-color:#fff;
+background:#000;
+color:#64B4FF;
 border:1px solid #333
 }
 
+/* اطلاعات - خاموش */
+.more{
+background:#000;
+color:#E8EAED;
+border:1px solid #333
+}
+
+/* اطلاعات - روشن */
 .more.on{
-background:#351010;
-border-color:#351010;
-color:#fff
+background:#000;
+border-color:#64B4FF;
+color:#64B4FF
 }
 
 .section{
@@ -354,7 +357,8 @@ padding-right:10px
 }
 
 .storeBtn{
-font-size:21px
+font-size:21px;
+padding-top:5px
 }
 
 .add,
@@ -474,43 +478,6 @@ class="file"
 type="file"
 accept=".json,application/json"
 onchange="importPriceList(event)">
-
-
-<button
-class="back"
-onclick="backup()">
-پشتیبان‌گیری از این مغازه
-</button>
-
-
-<button
-class="back"
-onclick="file.click()">
-بازیابی قیمت‌ها
-</button>
-
-
-<input
-id="file"
-class="file"
-type="file"
-accept=".json"
-onchange="restore(event)">
-
-
-<div class="note">
-
-اطلاعات این برنامه روی همین دستگاه ذخیره می‌شود.
-
-<br>
-
-برای فرستادن تغییرات به دیگران از «ارسال لیست» استفاده کن.
-
-<br>
-
-دریافت‌کننده می‌تواند فایل ارسالی را لمس کند تا PriceYar آن را خودکار دریافت و به‌روزرسانی کند.
-
-</div>
 
 </main>
 
@@ -1572,173 +1539,6 @@ return String(name)
 }
 
 
-function backup(){
-
-let backupStore=
-JSON.parse(
-JSON.stringify(st())
-);
-
-
-if(isSeller()){
-
-backupStore.items.forEach(
-item=>{
-
-delete item.buy;
-
-delete item.buyPrice;
-
-delete item.purchasePrice;
-
-});
-
-}
-
-
-let b=
-new Blob(
-[
-JSON.stringify(
-backupStore,
-null,
-2
-)
-],
-{
-type:"application/json"
-}
-);
-
-
-let a=
-document.createElement("a");
-
-
-a.href=
-URL.createObjectURL(b);
-
-
-a.download=
-"backup-"+
-safeFileName(st().name)+
-".json";
-
-
-a.click();
-
-
-setTimeout(
-()=>
-URL.revokeObjectURL(a.href),
-1000
-);
-
-}
-
-
-function restore(e){
-
-let f=
-e.target.files[0];
-
-
-if(!f){
-
-return;
-
-}
-
-
-let r=
-new FileReader();
-
-
-r.onload=()=>{
-
-try{
-
-let x=
-JSON.parse(r.result);
-
-
-if(
-!x||
-!Array.isArray(x.items)
-){
-
-throw 0;
-
-}
-
-
-x.items.forEach(
-item=>{
-
-if(!item.id){
-
-item.id=makeId();
-
-}
-
-if(!item.last){
-
-item.last=Date.now();
-
-}
-
-});
-
-
-if(isSeller()){
-
-x.items.forEach(
-item=>{
-
-delete item.buy;
-
-delete item.buyPrice;
-
-delete item.purchasePrice;
-
-});
-
-}
-
-
-st().items=
-x.items;
-
-
-save();
-
-render();
-
-
-alert(
-"قیمت‌ها بازیابی شدند"
-);
-
-
-}catch(_){
-
-alert(
-"فایل پشتیبان معتبر نیست"
-);
-
-}
-
-};
-
-
-r.readAsText(f);
-
-
-e.target.value="";
-
-}
-
-
 function exportPriceList(){
 
 ensureIds();
@@ -2455,29 +2255,6 @@ reader.result
 reader.readAsText(file);
 
 e.target.value="";
-
-}
-
-
-function today(){
-
-let d=
-new Date();
-
-
-return(
-d.getFullYear()+
-"-"+
-String(
-d.getMonth()+1
-)
-.padStart(2,"0")+
-"-"+
-String(
-d.getDate()
-)
-.padStart(2,"0")
-);
 
 }
 
