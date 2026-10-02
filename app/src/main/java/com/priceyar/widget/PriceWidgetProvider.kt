@@ -26,6 +26,9 @@ class PriceWidgetProvider : AppWidgetProvider() {
         private const val ACTION_SHARE_LIST =
             "com.priceyar.widget.SHARE_LIST"
 
+        const val ACTION_ADD_PRODUCT =
+            "com.priceyar.widget.ADD_PRODUCT"
+
         fun updateWidget(context: Context) {
 
             val manager =
@@ -155,10 +158,10 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
-            // افزودن کالا
+            // افزودن مستقیم کالا
             views.setOnClickPendingIntent(
                 R.id.widgetAddButton,
-                createMainPendingIntent(
+                createAddProductPendingIntent(
                     context,
                     appWidgetId
                 )
@@ -182,7 +185,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
-            // نمایش وضعیت دکمه اطلاعات
+            // وضعیت دکمه اطلاعات
             val infoEnabled =
                 isInfoModeEnabled(context)
 
@@ -238,7 +241,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
             )
         }
 
-        private fun createMainPendingIntent(
+        private fun createAddProductPendingIntent(
             context: Context,
             appWidgetId: Int
         ): PendingIntent {
@@ -248,6 +251,9 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     context,
                     MainActivity::class.java
                 )
+
+            intent.action =
+                ACTION_ADD_PRODUCT
 
             intent.flags =
                 Intent.FLAG_ACTIVITY_NEW_TASK or
