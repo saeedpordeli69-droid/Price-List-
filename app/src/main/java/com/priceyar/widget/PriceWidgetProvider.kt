@@ -132,9 +132,19 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     layout
                 )
 
+            // جستجو
             views.setOnClickPendingIntent(
                 R.id.widgetSearchArea,
                 createSearchPendingIntent(
+                    context,
+                    appWidgetId
+                )
+            )
+
+            // افزودن کالا
+            views.setOnClickPendingIntent(
+                R.id.widgetAddButton,
+                createMainPendingIntent(
                     context,
                     appWidgetId
                 )
@@ -161,6 +171,31 @@ class PriceWidgetProvider : AppWidgetProvider() {
             return PendingIntent.getActivity(
                 context,
                 appWidgetId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        private fun createMainPendingIntent(
+            context: Context,
+            appWidgetId: Int
+        ): PendingIntent {
+
+            val intent =
+                Intent(
+                    context,
+                    MainActivity::class.java
+                )
+
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+
+            return PendingIntent.getActivity(
+                context,
+                appWidgetId + 10000,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
