@@ -120,7 +120,10 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
 
             val layout =
-                if (minHeight >= 90 || minWidth >= 400) {
+                if (
+                    minHeight >= 90 ||
+                    minWidth >= 400
+                ) {
                     R.layout.price_widget_large
                 } else {
                     R.layout.price_widget
@@ -132,7 +135,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     layout
                 )
 
-            // جستجو
+            // جستجوی معمولی
             views.setOnClickPendingIntent(
                 R.id.widgetSearchArea,
                 createSearchPendingIntent(
@@ -145,6 +148,15 @@ class PriceWidgetProvider : AppWidgetProvider() {
             views.setOnClickPendingIntent(
                 R.id.widgetAddButton,
                 createMainPendingIntent(
+                    context,
+                    appWidgetId
+                )
+            )
+
+            // جستجو همراه با توضیحات
+            views.setOnClickPendingIntent(
+                R.id.widgetHelpButton,
+                createInfoPendingIntent(
                     context,
                     appWidgetId
                 )
@@ -196,6 +208,35 @@ class PriceWidgetProvider : AppWidgetProvider() {
             return PendingIntent.getActivity(
                 context,
                 appWidgetId + 10000,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        private fun createInfoPendingIntent(
+            context: Context,
+            appWidgetId: Int
+        ): PendingIntent {
+
+            val intent =
+                Intent(
+                    context,
+                    SearchActivity::class.java
+                )
+
+            intent.putExtra(
+                "showDescription",
+                true
+            )
+
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+            return PendingIntent.getActivity(
+                context,
+                appWidgetId + 20000,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
@@ -256,6 +297,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
     ) {
 
         super.onEnabled(context)
+
         updateWidget(context)
     }
 
