@@ -316,6 +316,11 @@ class MainActivity : AppCompatActivity() {
                         )
 
                         packageRoot.put(
+                            "shareMode",
+                            mode
+                        )
+
+                        packageRoot.put(
                             "stores",
                             rawRoot.optJSONArray("stores")
                                 ?: org.json.JSONArray()
@@ -458,6 +463,11 @@ class MainActivity : AppCompatActivity() {
             val root =
                 org.json.JSONObject(json)
 
+            root.put(
+                "shareMode",
+                "seller"
+            )
+
             val stores =
                 root.optJSONArray("stores")
 
@@ -506,7 +516,23 @@ class MainActivity : AppCompatActivity() {
                 if (modeName == "ویژه فروشندگان") {
                     prepareSellerJson(json)
                 } else {
-                    json
+
+                    try {
+
+                        val root =
+                            org.json.JSONObject(json)
+
+                        root.put(
+                            "shareMode",
+                            "management"
+                        )
+
+                        root.toString(2)
+
+                    } catch (e: Exception) {
+
+                        json
+                    }
                 }
 
             val sharedDirectory =
