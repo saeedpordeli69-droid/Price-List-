@@ -12,6 +12,7 @@
 <title>مدیریت قیمت فروشگاه</title>
 
 <style>
+
 *{
 box-sizing:border-box
 }
@@ -31,7 +32,7 @@ min-height:100vh
 .app{
 max-width:680px;
 margin:auto;
-padding:15px 14px 35px
+padding:25px 14px 35px
 }
 
 .head{
@@ -57,6 +58,7 @@ padding:5px 55px 0;
 position:relative
 }
 
+/* فقط یک سه نقطه در سمت چپ */
 .storeBtn:after{
 content:"⋮";
 position:absolute;
@@ -114,16 +116,16 @@ flex:1;
 height:46px;
 border-radius:12px;
 border:1px solid #444;
-background:#222;
-color:#64B4FF;
+background:#351010;
+color:#fff;
 font-size:15px;
 font-weight:800
 }
 
 .storeAction.addStore{
-background:#000;
-color:#64B4FF;
-border-color:#333
+background:#351010;
+color:#fff;
+border-color:#444
 }
 
 .storeAction.deleteStore{
@@ -261,12 +263,17 @@ background:#111;
 border:1px solid #333
 }
 
-.note{
-text-align:center;
-color:#666;
-font-size:11px;
-margin-top:8px;
-line-height:1.8
+/* دکمه تنظیمات */
+.settingsBtn{
+width:100%;
+height:46px;
+border-radius:12px;
+margin-top:10px;
+color:#fff;
+background:#111;
+border:1px solid #333;
+font-size:15px;
+font-weight:800
 }
 
 .file{
@@ -355,7 +362,8 @@ color:#aaa
 
 .app{
 padding-left:10px;
-padding-right:10px
+padding-right:10px;
+padding-top:25px
 }
 
 .storeBtn{
@@ -374,6 +382,7 @@ font-size:20px
 }
 
 }
+
 </style>
 </head>
 
@@ -388,7 +397,6 @@ font-size:20px
 <button
 class="storeBtn emptyStore"
 id="storeBtn">
-⋮
 </button>
 
 <div
@@ -466,6 +474,12 @@ onclick="updatePriceList()">
 ↻
 </span>
 به‌روزرسانی لیست
+</button>
+
+<button
+class="settingsBtn"
+onclick="openSettings()">
+⚙ تنظیمات
 </button>
 
 <input
@@ -873,8 +887,7 @@ ensureItemIds();
 
 if(!st()){
 
-$("storeBtn").textContent=
-"⋮";
+$("storeBtn").textContent="";
 
 $("storeBtn")
 .classList.add("emptyStore");
@@ -885,7 +898,7 @@ $("title").textContent=
 $("count").textContent="";
 
 $("list").innerHTML=
-'<div class="empty">برای شروع، از منوی ⋮ یک فروشگاه بسازید یا فایل لیست را اضافه کنید.</div>';
+'<div class="empty">برای شروع، از منوی ⋮ یک فروشگاه بسازید یا فایل لیست را وارد کنید.</div>';
 
 return;
 
@@ -1115,7 +1128,7 @@ importStore.className=
 "storeAction";
 
 importStore.textContent=
-"＋ اضافه کردن فروشگاه";
+"＋ ورود لیست";
 
 importStore.onclick=()=>{
 
@@ -1162,8 +1175,7 @@ function updateStoreButton(){
 
 if(!st()){
 
-$("storeBtn").textContent=
-"⋮";
+$("storeBtn").textContent="";
 
 $("storeBtn")
 .classList.add("emptyStore");
@@ -1321,7 +1333,7 @@ function openAdd(){
 if(!st()){
 
 alert(
-"ابتدا یک فروشگاه بسازید یا یک فایل فروشگاه اضافه کنید."
+"ابتدا یک فروشگاه بسازید یا یک لیست وارد کنید."
 );
 
 return;
@@ -1516,19 +1528,6 @@ edit,
 save();
 
 closeModal();
-
-}
-
-function safeFileName(name){
-
-return String(name)
-.replace(
-/[\\/:*?"<>|]/g,
-"-"
-)
-.trim()
-||
-"store";
 
 }
 
@@ -1787,9 +1786,9 @@ data.stores=[];
 
 let updatedStores=0;
 
-let updatedItems=0;
-
 let addedStores=0;
+
+let updatedItems=0;
 
 let addedItems=0;
 
@@ -1870,7 +1869,7 @@ inStore.items=[];
 
 /*
 فایل واردشده مرجع کامل فروشگاه است.
-بنابراین تمام کالاهای قبلی این فروشگاه
+تمام کالاهای قبلی این فروشگاه
 با کالاهای داخل فایل جایگزین می‌شوند.
 */
 
@@ -2032,39 +2031,6 @@ alert(
 
 };
 
-window.exportFinished=
-function(){
-
-alert(
-"فایل لیست قیمت با موفقیت آماده شد.\n\n"+
-"حالا می‌توانی آن را برای بقیه ارسال کنی."
-);
-
-};
-
-window.exportCancelled=
-function(){};
-
-window.exportFailed=
-function(){
-
-alert(
-"ارسال یا آماده‌سازی فایل انجام نشد.\n\n"+
-"لطفاً دوباره تلاش کن."
-);
-
-};
-
-window.importFailed=
-function(){
-
-alert(
-"خواندن فایل انجام نشد.\n\n"+
-"لطفاً دوباره فایل را انتخاب کن."
-);
-
-};
-
 function importPriceList(e){
 
 const file=
@@ -2093,6 +2059,41 @@ reader.readAsText(file);
 e.target.value="";
 
 }
+
+/* تنظیمات فعلاً آماده است تا امکانات بعدی را داخلش اضافه کنیم */
+function openSettings(){
+
+alert(
+"تنظیمات\n\nامکانات تنظیمات در نسخه‌های بعدی اضافه خواهد شد."
+);
+
+}
+
+window.exportFinished=
+function(){};
+
+window.exportCancelled=
+function(){};
+
+window.exportFailed=
+function(){
+
+alert(
+"ارسال یا آماده‌سازی فایل انجام نشد.\n\n"+
+"لطفاً دوباره تلاش کن."
+);
+
+};
+
+window.importFailed=
+function(){
+
+alert(
+"خواندن فایل انجام نشد.\n\n"+
+"لطفاً دوباره فایل را انتخاب کن."
+);
+
+};
 
 $("search")
 .addEventListener(
@@ -2140,12 +2141,6 @@ ensureItemIds();
 updateStoreButton();
 
 applyMode();
-
-/*
-اطلاعات ذخیره‌شده قبلی از نسخه‌های قبل حفظ می‌شود.
-اما اگر قبلاً هیچ فروشگاهی وجود نداشته باشد،
-هیچ فروشگاهی خودکار ساخته نمی‌شود.
-*/
 
 if(
 window.AndroidBridge&&
