@@ -172,21 +172,18 @@ font-size:16px;
 font-weight:800
 }
 
-/* افزودن کالا */
 .add{
 background:#000;
 color:#64B4FF;
 border:1px solid #333
 }
 
-/* اطلاعات - خاموش */
 .more{
 background:#000;
 color:#E8EAED;
 border:1px solid #333
 }
 
-/* اطلاعات - روشن */
 .more.on{
 background:#000;
 border-color:#64B4FF;
@@ -402,7 +399,6 @@ class="modeBadge">
 
 </div>
 
-
 <div class="searchWrap">
 
 <span class="searchIcon">
@@ -416,7 +412,6 @@ autocomplete="off"
 placeholder="جستجوی کالا...">
 
 </div>
-
 
 <div class="quickRow">
 
@@ -435,7 +430,6 @@ onclick="toggleMore()">
 
 </div>
 
-
 <div class="section">
 
 <b id="title">
@@ -447,10 +441,8 @@ onclick="toggleMore()">
 
 </div>
 
-
 <div id="list">
 </div>
-
 
 <button
 class="back"
@@ -461,7 +453,6 @@ onclick="exportPriceList()">
 ارسال لیست
 </button>
 
-
 <button
 class="back"
 onclick="updatePriceList()">
@@ -471,7 +462,6 @@ onclick="updatePriceList()">
 به‌روزرسانی لیست
 </button>
 
-
 <input
 id="updateFile"
 class="file"
@@ -480,7 +470,6 @@ accept=".json,application/json"
 onchange="importPriceList(event)">
 
 </main>
-
 
 <div
 id="modal"
@@ -492,19 +481,16 @@ class="modal">
 افزودن کالا
 </h2>
 
-
 <input
 id="name"
 class="input"
 placeholder="نام کالا">
-
 
 <input
 id="price"
 class="input"
 placeholder="قیمت"
 inputmode="numeric">
-
 
 <div id="buyWrap">
 
@@ -516,13 +502,11 @@ inputmode="numeric">
 
 </div>
 
-
 <textarea
 id="desc"
 class="input textarea"
 placeholder="توضیحات (اختیاری)">
 </textarea>
-
 
 <div class="actions">
 
@@ -548,9 +532,7 @@ onclick="deleteItem()">
 </div>
 
 </div>
-
 </div>
-
 
 <script>
 
@@ -558,6 +540,7 @@ const K="priceYarStoresV3";
 
 const MODE_KEY="priceYarAppMode";
 
+const DEFAULT_STORE_NAME="سوپر مارکت سلطانی";
 
 let data=
 JSON.parse(
@@ -566,35 +549,33 @@ localStorage.getItem(K)||"null"
 ||
 {
 active:0,
-stores:[
-{
-id:null,
-name:"سوپر مارکت سلطانی",
-items:[]
-}
-],
+stores:[],
 deleted:{}
 };
-
 
 let appMode=
 localStorage.getItem(MODE_KEY)
 ||
 "management";
 
-
 let edit=-1;
 
 let more=false;
 
-
 const $=id=>
 document.getElementById(id);
-
 
 const st=()=>
 data.stores[data.active];
 
+function normalizeName(name){
+
+return String(name||"")
+.trim()
+.replace(/\s+/g," ")
+.toLocaleLowerCase();
+
+}
 
 function isSeller(){
 
@@ -602,13 +583,11 @@ return appMode==="seller";
 
 }
 
-
 function isManagement(){
 
 return appMode!=="seller";
 
 }
-
 
 function setMode(mode){
 
@@ -628,7 +607,6 @@ applyMode();
 
 }
 
-
 function applyMode(){
 
 const seller=isSeller();
@@ -645,7 +623,6 @@ seller
 "block";
 
 }
-
 
 if(seller){
 
@@ -668,8 +645,14 @@ $("modeBadge").textContent=
 
 $("modeBadge").classList.remove("seller");
 
-}
+$("moreBtn").textContent=
+more
+?
+"اطلاعات ✓"
+:
+"اطلاعات ○";
 
+}
 
 if(seller){
 
@@ -677,11 +660,9 @@ $("buy").value="";
 
 }
 
-
 render();
 
 }
-
 
 function makeId(){
 
@@ -717,7 +698,6 @@ return v.toString(16);
 
 }
 
-
 function ensureIds(){
 
 if(!Array.isArray(data.stores)){
@@ -725,7 +705,6 @@ if(!Array.isArray(data.stores)){
 data.stores=[];
 
 }
-
 
 data.stores.forEach(
 s=>{
@@ -744,23 +723,21 @@ s.items=[];
 
 });
 
+if(
+data.active<0||
+data.active>=data.stores.length
+){
 
-if(!data.stores.length){
-
-data.stores.push(
-{
-id:makeId(),
-name:"سوپر مارکت سلطانی",
-items:[]
-}
-);
-
-data.active=0;
-
-}
+data.active=
+data.stores.length
+?
+0
+:
+-1;
 
 }
 
+}
 
 function ensureItemIds(){
 
@@ -792,7 +769,6 @@ item.last=Date.now();
 
 });
 
-
 if(!data.deleted){
 
 data.deleted={};
@@ -801,7 +777,6 @@ data.deleted={};
 
 }
 
-
 function cleanSellerData(){
 
 if(!isSeller()){
@@ -809,7 +784,6 @@ if(!isSeller()){
 return;
 
 }
-
 
 data.stores.forEach(
 store=>{
@@ -824,9 +798,7 @@ store.items.forEach(
 item=>{
 
 delete item.buy;
-
 delete item.buyPrice;
-
 delete item.purchasePrice;
 
 });
@@ -834,7 +806,6 @@ delete item.purchasePrice;
 });
 
 }
-
 
 function faDigits(value){
 
@@ -847,7 +818,6 @@ d=>"۰۱۲۳۴۵۶۷۸۹"[d]
 );
 
 }
-
 
 function save(){
 
@@ -868,7 +838,6 @@ JSON.stringify(data)
 
 }
 
-
 function esc(s){
 
 return String(
@@ -888,13 +857,28 @@ m=>
 
 }
 
-
 function render(){
 
 ensureIds();
 
 ensureItemIds();
 
+if(!st()){
+
+$("storeBtn").textContent=
+"انتخاب فروشگاه";
+
+$("title").textContent=
+"فروشگاهی انتخاب نشده";
+
+$("count").textContent="";
+
+$("list").innerHTML=
+'<div class="empty">ابتدا نام فروشگاه را وارد کنید</div>';
+
+return;
+
+}
 
 let q=
 $("search")
@@ -902,10 +886,8 @@ $("search")
 .trim()
 .toLocaleLowerCase();
 
-
 let a=
-st()
-.items
+st().items
 .filter(
 x=>
 !q||
@@ -919,14 +901,12 @@ String(x.name||"")
 (x.last||0)
 );
 
-
 $("title").textContent=
 q
 ?
 "نتایج جستجو"
 :
 "کالاهای اخیر";
-
 
 $("count").textContent=
 q
@@ -935,9 +915,7 @@ a.length+" نتیجه"
 :
 st().items.length+" کالا";
 
-
 $("list").innerHTML="";
-
 
 if(!a.length){
 
@@ -956,16 +934,13 @@ return;
 
 }
 
-
 a.forEach(
 x=>{
 
 let i=
 st().items.indexOf(x);
 
-
 let extra="";
-
 
 if(more){
 
@@ -982,7 +957,6 @@ esc(faDigits(x.buy))+
 
 }
 
-
 if(x.desc){
 
 extra+=
@@ -994,13 +968,10 @@ esc(x.desc)+
 
 }
 
-
 let r=
 document.createElement("div");
 
-
 r.className="row";
-
 
 r.innerHTML=
 '<div class="info">'+
@@ -1013,10 +984,8 @@ extra+
 esc(faDigits(x.price))+
 "</div>";
 
-
 r.onclick=()=>
 openEdit(i);
-
 
 $("list")
 .appendChild(r);
@@ -1025,12 +994,10 @@ $("list")
 
 }
 
-
 $("storeBtn").onclick=()=>{
 
 let menu=
 $("storeMenu");
-
 
 if(
 menu.classList.contains("open")
@@ -1048,14 +1015,12 @@ menu.classList.add("open");
 
 };
 
-
 function stores(){
 
 let m=
 $("storeMenu");
 
 m.innerHTML="";
-
 
 data.stores.forEach(
 (s,i)=>{
@@ -1083,7 +1048,6 @@ i===data.active
 )+
 s.name;
 
-
 d.onclick=()=>{
 
 data.active=i;
@@ -1099,18 +1063,15 @@ render();
 
 };
 
-
 m.appendChild(d);
 
 });
-
 
 let actions=
 document.createElement("div");
 
 actions.className=
 "storeActions";
-
 
 let add=
 document.createElement("button");
@@ -1130,7 +1091,6 @@ addStore();
 
 };
 
-
 let del=
 document.createElement("button");
 
@@ -1149,7 +1109,6 @@ deleteStore();
 
 };
 
-
 actions.appendChild(add);
 
 actions.appendChild(del);
@@ -1158,14 +1117,21 @@ m.appendChild(actions);
 
 }
 
-
 function updateStoreButton(){
+
+if(!st()){
+
+$("storeBtn").textContent=
+"انتخاب فروشگاه";
+
+return;
+
+}
 
 $("storeBtn").textContent=
 st().name;
 
 }
-
 
 function addStore(){
 
@@ -1173,7 +1139,6 @@ let n=
 prompt(
 "نام فروشگاه جدید را وارد کن:"
 );
-
 
 if(
 !n||
@@ -1184,19 +1149,44 @@ return;
 
 }
 
+n=n.trim();
+
+const existing=
+data.stores.find(
+s=>
+normalizeName(s.name)===
+normalizeName(n)
+);
+
+if(existing){
+
+data.active=
+data.stores.indexOf(existing);
+
+save();
+
+updateStoreButton();
+
+render();
+
+alert(
+"این فروشگاه قبلاً وجود دارد و انتخاب شد."
+);
+
+return;
+
+}
 
 data.stores.push(
 {
 id:makeId(),
-name:n.trim(),
+name:n,
 items:[]
 }
 );
 
-
 data.active=
 data.stores.length-1;
-
 
 save();
 
@@ -1205,7 +1195,6 @@ updateStoreButton();
 render();
 
 }
-
 
 function deleteStore(){
 
@@ -1221,10 +1210,14 @@ return;
 
 }
 
+if(!st()){
+
+return;
+
+}
 
 let name=
 st().name;
-
 
 if(
 !confirm(
@@ -1239,12 +1232,10 @@ return;
 
 }
 
-
 data.stores.splice(
 data.active,
 1
 );
-
 
 if(
 data.active>=
@@ -1255,7 +1246,6 @@ data.active=
 data.stores.length-1;
 
 }
-
 
 ensureIds();
 
@@ -1269,11 +1259,9 @@ render();
 
 }
 
-
 function toggleMore(){
 
 more=!more;
-
 
 $("moreBtn").textContent=
 more
@@ -1282,27 +1270,34 @@ more
 :
 "اطلاعات ○";
 
-
 $("moreBtn")
 .classList.toggle(
 "on",
 more
 );
 
-
 render();
 
 }
 
-
 function openAdd(){
+
+if(!st()){
+
+askStoreName();
+
+if(!st()){
+
+return;
+
+}
+
+}
 
 edit=-1;
 
-
 $("mtitle").textContent=
 "افزودن کالا";
-
 
 $("name").value="";
 
@@ -1312,17 +1307,13 @@ $("buy").value="";
 
 $("desc").value="";
 
-
 $("del").style.display=
 "none";
 
-
 applyMode();
-
 
 $("modal").style.display=
 "flex";
-
 
 setTimeout(
 ()=>
@@ -1332,27 +1323,27 @@ $("name").focus(),
 
 }
 
-
 function openEdit(i){
 
-edit=i;
+if(!st()){
 
+return;
+
+}
+
+edit=i;
 
 let x=
 st().items[i];
 
-
 $("mtitle").textContent=
 "ویرایش کالا";
-
 
 $("name").value=
 x.name||"";
 
-
 $("price").value=
 x.price||"";
-
 
 $("buy").value=
 isSeller()
@@ -1361,23 +1352,18 @@ isSeller()
 :
 (x.buy||"");
 
-
 $("desc").value=
 x.desc||"";
-
 
 $("del").style.display=
 "block";
 
-
 applyMode();
-
 
 $("modal").style.display=
 "flex";
 
 }
-
 
 function closeModal(){
 
@@ -1388,16 +1374,19 @@ render();
 
 }
 
-
 function saveItem(){
+
+if(!st()){
+
+return;
+
+}
 
 let n=
 $("name").value.trim();
 
-
 let p=
 $("price").value.trim();
-
 
 if(!n||!p){
 
@@ -1409,14 +1398,12 @@ return;
 
 }
 
-
 let old=
 edit>=0
 ?
 st().items[edit]
 :
 null;
-
 
 let itemId=
 old&&old.id
@@ -1425,9 +1412,7 @@ old.id
 :
 makeId();
 
-
 let x;
-
 
 if(isSeller()){
 
@@ -1452,7 +1437,6 @@ last:Date.now()
 
 }
 
-
 if(edit<0){
 
 st().items.push(x);
@@ -1469,13 +1453,11 @@ st().items[edit]=x;
 
 }
 
-
 save();
 
 closeModal();
 
 }
-
 
 function deleteItem(){
 
@@ -1485,10 +1467,8 @@ return;
 
 }
 
-
 let item=
 st().items[edit];
-
 
 if(
 !confirm(
@@ -1500,30 +1480,25 @@ return;
 
 }
 
-
 if(!data.deleted){
 
 data.deleted={};
 
 }
 
-
 data.deleted[item.id]=
 Date.now();
-
 
 st().items.splice(
 edit,
 1
 );
 
-
 save();
 
 closeModal();
 
 }
-
 
 function safeFileName(name){
 
@@ -1538,7 +1513,6 @@ return String(name)
 
 }
 
-
 function exportPriceList(){
 
 ensureIds();
@@ -1546,7 +1520,6 @@ ensureIds();
 ensureItemIds();
 
 save();
-
 
 const packageData={
 type:"priceyar-price-list",
@@ -1561,7 +1534,6 @@ stores:data.stores,
 deleted:data.deleted||{}
 };
 
-
 const json=
 JSON.stringify(
 packageData,
@@ -1569,10 +1541,8 @@ null,
 2
 );
 
-
 const fileName=
 "لیست جدید قیمت‌ها - برای به‌روزرسانی لمس کنید.json";
-
 
 if(
 window.AndroidBridge&&
@@ -1599,7 +1569,6 @@ e
 
 }
 
-
 if(
 window.AndroidBridge&&
 AndroidBridge.exportPriceList
@@ -1625,7 +1594,6 @@ e
 
 }
 
-
 try{
 
 const blob=
@@ -1637,14 +1605,11 @@ type:
 }
 );
 
-
 const a=
 document.createElement("a");
 
-
 const url=
 URL.createObjectURL(blob);
-
 
 a.href=url;
 
@@ -1656,14 +1621,12 @@ a.click();
 
 a.remove();
 
-
 setTimeout(
 ()=>{
 URL.revokeObjectURL(url);
 },
 2000
 );
-
 
 }catch(e){
 
@@ -1674,7 +1637,6 @@ alert(
 }
 
 }
-
 
 function updatePriceList(){
 
@@ -1700,10 +1662,8 @@ e
 
 }
 
-
 const input=
 $("updateFile");
-
 
 input.value="";
 
@@ -1712,6 +1672,12 @@ input.click();
 }
 
 
+/* =========================================================
+   دریافت لیست واردشده
+   تطبیق فروشگاه بر اساس نام
+   تطبیق کالا بر اساس نام
+   ========================================================= */
+
 window.receiveImportedPriceList=
 function(text){
 
@@ -1719,7 +1685,6 @@ try{
 
 const incoming=
 JSON.parse(text);
-
 
 if(
 !incoming||
@@ -1731,9 +1696,7 @@ throw new Error("invalid");
 
 }
 
-
 let isSellerFile=false;
-
 
 if(
 incoming.shareMode==="seller"
@@ -1751,7 +1714,6 @@ isSellerFile=false;
 
 let allItems=[];
 
-
 incoming.stores.forEach(
 store=>{
 
@@ -1768,7 +1730,6 @@ store.items
 
 });
 
-
 if(allItems.length>0){
 
 isSellerFile=
@@ -1784,7 +1745,6 @@ item,
 
 }
 
-
 setMode(
 isSellerFile
 ?
@@ -1793,11 +1753,11 @@ isSellerFile
 "management"
 );
 
+if(!Array.isArray(data.stores)){
 
-ensureIds();
+data.stores=[];
 
-ensureItemIds();
-
+}
 
 if(!data.deleted){
 
@@ -1805,141 +1765,190 @@ data.deleted={};
 
 }
 
-
 let changed=0;
 
+let firstImportedStore=null;
 
 incoming.stores.forEach(
 inStore=>{
 
-if(!inStore.id){
+if(!inStore){
+
+return;
+
+}
+
+const incomingName=
+String(
+inStore.name||
+""
+).trim();
+
+if(!incomingName){
 
 return;
 
 }
 
 
+/* پیدا کردن فروشگاه فقط با نام */
+
 let localStore=
 data.stores.find(
 s=>
-s.id===inStore.id
+normalizeName(s.name)===
+normalizeName(incomingName)
 );
 
+
+/* اگر فروشگاه وجود نداشت، بساز */
 
 if(!localStore){
 
 localStore={
-id:inStore.id,
-name:inStore.name||"فروشگاه",
+id:
+inStore.id||
+makeId(),
+
+name:
+incomingName,
+
 items:[]
 };
-
 
 data.stores.push(
 localStore
 );
 
-
 changed++;
+
+}else{
+
+/*
+اگر ID فایل فرق داشته باشد،
+ID فروشگاه موجود حفظ می‌شود.
+*/
+
+if(!localStore.id){
+
+localStore.id=
+makeId();
+
+}
 
 }
 
 
+/* نام فروشگاه از فایل */
+
 if(
-inStore.name&&
-inStore.name!==localStore.name
+localStore.name!==incomingName
 ){
 
 localStore.name=
-inStore.name;
+incomingName;
 
 changed++;
 
 }
 
+if(!firstImportedStore){
+
+firstImportedStore=
+localStore;
+
+}
 
 if(
-!Array.isArray(
-inStore.items
-)
+!Array.isArray(localStore.items)
+){
+
+localStore.items=[];
+
+}
+
+if(
+!Array.isArray(inStore.items)
 ){
 
 return;
 
 }
 
+
+/* بررسی کالاها */
 
 inStore.items.forEach(
 remoteItem=>{
 
-if(!remoteItem.id){
+if(!remoteItem){
+
+return;
+
+}
+
+const remoteName=
+String(
+remoteItem.name||
+""
+).trim();
+
+if(!remoteName){
 
 return;
 
 }
 
 
-if(
-data.deleted&&
-data.deleted[remoteItem.id]
-){
-
-delete data.deleted[
-remoteItem.id
-];
-
-}
-
+/*
+کالا با نام یکسان پیدا می‌شود.
+ID دیگر ملاک اصلی نیست.
+*/
 
 let localItem=
 localStore.items.find(
-x=>
-x.id===remoteItem.id
+item=>
+normalizeName(item.name)===
+normalizeName(remoteName)
 );
 
 
-const remoteTime=
-Number(
-remoteItem.last||0
-);
-
-
-const localTime=
-localItem
-?
-Number(
-localItem.last||0
-)
-:
-0;
-
+/* کالای جدید */
 
 if(!localItem){
 
-let newItem={
-id:remoteItem.id,
-name:remoteItem.name||"",
-price:remoteItem.price||"",
-desc:remoteItem.desc||"",
-last:
-remoteTime||
-Date.now()
-};
+localItem={
+id:
+remoteItem.id||
+makeId(),
 
+name:
+remoteName,
+
+price:
+remoteItem.price||"",
+
+desc:
+remoteItem.desc||"",
+
+last:
+Number(
+remoteItem.last||
+Date.now()
+)
+};
 
 if(!isSellerFile){
 
-newItem.buy=
+localItem.buy=
 remoteItem.buy||
 "";
 
 }
 
-
 localStore.items.push(
-newItem
+localItem
 );
-
 
 changed++;
 
@@ -1948,35 +1957,18 @@ return;
 }
 
 
-const remoteName=
-remoteItem.name||"";
+/* کالای موجود است؛ اطلاعات را جایگزین کن */
 
+let different=false;
 
 const remotePrice=
 remoteItem.price||"";
 
-
 const remoteDesc=
 remoteItem.desc||"";
 
-
 const remoteBuy=
 remoteItem.buy||"";
-
-
-let different=false;
-
-
-if(
-localItem.name!==remoteName
-){
-
-localItem.name=
-remoteName;
-
-different=true;
-
-}
 
 
 if(
@@ -1990,7 +1982,6 @@ different=true;
 
 }
 
-
 if(
 localItem.desc!==remoteDesc
 ){
@@ -2002,9 +1993,9 @@ different=true;
 
 }
 
+if(!isSellerFile){
 
 if(
-!isSellerFile&&
 localItem.buy!==remoteBuy
 ){
 
@@ -2015,23 +2006,28 @@ different=true;
 
 }
 
+}
+
+
+/* نام کالا هم به‌روز شود */
+
+if(
+localItem.name!==remoteName
+){
+
+localItem.name=
+remoteName;
+
+different=true;
+
+}
 
 if(different){
 
 localItem.last=
-Math.max(
-remoteTime,
-Date.now()
-);
+Date.now();
 
 changed++;
-
-}else if(
-remoteTime>localTime
-){
-
-localItem.last=
-remoteTime;
 
 }
 
@@ -2040,9 +2036,10 @@ remoteTime;
 });
 
 
+/* حذف کالاهای اعلام‌شده */
+
 const remoteDeleted=
 incoming.deleted||{};
-
 
 Object.keys(
 remoteDeleted
@@ -2055,12 +2052,10 @@ Number(
 remoteDeleted[id]||0
 );
 
-
 const localDeletedTime=
 Number(
 data.deleted[id]||0
 );
-
 
 if(
 remoteTime<=localDeletedTime
@@ -2070,10 +2065,8 @@ return;
 
 }
 
-
 data.deleted[id]=
 remoteTime;
-
 
 data.stores.forEach(
 store=>{
@@ -2084,17 +2077,7 @@ item=>
 item.id===id
 );
 
-
 if(index>=0){
-
-const item=
-store.items[index];
-
-
-if(
-Number(item.last||0)
-<=remoteTime
-){
 
 store.items.splice(
 index,
@@ -2105,12 +2088,12 @@ changed++;
 
 }
 
-}
-
 });
 
 });
 
+
+/* پاکسازی حذف‌شده‌ها */
 
 data.stores.forEach(
 store=>{
@@ -2123,7 +2106,6 @@ const deletedAt=
 Number(
 data.deleted[item.id]||0
 );
-
 
 return(
 !deletedAt||
@@ -2141,17 +2123,34 @@ cleanSellerData();
 
 }
 
-
 ensureIds();
 
 ensureItemIds();
+
+
+/* باز کردن همان فروشگاه واردشده */
+
+if(firstImportedStore){
+
+const importedIndex=
+data.stores.indexOf(
+firstImportedStore
+);
+
+if(importedIndex>=0){
+
+data.active=
+importedIndex;
+
+}
+
+}
 
 save();
 
 updateStoreButton();
 
 applyMode();
-
 
 if(changed){
 
@@ -2169,14 +2168,12 @@ alert(
 
 }
 
-
 }catch(error){
 
 console.log(
 "Import error:",
 error
 );
-
 
 alert(
 "فایل انتخاب‌شده معتبر نیست.\n\n"+
@@ -2186,7 +2183,6 @@ alert(
 }
 
 };
-
 
 window.exportFinished=
 function(){
@@ -2198,10 +2194,8 @@ alert(
 
 };
 
-
 window.exportCancelled=
 function(){};
-
 
 window.exportFailed=
 function(){
@@ -2213,7 +2207,6 @@ alert(
 
 };
 
-
 window.importFailed=
 function(){
 
@@ -2224,12 +2217,10 @@ alert(
 
 };
 
-
 function importPriceList(e){
 
 const file=
 e.target.files[0];
-
 
 if(!file){
 
@@ -2237,10 +2228,8 @@ return;
 
 }
 
-
 const reader=
 new FileReader();
-
 
 reader.onload=()=>
 {
@@ -2251,10 +2240,57 @@ reader.result
 
 };
 
-
 reader.readAsText(file);
 
 e.target.value="";
+
+}
+
+
+/* =========================================================
+   انتخاب نام فروشگاه در اولین اجرا
+   ========================================================= */
+
+function askStoreName(){
+
+if(data.stores.length>0){
+
+return;
+
+}
+
+let name=
+prompt(
+"نام فروشگاه خود را وارد کنید:"
+);
+
+if(
+!name||
+!name.trim()
+){
+
+name=
+"فروشگاه من";
+
+}
+
+name=name.trim();
+
+data.stores.push(
+{
+id:makeId(),
+name:name,
+items:[]
+}
+);
+
+data.active=0;
+
+save();
+
+updateStoreButton();
+
+render();
 
 }
 
@@ -2273,8 +2309,7 @@ $("search")
 
 setTimeout(
 ()=>
-$("search")
-.scrollIntoView(
+$("search").scrollIntoView(
 {
 behavior:"smooth",
 block:"start"
@@ -2302,16 +2337,20 @@ closeModal();
 });
 
 
+/* =========================================================
+   راه‌اندازی برنامه
+   ========================================================= */
+
 ensureIds();
 
 ensureItemIds();
-
-save();
 
 updateStoreButton();
 
 applyMode();
 
+
+/* دریافت اطلاعات ذخیره‌شده از Android */
 
 if(
 window.AndroidBridge&&
@@ -2323,29 +2362,32 @@ try{
 const native=
 AndroidBridge.loadData();
 
-
 if(native){
 
 data=
 JSON.parse(native);
 
-
 ensureIds();
 
 ensureItemIds();
-
 
 localStorage.setItem(
 K,
 JSON.stringify(data)
 );
 
-
-updateStoreButton();
-
-render();
-
 }else{
+
+/*
+در نصب جدید هیچ فروشگاه پیش‌فرضی
+ساخته نمی‌شود.
+*/
+
+if(!data.stores.length){
+
+askStoreName();
+
+}
 
 AndroidBridge.saveData(
 JSON.stringify(data)
@@ -2365,14 +2407,16 @@ e
 }
 
 
+/* =========================================================
+   ذخیره همزمان در Android
+   ========================================================= */
+
 const originalSave=
 save;
-
 
 save=function(){
 
 originalSave();
-
 
 try{
 
@@ -2398,6 +2442,27 @@ e
 
 };
 
+
+/* اگر برنامه واقعاً بدون فروشگاه است */
+
+if(!data.stores.length){
+
+askStoreName();
+
+}else{
+
+ensureIds();
+
+ensureItemIds();
+
+updateStoreButton();
+
+render();
+
+}
+
+
+/* Service Worker */
 
 if(
 "serviceWorker"
