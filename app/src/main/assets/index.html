@@ -393,6 +393,13 @@ color:#fff;
 font-weight:800}
 .smallBtn.danger{
 background:#351010}
+.actionPopup{max-width:520px;padding:22px 18px 20px}
+.actionPopup h2{margin:0 0 14px;text-align:center}
+.popupAction,.popupCancel{width:100%;height:48px;border-radius:12px;border:1px solid #444;background:#252525;color:#fff;font-size:16px;font-weight:850;margin-top:8px}
+.popupAction.danger{background:#351010}
+.popupText{text-align:center;font-weight:750;color:#fff;margin:2px 0 8px}
+.popupCancel{background:#151515}
+.summary .sub{font-size:15px;color:#fff;font-weight:850;line-height:1.7;margin-top:10px}
 .txRow{
 padding:12px;
 border:1px solid #292929;
@@ -650,6 +657,8 @@ font-size:20px}
 <div id="ledgerModal" class="modal"><div class="sheet ledgerSheet sheetScrollFix"><div class="ledgerHeader"><h2><span class="ledgerMiniLogo" aria-hidden="true"><i></i></span> دفتر حساب</h2><button id="ledgerAddBtn" class="ledgerAdd" onclick="openAccountForm()">＋ حساب جدید</button></div><div class="ledgerTabs"><button id="creditorTab" class="ledgerTab creditor active" onclick="setLedgerTab('creditor')">طلب</button><button id="debtorTab" class="ledgerTab debtor" onclick="setLedgerTab('debtor')">بدهی</button></div><input id="ledgerSearch" class="ledgerSearch" autocomplete="off" placeholder="جستجوی حساب..." oninput="renderAccounts()"><div id="ledgerTotal" class="ledgerTotal"><span id="ledgerTotalTitle">جمع کل طلب‌ها</span><span id="ledgerTotalValue" class="totalValue credit">۰</span></div><div id="accountList"></div></div></div>
 
 <div id="accountModal" class="modal"><div class="sheet sheetScrollFix"><div class="ledgerHeader"><h2 id="accountTitle">حساب</h2></div><div id="accountContent"></div></div></div>
+<div id="accountActionModal" class="modal"><div class="sheet actionPopup"><h2 id="accountActionTitle">عملیات حساب</h2><button class="popupAction" onclick="accountAction('detail')">مشاهده ثبت‌ها</button><button class="popupAction" onclick="accountAction('tx')">＋ ثبت مبلغ</button><button class="popupAction" onclick="accountAction('edit')">ویرایش حساب</button><button class="popupAction danger" onclick="accountAction('delete')">حذف حساب</button><button class="popupCancel" onclick="closeAccountAction()">انصراف</button></div></div>
+<div id="deleteItemModal" class="modal"><div class="sheet actionPopup"><h2>حذف</h2><div class="popupText">آیا این کالا حذف شود؟</div><button class="popupAction danger" onclick="confirmDeleteItem()">حذف</button><button class="popupCancel" onclick="closeDeleteItemPopup()">انصراف</button></div></div>
 
 <div id="accountFormModal" class="modal"><div class="sheet sheetScrollFix"><h2 id="accountFormTitle">حساب جدید</h2><div class="settingTitle">نوع حساب</div><div class="settingRow"><button id="accountCreditorBtn" class="settingOption" onclick="setAccountType('creditor')">طلب</button><button id="accountDebtorBtn" class="settingOption" onclick="setAccountType('debtor')">بدهی</button></div><input id="accountName" class="input" placeholder="نام شخص / شرکت"><input id="accountPhone" class="input" placeholder="شماره تماس (اختیاری)" inputmode="tel"><textarea id="accountNote" class="input textarea" placeholder="توضیحات (اختیاری)"></textarea><div class="actions formSave"><button class="btn" onclick="saveAccount()">ذخیره</button><button class="btn dark" onclick="closeAccountForm()">انصراف</button></div></div></div>
 
@@ -713,19 +722,21 @@ function render(){
  let q=$("search").value.trim().toLocaleLowerCase(),a=st().items.filter(x=>!q||String(x.name||"").toLocaleLowerCase().includes(q)).sort((x,y)=>(y.last||0)-(x.last||0));
  $("title").textContent=q?"نتایج جستجو":"کالاهای اخیر";$("count").textContent=q?a.length+" نتیجه":st().items.length+" کالا";$("list").innerHTML="";
  if(!a.length){$("list").innerHTML='<div class="empty">'+(q?"کالایی پیدا نشد":"هنوز کالایی اضافه نشده")+'</div>';return}
- a.forEach(x=>{let i=st().items.indexOf(x),extra="";if(more){if(!isSeller()&&x.buy)extra+='<div class="buy">قیمت خرید: '+esc(digitsAmount(x.buy))+'</div>';if(x.desc)extra+='<div class="sub">'+esc(x.desc)+'</div>'}let w=document.createElement("div");w.className="rowWrap";w.innerHTML='<div class="row"><div class="info"><div class="name">'+esc(x.name)+'</div>'+extra+'</div><div class="price">'+esc(digitsAmount(x.price))+'</div></div><div class="longPressHint">برای حذف، کالا را چند لحظه نگه دارید</div>';$("list").appendChild(w);setupLongPress(w,w.querySelector(".row"),i)});applySettings()}
+ a.forEach(x=>{let i=st().items.indexOf(x),extra="";if(more){if(!isSeller()&&x.buy)extra+='<div class="buy">قیمت خرید: '+esc(digitsAmount(x.buy))+'</div>';if(x.desc)extra+='<div class="sub">'+esc(x.desc)+'</div>'}let w=document.createElement("div");w.className="rowWrap";w.innerHTML='<div class="row"><div class="info"><div class="name">'+esc(x.name)+'</div>'+extra+'</div><div class="price">'+esc(digitsAmount(x.price))+'</div></div>';$("list").appendChild(w);setupLongPress(w,w.querySelector(".row"),i)});applySettings()}
 
+let pendingDeleteItem=-1;
 function setupLongPress(w,r,index){
 let timer=null,longTriggered=false,down=false;
 const clear=()=>{if(timer){clearTimeout(timer);timer=null}};
-r.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button!==0)return;down=true;longTriggered=false;clear();timer=setTimeout(()=>{if(down){longTriggered=true;removeItemByIndex(index)}},650)});
+r.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button!==0)return;down=true;longTriggered=false;clear();timer=setTimeout(()=>{if(down){longTriggered=true;showDeleteItemPopup(index)}},650)});
 r.addEventListener("pointerup",()=>{down=false;clear()});
 r.addEventListener("pointercancel",()=>{down=false;clear()});
 r.addEventListener("pointerleave",()=>{if(timer){down=false;clear()}});
 r.addEventListener("click",e=>{if(longTriggered){e.preventDefault();e.stopPropagation();longTriggered=false;return}openEdit(index)});
 }
-
-function removeItemByIndex(i){if(!st()||i<0||i>=st().items.length)return;st().items.splice(i,1);save();render()}
+function showDeleteItemPopup(i){if(!st()||i<0||i>=st().items.length)return;pendingDeleteItem=i;$("deleteItemModal").style.display="flex"}
+function closeDeleteItemPopup(){pendingDeleteItem=-1;$("deleteItemModal").style.display="none"}
+function confirmDeleteItem(){let i=pendingDeleteItem;closeDeleteItemPopup();if(!st()||i<0||i>=st().items.length)return;st().items.splice(i,1);save();render()}
 $("storeBtn").onclick=()=>{$("storeMenu").classList.toggle("open");if($("storeMenu").classList.contains("open"))stores()}
 
 function stores(){let m=$("storeMenu");m.innerHTML="";data.stores.forEach((s,i)=>{let d=document.createElement("div");d.className="storeItem"+(i===data.active?" active":"");d.textContent=(i===data.active?"✓ ":"")+s.name;d.onclick=()=>{data.active=i;save();m.classList.remove("open");updateStoreButton();render()};m.appendChild(d)});let a=document.createElement("div");a.className="storeActions";a.innerHTML='<button class="storeAction">＋ ساختن فروشگاه</button><button class="storeAction">＋ ورود لیست</button>';a.children[0].onclick=()=>{m.classList.remove("open");createStore()};a.children[1].onclick=()=>{m.classList.remove("open");updatePriceList()};if(data.stores.length){let b=document.createElement("button");b.className="storeAction";b.textContent="− حذف فروشگاه";b.onclick=()=>{m.classList.remove("open");deleteStore()};a.appendChild(b)}m.appendChild(a)}
@@ -779,13 +790,16 @@ function closeLedger(){if($("ledgerModal").style.display!=="none"){$("ledgerModa
 
 function setLedgerTab(t){if(isSeller()&&t==="debtor")return;ledgerTab=t==="debtor"?"debtor":"creditor";renderAccounts()}
 
-function renderAccounts(){ensureLedger();$("creditorTab").classList.toggle("active",ledgerTab==="creditor");$("debtorTab").style.display=isSeller()?"none":"block";$("debtorTab").classList.toggle("active",ledgerTab==="debtor");let total=totalForType(ledgerTab);$("ledgerTotalTitle").textContent=ledgerTab==="creditor"?"جمع کل طلب‌ها":"جمع کل بدهی‌ها";$("ledgerTotalValue").textContent=digitsAmount(total);$("ledgerTotalValue").className="totalValue "+(ledgerTab==="creditor"?"credit":"debit");$("ledgerTotal").classList.toggle("debtor",ledgerTab==="debtor");let q=$("ledgerSearch").value.trim().toLocaleLowerCase();let list=ledger.accounts.filter(a=>a.type===ledgerTab&&(!q||String(a.name||"").toLocaleLowerCase().includes(q)||String(a.phone||"").includes(q))).slice().sort((a,b)=>{let ad=Math.max(0,...(a.transactions||[]).map(t=>dateKey(t.date)));let bd=Math.max(0,...(b.transactions||[]).map(t=>dateKey(t.date)));return bd-ad});let box=$("accountList");box.innerHTML="";if(!list.length){box.innerHTML='<div class="empty">'+(q?"حسابی پیدا نشد":"هنوز حسابی ثبت نشده است")+'</div>';return}list.forEach(a=>{let b=accountBalance(a),d=document.createElement("div");d.className="accountRow";d.innerHTML='<div><div class="accountName">'+esc(a.name)+"</div><div class=\"accountMeta\">"+(a.phone?esc(a.phone)+" • ":"")+(a.type==="creditor"?"طلب":"بدهی")+" • "+faDigits((a.transactions||[]).length)+" ثبت</div></div><div class=\"balance "+(a.type==="creditor"?"credit":"debit")+"\">"+digitsAmount(b)+"</div>";d.onclick=()=>openAccount(ledger.accounts.indexOf(a));box.appendChild(d)})}
+function renderAccounts(){ensureLedger();$("creditorTab").classList.toggle("active",ledgerTab==="creditor");$("debtorTab").style.display=isSeller()?"none":"block";$("debtorTab").classList.toggle("active",ledgerTab==="debtor");let total=totalForType(ledgerTab);$("ledgerTotalTitle").textContent=ledgerTab==="creditor"?"جمع کل طلب‌ها":"جمع کل بدهی‌ها";$("ledgerTotalValue").textContent=digitsAmount(total);$("ledgerTotalValue").className="totalValue "+(ledgerTab==="creditor"?"credit":"debit");$("ledgerTotal").classList.toggle("debtor",ledgerTab==="debtor");let q=$("ledgerSearch").value.trim().toLocaleLowerCase();let list=ledger.accounts.filter(a=>a.type===ledgerTab&&(!q||String(a.name||"").toLocaleLowerCase().includes(q)||String(a.phone||"").includes(q))).slice().sort((a,b)=>{let ad=Math.max(0,...(a.transactions||[]).map(t=>dateKey(t.date)));let bd=Math.max(0,...(b.transactions||[]).map(t=>dateKey(t.date)));return bd-ad});let box=$("accountList");box.innerHTML="";if(!list.length){box.innerHTML='<div class="empty">'+(q?"حسابی پیدا نشد":"هنوز حسابی ثبت نشده است")+'</div>';return}list.forEach(a=>{let b=accountBalance(a),d=document.createElement("div");d.className="accountRow";d.innerHTML='<div><div class="accountName">'+esc(a.name)+"</div><div class=\"accountMeta\">"+(a.phone?esc(a.phone)+" • ":"")+(a.type==="creditor"?"طلب":"بدهی")+" • "+faDigits((a.transactions||[]).length)+" ثبت</div></div><div class=\"balance "+(a.type==="creditor"?"credit":"debit")+"\">"+digitsAmount(b)+"</div>";d.onclick=()=>showAccountActions(ledger.accounts.indexOf(a));box.appendChild(d)})}
 
+function showAccountActions(i){if(i<0||i>=ledger.accounts.length)return;activeAccount=i;let a=ledger.accounts[i];$("accountActionTitle").textContent=a.name||"عملیات حساب";$("accountActionModal").style.display="flex";history.pushState({priceyarLayer:"accountAction"},"")}
+function closeAccountAction(){if($("accountActionModal").style.display!=="none")$("accountActionModal").style.display="none"}
+function accountAction(action){let i=activeAccount;closeAccountAction();if(i<0)return;if(action==="detail"){openAccount(i);return}if(action==="tx"){openAccount(i);setTimeout(()=>openTxForm(),40);return}if(action==="edit"){openAccountForm(i);return}if(action==="delete"){deleteAccount(i);return}}
 function openAccount(i){activeAccount=i;let a=ledger.accounts[i];if(!a)return;$("accountTitle").textContent=a.name;$("accountModal").style.display="flex";history.pushState({priceyarLayer:"account"},"");renderAccount()}
 
 function closeAccount(){if($("accountModal").style.display!=="none"){$("accountModal").style.display="none";activeAccount=-1}}
 
-function renderAccount(){let a=ledger.accounts[activeAccount];if(!a)return;let total=accountBalance(a),typeText=a.type==="creditor"?"طلب":"بدهی",typeClass=a.type==="creditor"?"credit":"debit";let h='<div class="summary"><div class="summaryLine"><span>'+typeText+'</span><strong class="'+typeClass+'">'+digitsAmount(total)+'</strong></div>'+(a.phone?'<div class="summaryLine"><span>تلفن</span><strong>'+esc(a.phone)+"</strong></div>":"")+(a.note?'<div class="sub">'+esc(a.note)+"</div>":"")+'</div>';if(!isSeller())h+='<div class="accountActions"><button class="smallBtn" onclick="openAccountForm('+activeAccount+')">ویرایش حساب</button><button class="smallBtn danger" onclick="deleteAccount('+activeAccount+')">حذف حساب</button><button class="smallBtn" onclick="openTxForm()">＋ ثبت مبلغ</button></div>';h+='<div class="section"><b>ثبت‌ها</b><span>'+faDigits((a.transactions||[]).length)+'</span></div>';let txs=(a.transactions||[]).map((t,i)=>({t,i})).sort((x,y)=>dateKey(x.t.date)-dateKey(y.t.date)||x.i-y.i);if(!txs.length)h+='<div class="empty">هنوز مبلغی ثبت نشده است.</div>';else txs.forEach(({t,i})=>{h+='<div class="txRow"><div class="txTop"><span class="txDate">'+persianDate(t.date)+'</span><span class="txAmount '+typeClass+'">'+digitsAmount(t.amount)+'</span></div>'+(t.note?'<div class="txNote">'+esc(t.note)+"</div>":"");if(!isSeller())h+='<div class="txActions"><button onclick="openTxForm('+i+')">ویرایش</button><button onclick="deleteTransaction('+i+')">حذف</button></div>';h+='</div>'});$("accountContent").innerHTML=h}
+function renderAccount(){let a=ledger.accounts[activeAccount];if(!a)return;let total=accountBalance(a),typeText=a.type==="creditor"?"طلب":"بدهی",typeClass=a.type==="creditor"?"credit":"debit";let h='<div class="summary"><div class="summaryLine"><span>'+typeText+'</span><strong class="'+typeClass+'">'+digitsAmount(total)+'</strong></div>'+(a.phone?'<div class="summaryLine"><span>تلفن</span><strong>'+esc(a.phone)+"</strong></div>":"")+(a.note?'<div class="sub">'+esc(a.note)+"</div>":"")+'</div>';h+='<div class="section"><b>ثبت‌ها</b><span>'+faDigits((a.transactions||[]).length)+'</span></div>';let txs=(a.transactions||[]).map((t,i)=>({t,i})).sort((x,y)=>dateKey(x.t.date)-dateKey(y.t.date)||x.i-y.i);if(!txs.length)h+='<div class="empty">هنوز مبلغی ثبت نشده است.</div>';else txs.forEach(({t,i})=>{h+='<div class="txRow"><div class="txTop"><span class="txDate">'+persianDate(t.date)+'</span><span class="txAmount '+typeClass+'">'+digitsAmount(t.amount)+'</span></div>'+(t.note?'<div class="txNote">'+esc(t.note)+"</div>":"");if(!isSeller())h+='<div class="txActions"><button onclick="openTxForm('+i+')">ویرایش</button><button onclick="deleteTransaction('+i+')">حذف</button></div>';h+='</div>'});$("accountContent").innerHTML=h}
 
 function setAccountType(t){accountType=t==="debtor"?"debtor":"creditor";$("accountCreditorBtn").classList.toggle("active",accountType==="creditor");$("accountDebtorBtn").classList.toggle("active",accountType==="debtor")}
 
@@ -807,20 +821,25 @@ function saveTransaction(){if(isSeller()||activeAccount<0)return;let amount=form
 
 function deleteTransaction(i){if(isSeller()||activeAccount<0||!confirm("این ثبت حذف شود؟"))return;ledger.accounts[activeAccount].transactions.splice(i,1);saveLedger();renderAccount();renderAccounts()}
 
-["modal","settingsModal"].forEach(id=>$(id).addEventListener("click",e=>{if(e.target.id!==id)return;if(id==="modal")closeModal();else closeSettings()}));
+["modal","settingsModal","accountActionModal","deleteItemModal"].forEach(id=>$(id).addEventListener("click",e=>{if(e.target.id!==id)return;if(id==="modal")closeModal();else if(id==="settingsModal")closeSettings();else if(id==="accountActionModal")closeAccountAction();else closeDeleteItemPopup()}));
 $("search").addEventListener("input",render);
 $("ledgerSearch").addEventListener("input",renderAccounts);
 ["price","buy","txAmount"].forEach(id=>$(id).addEventListener("input",e=>{e.target.value=formatInputAmount(e.target.value)}));
 function formatJalaliInput(v){let raw=normalizeDigits(v).replace(/\D/g,"").slice(0,8);if(raw.length>6)raw=raw.slice(0,4)+"/"+raw.slice(4,6)+"/"+raw.slice(6);else if(raw.length>4)raw=raw.slice(0,4)+"/"+raw.slice(4);return faDigits(raw)}
 $("txDate").addEventListener("input",e=>{e.target.value=formatJalaliInput(e.target.value)});
-window.addEventListener("popstate",()=>{
-if($("txModal").style.display!=="none"){ $("txModal").style.display="none"; return; }
-if($("accountFormModal").style.display!=="none"){ $("accountFormModal").style.display="none"; return; }
-if($("accountModal").style.display!=="none"){ $("accountModal").style.display="none"; activeAccount=-1; return; }
-if($("ledgerModal").style.display!=="none"){ $("ledgerModal").style.display="none"; return; }
-if($("settingsModal").style.display!=="none"){ $("settingsModal").style.display="none"; return; }
-if($("modal").style.display!=="none"){ $("modal").style.display="none"; return; }
-});
+function handleBackLayer(){
+if($("deleteItemModal").style.display!=="none"){closeDeleteItemPopup();return true}
+if($("accountActionModal").style.display!=="none"){closeAccountAction();return true}
+if($("txModal").style.display!=="none"){closeTx();return true}
+if($("accountFormModal").style.display!=="none"){closeAccountForm();return true}
+if($("accountModal").style.display!=="none"){closeAccount();return true}
+if($("ledgerModal").style.display!=="none"){closeLedger();return true}
+if($("settingsModal").style.display!=="none"){closeSettings();return true}
+if($("modal").style.display!=="none"){closeModal();return true}
+return true;
+}
+window.handleAndroidBack=handleBackLayer;
+window.addEventListener("popstate",()=>{handleBackLayer()});
 if(!history.state?.priceyarBase)history.replaceState({priceyarBase:true},"");ensureIds();ensureItemIds();ensureLedger();updateStoreButton();applyMode();
 if(AndroidBridge?.loadData)try{let n=AndroidBridge.loadData();if(n){data=JSON.parse(n);ensureIds();ensureItemIds();localStorage.setItem(K,JSON.stringify(data))}else AndroidBridge.saveData(JSON.stringify(data))}catch(e){}
 updateStoreButton();render();
