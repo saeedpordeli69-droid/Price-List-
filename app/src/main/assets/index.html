@@ -38,35 +38,24 @@ gap:10px;
 margin-top:8px}
 .ledgerMiniLogo{
 display:inline-block;
-width:31px;
-height:31px;
-border:2px solid currentColor;
-border-radius:4px;
+width:30px;
+height:22px;
 position:relative;
-margin-left:7px;
-vertical-align:-9px;
+margin-left:8px;
+vertical-align:-5px;
 opacity:.95}
 .ledgerMiniLogo:before{
 content:"";
 position:absolute;
-right:5px;
-left:5px;
-top:7px;
+right:2px;
+left:2px;
+top:3px;
 height:2px;
 background:currentColor;
-box-shadow:0 6px 0 currentColor,0 12px 0 currentColor}
-.ledgerMiniLogo:after{
-content:"";
-position:absolute;
-width:9px;
-height:9px;
-border:2px solid currentColor;
-border-radius:50%;
-left:-5px;
-bottom:-5px;
-background:#111}
-.ledgerMiniLogo i{
-display:none}
+box-shadow:0 7px 0 currentColor,0 14px 0 currentColor;
+border-radius:2px}
+.ledgerMiniLogo:after{display:none}
+.ledgerMiniLogo i{display:none}
 .ledgerBtn{
 height:40px;
 padding:0 15px;
@@ -467,14 +456,22 @@ color:#aaa;
 border:1px solid #333;
 font-size:17px;
 font-weight:850}
+.ledgerTab.creditor{
+color:#fff;
+background:#123a25;
+border-color:#2f6b49}
+.ledgerTab.debtor{
+color:#fff;
+background:#3a1515;
+border-color:#6b2f2f}
 .ledgerTab.active.creditor{
-color:#55d98b;
-border-color:#55d98b;
-background:#122118}
+color:#fff;
+background:#174c30;
+border-color:#55d98b}
 .ledgerTab.active.debtor{
-color:#ff6b6b;
-border-color:#ff6b6b;
-background:#241315}
+color:#fff;
+background:#4a1a1a;
+border-color:#ff6b6b}
 .ledgerSearch{
 width:100%;
 height:48px;
@@ -487,7 +484,7 @@ padding:0 14px;
 outline:0;
 margin:4px 0 8px}
 .ledgerTotal{
-border:1px solid #fff;
+border:1px solid #292929;
 background:#151515;
 color:#fff;
 border-radius:15px;
@@ -498,7 +495,7 @@ align-items:center;
 margin:8px 0;
 font-weight:850}
 .ledgerTotal.debtor{
-border-color:#fff}
+border-color:#292929}
 .ledgerTotal .totalValue.credit{
 color:#55d98b}
 .ledgerTotal .totalValue.debit{
@@ -545,6 +542,12 @@ font-size:12px;
 color:#999}
 .txAmount{
 font-weight:900}
+.txAmount.payment,.txKind.payment{
+color:#55d98b}
+.txRow{
+cursor:pointer}
+.txRow:active{
+background:#1b1b1b}
 .txNote{
 font-size:12px;
 color:#888;
@@ -610,6 +613,10 @@ body.light .ledgerTab,body.light .ledgerSearch{
 background:#f5f5f5;
 color:#111;
 border-color:#ccc}
+body.light .ledgerTab.creditor{background:#123a25;color:#fff;border-color:#2f6b49}
+body.light .ledgerTab.debtor{background:#3a1515;color:#fff;border-color:#6b2f2f}
+body.light .ledgerTab.active.creditor{background:#174c30;color:#fff;border-color:#55d98b}
+body.light .ledgerTab.active.debtor{background:#4a1a1a;color:#fff;border-color:#ff6b6b}
 body.light .ledgerTotal{
 background:#fff}
 body.light .ledgerTotal.active{
@@ -662,7 +669,7 @@ font-size:20px}
 
 <div id="accountFormModal" class="modal"><div class="sheet sheetScrollFix"><h2 id="accountFormTitle">حساب جدید</h2><div class="settingTitle">نوع حساب</div><div class="settingRow"><button id="accountCreditorBtn" class="settingOption" onclick="setAccountType('creditor')">طلب</button><button id="accountDebtorBtn" class="settingOption" onclick="setAccountType('debtor')">بدهی</button></div><input id="accountName" class="input" placeholder="نام شخص / شرکت"><input id="accountPhone" class="input" placeholder="شماره تماس (اختیاری)" inputmode="tel"><textarea id="accountNote" class="input textarea" placeholder="توضیحات (اختیاری)"></textarea><div class="actions formSave"><button class="btn" onclick="saveAccount()">ذخیره</button><button class="btn dark" onclick="closeAccountForm()">انصراف</button></div></div></div>
 
-<div id="txModal" class="modal"><div class="sheet sheetScrollFix"><h2 id="txTitle">ثبت مبلغ</h2><div class="settingTitle">تاریخ شمسی</div><input id="txDate" class="input" placeholder="۱۴۰۵/۰۷/۱۳" inputmode="numeric" maxlength="10"><button class="smallBtn" style="width:100%;margin:4px 0 8px" onclick="setTodayTxDate()">امروز</button><input id="txAmount" class="input amountInput" placeholder="۱,۲۵۰,۰۰۰" inputmode="numeric"><textarea id="txNote" class="input textarea" placeholder="شرح (اختیاری)"></textarea><div class="actions formSave"><button class="btn" onclick="saveTransaction()">ذخیره</button><button class="btn dark" onclick="closeTx()">انصراف</button></div></div></div>
+<div id="txModal" class="modal"><div class="sheet sheetScrollFix"><h2 id="txTitle">ثبت مبلغ</h2><div class="settingTitle">تاریخ شمسی</div><input id="txDate" class="input" placeholder="۱۴۰۵/۰۷/۱۳" inputmode="numeric" maxlength="10"><button class="smallBtn" style="width:100%;margin:4px 0 8px" onclick="setTodayTxDate()">امروز</button><input id="txAmount" class="input amountInput" placeholder="۱,۲۵۰,۰۰۰" inputmode="numeric"><textarea id="txNote" class="input textarea" placeholder="شرح (اختیاری)"></textarea><div class="actions formSave"><button class="btn" onclick="saveTransaction()">ذخیره</button><button class="btn dark" onclick="closeTx()">انصراف</button></div><div id="txDeleteWrap" style="display:none;margin-top:10px"><button class="btn danger" style="width:100%" onclick="deleteCurrentTransaction()">حذف ثبت</button></div></div></div>
 
 
 <script>
@@ -799,8 +806,7 @@ function openAccount(i){activeAccount=i;let a=ledger.accounts[i];if(!a)return;$(
 
 function closeAccount(){if($("accountModal").style.display!=="none"){$("accountModal").style.display="none";activeAccount=-1}}
 
-function renderAccount(){let a=ledger.accounts[activeAccount];if(!a)return;let total=accountBalance(a),typeText=a.type==="creditor"?"طلب":"بدهی",typeClass=a.type==="creditor"?"credit":"debit";let h='<div class="summary"><div class="summaryLine"><span>'+typeText+'</span><strong class="'+typeClass+'">'+digitsAmount(total)+'</strong></div>'+(a.phone?'<div class="summaryLine"><span>تلفن</span><strong>'+esc(a.phone)+"</strong></div>":"")+(a.note?'<div class="sub">'+esc(a.note)+"</div>":"")+'</div>';h+='<div class="section"><b>ثبت‌ها</b><span>'+faDigits((a.transactions||[]).length)+'</span></div>';let txs=(a.transactions||[]).map((t,i)=>({t,i})).sort((x,y)=>dateKey(x.t.date)-dateKey(y.t.date)||x.i-y.i);if(!txs.length)h+='<div class="empty">هنوز مبلغی ثبت نشده است.</div>';else txs.forEach(({t,i})=>{let isPayment=t.type==="payment";let amountClass=isPayment?"payment":typeClass;let label=isPayment?'<span class="txKind">پرداختی</span>':'';h+='<div class="txRow"><div class="txTop"><span class="txDate">'+persianDate(t.date)+'</span><span class="txAmount '+amountClass+'">'+(isPayment?"−":"")+digitsAmount(t.amount)+'</span></div>'+label+(t.note?'<div class="txNote">'+esc(t.note)+"</div>":"");if(!isSeller())h+='<div class="txActions"><button onclick="openTxForm('+i+')">ویرایش</button><button onclick="deleteTransaction('+i+')">حذف</button></div>';h+='</div>'});$("accountContent").innerHTML=h}
-
+function renderAccount(){let a=ledger.accounts[activeAccount];if(!a)return;let total=accountBalance(a),typeText=a.type==="creditor"?"طلب":"بدهی",typeClass=a.type==="creditor"?"credit":"debit";let h='<div class="summary"><div class="summaryLine"><span>'+typeText+'</span><strong class="'+typeClass+'">'+digitsAmount(total)+'</strong></div>'+(a.phone?'<div class="summaryLine"><span>تلفن</span><strong>'+esc(a.phone)+"</strong></div>":"")+(a.note?'<div class="sub">'+esc(a.note)+"</div>":"")+'</div>';h+='<div class="section"><b>ثبت‌ها</b><span>'+faDigits((a.transactions||[]).length)+'</span></div>';let txs=(a.transactions||[]).map((t,i)=>({t,i})).sort((x,y)=>dateKey(x.t.date)-dateKey(y.t.date)||x.i-y.i);if(!txs.length)h+='<div class="empty">هنوز مبلغی ثبت نشده است.</div>';else txs.forEach(({t,i})=>{let isPayment=t.type==="payment";let amountClass=isPayment?"payment":typeClass;let label=isPayment?'<div class="txKind payment">پرداختی</div>':"";h+='<div class="txRow" onclick="openTxForm('+i+')"><div class="txTop"><span class="txDate">'+persianDate(t.date)+'</span><span class="txAmount '+amountClass+'">'+(isPayment?"−":"")+digitsAmount(t.amount)+'</span></div>'+label+(t.note?'<div class="txNote">'+esc(t.note)+"</div>":"")+'</div>'});$("accountContent").innerHTML=h}
 function setAccountType(t){accountType=t==="debtor"?"debtor":"creditor";$("accountCreditorBtn").classList.toggle("active",accountType==="creditor");$("accountDebtorBtn").classList.toggle("active",accountType==="debtor")}
 
 function openAccountForm(i=-1){if(isSeller())return;accountEdit=i;$("accountFormTitle").textContent=i<0?"حساب جدید":"ویرایش حساب";let a=i<0?{name:"",phone:"",note:"",type:ledgerTab}:ledger.accounts[i];$("accountName").value=a.name||"";$("accountPhone").value=a.phone||"";$("accountNote").value=a.note||"";setAccountType(a.type||"creditor");$("accountFormModal").style.display="flex";history.pushState({priceyarLayer:"accountForm"},"")}
@@ -811,13 +817,14 @@ function saveAccount(){if(isSeller())return;let n=$("accountName").value.trim();
 
 function deleteAccount(i){if(isSeller()||!confirm("این حساب و تمام ثبت‌های آن حذف شود؟"))return;ledger.accounts.splice(i,1);saveLedger();if(activeAccount===i)closeAccount();renderAccounts()}
 
-function openTxForm(i=-1,type="debit"){if(isSeller()||activeAccount<0)return;let a=ledger.accounts[activeAccount];if(type==="payment"&&a.type!=="debtor")return;txEdit=i;let t=i<0?{amount:"",note:"",date:jalaliToday(),type}:a.transactions[i];txType=t.type==="payment"?"payment":"debit";$("txTitle").textContent=txType==="payment"?"ثبت پرداختی":(i<0?"ثبت مبلغ":"ویرایش مبلغ");$("txAmount").value=formatInputAmount(t.amount||"");$("txNote").value=t.note||"";$("txNote").placeholder=txType==="payment"?"توضیحات فیش واریزی (اختیاری)":"شرح (اختیاری)";$("txDate").value=persianDate(t.date||jalaliToday());$("txModal").style.display="flex";history.pushState({priceyarLayer:"tx"},"");setTimeout(()=>$("txAmount").focus(),80)}
-
+function openTxForm(i=-1,type="debit"){if(isSeller()||activeAccount<0)return;let a=ledger.accounts[activeAccount];if(type==="payment"&&a.type!=="debtor")return;txEdit=i;let t=i<0?{amount:"",note:"",date:jalaliToday(),type}:a.transactions[i];if(!t)return;txType=t.type==="payment"?"payment":"debit";$("txTitle").textContent=txType==="payment"?"ثبت پرداختی":(i<0?"ثبت مبلغ":"ویرایش مبلغ");$("txAmount").value=formatInputAmount(t.amount||"");$("txNote").value=t.note||"";$("txNote").placeholder=txType==="payment"?"توضیحات فیش واریزی (اختیاری)":"شرح (اختیاری)";$("txDate").value=persianDate(t.date||jalaliToday());$("txDeleteWrap").style.display=i>=0?"block":"none";$("txModal").style.display="flex";history.pushState({priceyarLayer:"tx"},"");setTimeout(()=>$("txAmount").focus(),80)}
 function closeTx(){if($("txModal").style.display!=="none"){$("txModal").style.display="none"}}
 
 function setTodayTxDate(){$("txDate").value=faDigits(jalaliToday())}
 
 function saveTransaction(){if(isSeller()||activeAccount<0)return;let amount=formatAmount($("txAmount").value),date=normalizeDigits($("txDate").value).trim().replace(/-/g,"/").replace(/\s/g,"");let m=date.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);if(!amount){alert("مبلغ را وارد کن");return}if(!m){alert("تاریخ را به شکل ۱۴۰۵/۰۷/۱۳ وارد کن");return}let jy=Number(m[1]),jm=Number(m[2]),jd=Number(m[3]);if(jm<1||jm>12||jd<1||jd>31){alert("تاریخ واردشده معتبر نیست. فرمت درست: ۱۴۰۵/۰۷/۱۳");return}let a=ledger.accounts[activeAccount];if(txType==="payment"&&a.type!=="debtor"){alert("پرداختی فقط برای حساب‌های بدهی ثبت می‌شود.");return}date=String(jy).padStart(4,"0")+"/"+String(jm).padStart(2,"0")+"/"+String(jd).padStart(2,"0");let t=txEdit<0?{id:makeId()}:a.transactions[txEdit];t.amount=amount;t.date=date;t.note=$("txNote").value.trim();t.type=txType==="payment"?"payment":"debit";if(txEdit<0)a.transactions.push(t);saveLedger();history.replaceState({priceyarLayer:"account"},"");closeTx();renderAccount();renderAccounts()}
+
+function deleteCurrentTransaction(){if(isSeller()||activeAccount<0||txEdit<0)return;if(!confirm("این ثبت حذف شود؟"))return;let a=ledger.accounts[activeAccount];if(!a.transactions[txEdit])return;a.transactions.splice(txEdit,1);saveLedger();history.replaceState({priceyarLayer:"account"},"");closeTx();renderAccount();renderAccounts()}
 
 function deleteTransaction(i){if(isSeller()||activeAccount<0||!confirm("این ثبت حذف شود؟"))return;ledger.accounts[activeAccount].transactions.splice(i,1);saveLedger();renderAccount();renderAccounts()}
 
