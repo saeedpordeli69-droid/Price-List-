@@ -12,783 +12,742 @@
 <title>مدیریت قیمت فروشگاه</title>
 
 <style>
-
-*{
-box-sizing:border-box
-}
+*{box-sizing:border-box}
 
 html,body{
-margin:0;
-padding:0;
-background:#000;
-color:#fff;
-font-family:system-ui,-apple-system,"Noto Sans Arabic","Noto Sans",sans-serif
+ margin:0;
+ padding:0;
+ background:#000;
+ color:#fff;
+ font-family:system-ui,-apple-system,"Noto Sans Arabic","Noto Sans",sans-serif
 }
 
-body{
-min-height:100vh
-}
-
-body.light{
-background:#f5f5f5;
-color:#111
-}
+body{min-height:100vh}
+body.light{background:#f5f5f5;color:#111}
 
 .app{
-max-width:680px;
-margin:auto;
-padding:25px 14px 35px
+ max-width:680px;
+ margin:auto;
+ padding:25px 14px 35px
 }
 
-.head{
-margin-bottom:15px
-}
+.head{margin-bottom:15px}
 
-.storeBox{
-position:relative;
-width:100%
-}
-
-.storeBtn{
-width:100%;
-height:57px;
-border-radius:16px;
-background:#111;
-color:#fff;
-border:1px solid #333;
-font-size:23px;
-font-weight:850;
-text-align:center;
-padding:5px 55px 0;
-position:relative
-}
-
-.storeBtn:after{
-content:"";
-position:absolute;
-left:10px;
-top:50%;
-width:36px;
-height:36px;
-transform:translateY(-50%);
-border-radius:50%;
-border:1px solid rgba(255,255,255,.12);
-background:
-linear-gradient(#aaa,#aaa) center 11px/20px 2px no-repeat,
-linear-gradient(#aaa,#aaa) center 21px/13px 2px no-repeat,
-rgba(255,255,255,.035);
-opacity:.88
-}
-
-.storeBtn.emptyStore{
-color:#aaa
-}
-
-.storeMenu{
-display:none;
-position:absolute;
-z-index:20;
-top:64px;
-right:0;
-left:0;
-background:#151515;
-border:1px solid #333;
-border-radius:15px;
-padding:8px;
-box-shadow:0 15px 40px #000
-}
-
-.storeMenu.open{
-display:block
-}
-
-.storeItem{
-padding:13px;
-border-radius:10px;
-font-size:16px;
-margin-bottom:4px
-}
-
-.storeItem.active{
-background:#252525
-}
-
-.storeActions{
-display:flex;
-gap:8px;
-margin-top:8px;
-border-top:1px solid #292929;
-padding-top:8px
-}
-
-.storeAction{
-flex:1;
-height:46px;
-border-radius:12px;
-border:1px solid #444;
-background:#351010;
-color:#fff;
-font-size:15px;
-font-weight:800
-}
-
-.storeAction.addStore{
-background:#351010;
-color:#fff;
-border-color:#444
-}
-
-.storeAction.deleteStore{
-background:#351010;
-color:#fff
-}
-
-/* ابزار بالای صفحه */
 .topTools{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px;
-margin-top:8px
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ margin-top:8px
 }
 
 .ledgerBtn{
-height:38px;
-padding:0 15px;
-border-radius:11px;
-border:1px solid #333;
-background:#151515;
-color:#fff;
-font-size:14px;
-font-weight:800
+ height:40px;
+ padding:0 15px;
+ border-radius:12px;
+ background:#111;
+ color:#fff;
+ border:1px solid #333;
+ font-size:14px;
+ font-weight:800
 }
 
-.modeBadge{
-text-align:left;
-font-size:11px;
-color:#777;
-margin:0;
-flex:1
+.storeBox{
+ position:relative;
+ width:100%
 }
 
-.modeBadge.seller{
-color:#aaa
+.storeBtn{
+ width:100%;
+ height:57px;
+ border-radius:16px;
+ background:#111;
+ color:#fff;
+ border:1px solid #333;
+ font-size:23px;
+ font-weight:850;
+ text-align:center;
+ padding:5px 55px 0;
+ position:relative
 }
 
-.searchWrap{
-position:relative
+.storeBtn:after{
+ content:"";
+ position:absolute;
+ left:10px;
+ top:50%;
+ width:36px;
+ height:36px;
+ transform:translateY(-50%);
+ border-radius:50%;
+ border:1px solid rgba(255,255,255,.12);
+ background:
+ linear-gradient(#aaa,#aaa) center 11px/20px 2px no-repeat,
+ linear-gradient(#aaa,#aaa) center 21px/13px 2px no-repeat,
+ rgba(255,255,255,.035);
+ opacity:.88
 }
+
+.storeBtn.emptyStore{color:#aaa}
+
+.storeMenu{
+ display:none;
+ position:absolute;
+ z-index:20;
+ top:64px;
+ right:0;
+ left:0;
+ background:#151515;
+ border:1px solid #333;
+ border-radius:15px;
+ padding:8px;
+ box-shadow:0 15px 40px #000
+}
+
+.storeMenu.open{display:block}
+
+.storeItem{
+ padding:13px;
+ border-radius:10px;
+ font-size:16px;
+ margin-bottom:4px
+}
+
+.storeItem.active{background:#252525}
+
+.storeActions{
+ display:flex;
+ gap:8px;
+ margin-top:8px;
+ border-top:1px solid #292929;
+ padding-top:8px;
+ flex-wrap:wrap
+}
+
+.storeAction{
+ flex:1;
+ min-width:120px;
+ height:46px;
+ border-radius:12px;
+ border:1px solid #444;
+ background:#351010;
+ color:#fff;
+ font-size:15px;
+ font-weight:800
+}
+
+.searchWrap{position:relative}
 
 .search{
-width:100%;
-height:58px;
-background:#151515;
-border:1px solid #363636;
-border-radius:16px;
-color:#fff;
-font-size:18px;
-padding:0 52px 0 18px;
-outline:0
-}
-
-.search:focus{
-border-color:#666
+ width:100%;
+ height:58px;
+ background:#151515;
+ border:1px solid #363636;
+ border-radius:16px;
+ color:#fff;
+ font-size:18px;
+ padding:0 52px 0 18px;
+ outline:0
 }
 
 .searchIcon{
-position:absolute;
-right:17px;
-top:14px;
-color:#aaa;
-font-size:25px;
-pointer-events:none
+ position:absolute;
+ right:17px;
+ top:14px;
+ color:#aaa;
+ font-size:25px;
+ pointer-events:none
 }
 
 .quickRow{
-display:flex;
-gap:8px;
-margin-top:10px
+ display:flex;
+ gap:8px;
+ margin-top:10px
 }
 
-.add,
-.more{
-flex:1;
-width:auto;
-height:51px;
-margin-top:0;
-border-radius:14px;
-font-size:16px;
-font-weight:800
+.add,.more{
+ flex:1;
+ height:51px;
+ border-radius:14px;
+ font-size:16px;
+ font-weight:800
 }
 
 .add{
-background:#000;
-color:#64B4FF;
-border:1px solid #333
+ background:#000;
+ color:#64B4FF;
+ border:1px solid #333
 }
 
 .more{
-background:#000;
-color:#E8EAED;
-border:1px solid #333
+ background:#000;
+ color:#E8EAED;
+ border:1px solid #333
 }
 
 .more.on{
-background:#000;
-border-color:#64B4FF;
-color:#64B4FF
+ border-color:#64B4FF;
+ color:#64B4FF
 }
 
 .section{
-display:flex;
-justify-content:space-between;
-margin:23px 5px 8px
+ display:flex;
+ justify-content:space-between;
+ margin:23px 5px 8px
 }
 
 .section span{
-font-size:12px;
-color:#777
+ font-size:12px;
+ color:#777
 }
 
+/* حذف با کشیدن */
 .swipeWrap{
-position:relative;
-margin:8px 0;
-border-radius:15px;
-overflow:hidden;
-touch-action:pan-y
+ position:relative;
+ margin:8px 0;
+ border-radius:15px;
+ overflow:hidden;
+ touch-action:pan-y;
+ min-height:76px;
+ background:#b00000
 }
 
 .deleteBg{
-position:absolute;
-inset:0;
-background:#b00000;
-display:flex;
-align-items:center;
-z-index:0;
-opacity:0;
-transition:opacity .12s ease
+ position:absolute;
+ inset:0;
+ background:#b00000;
+ display:flex;
+ align-items:center;
+ z-index:0;
+ opacity:0;
+ pointer-events:none;
+ transition:opacity .1s ease
 }
 
 .deleteBg.left{
-justify-content:flex-start;
-padding-left:24px
+ justify-content:flex-start;
+ padding-left:24px
 }
 
 .deleteBg.right{
-justify-content:flex-end;
-padding-right:24px
+ justify-content:flex-end;
+ padding-right:24px
 }
 
 .trash{
-width:40px;
-height:48px;
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center
+ width:40px;
+ height:48px;
+ position:relative;
+ display:flex;
+ align-items:center;
+ justify-content:center
 }
 
 .trashCan{
-width:20px;
-height:25px;
-border:2px solid rgba(255,255,255,.95);
-border-top:0;
-border-radius:2px 2px 4px 4px;
-position:relative;
-margin-top:7px
+ width:20px;
+ height:25px;
+ border:2px solid rgba(255,255,255,.95);
+ border-top:0;
+ border-radius:2px 2px 4px 4px;
+ position:relative;
+ margin-top:7px;
+ background:
+ linear-gradient(
+  to right,
+  transparent 0,
+  transparent 5px,
+  #fff 5px,
+  #fff 7px,
+  transparent 7px,
+  transparent 12px,
+  #fff 12px,
+  #fff 14px,
+  transparent 14px
+ )
 }
 
 .trashCan:before{
-content:"";
-position:absolute;
-width:24px;
-height:2px;
-background:#fff;
-left:50%;
-top:-5px;
-transform:translateX(-50%);
-border-radius:2px
+ content:"";
+ position:absolute;
+ width:24px;
+ height:2px;
+ background:#fff;
+ left:50%;
+ top:-5px;
+ transform:translateX(-50%);
+ border-radius:2px
 }
 
 .trashCan:after{
-content:"";
-position:absolute;
-width:8px;
-height:3px;
-border:2px solid #fff;
-border-bottom:0;
-left:50%;
-top:-10px;
-transform:translateX(-50%);
-border-radius:3px 3px 0 0
+ content:"";
+ position:absolute;
+ width:8px;
+ height:3px;
+ border:2px solid #fff;
+ border-bottom:0;
+ left:50%;
+ top:-10px;
+ transform:translateX(-50%);
+ border-radius:3px 3px 0 0
 }
 
-.trash .trashCan{
-background:
-linear-gradient(
-to right,
-transparent 0,
-transparent 5px,
-rgba(255,255,255,.9) 5px,
-rgba(255,255,255,.9) 7px,
-transparent 7px,
-transparent 12px,
-rgba(255,255,255,.9) 12px,
-rgba(255,255,255,.9) 14px,
-transparent 14px
-)
-}
-
-.trash.open .trashCan:before{
-transform:
-translateX(-50%)
-rotate(-16deg);
-transform-origin:right center;
-transition:transform .12s ease
-}
-
+.trash.open .trashCan:before,
 .trash.open .trashCan:after{
-transform:
-translateX(-50%)
-rotate(-16deg);
-transform-origin:right center;
-transition:transform .12s ease
-}
-
-.trashCan:before,
-.trashCan:after{
-transition:transform .12s ease
+ transform:translateX(-50%) rotate(-16deg);
+ transform-origin:right center
 }
 
 .row{
-position:relative;
-z-index:1;
-background:#101010;
-border:1px solid #252525;
-border-radius:15px;
-padding:13px 15px;
-min-height:76px;
-display:flex;
-gap:12px;
-align-items:center;
-transition:
-transform .18s ease,
-background .18s ease;
-will-change:transform;
-user-select:none;
--webkit-user-select:none
+ position:relative;
+ z-index:1;
+ background:#101010;
+ border:1px solid #252525;
+ border-radius:15px;
+ padding:13px 15px;
+ min-height:76px;
+ display:flex;
+ gap:12px;
+ align-items:center;
+ transition:transform .18s ease,opacity .18s ease;
+ will-change:transform;
+ user-select:none
 }
 
 .row.swiping{
-transition:none
+ transition:none
+}
+
+.swipeWrap.removing .row{
+ opacity:0
 }
 
 .info{
-flex:1;
-min-width:0
+ flex:1;
+ min-width:0
 }
 
 .name{
-font-size:21px;
-font-weight:850;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
+ font-size:21px;
+ font-weight:850;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis
 }
 
-.sub,
-.buy{
-font-size:12px;
-color:#888;
-margin-top:4px;
-line-height:1.7
+.sub,.buy{
+ font-size:12px;
+ color:#888;
+ margin-top:4px;
+ line-height:1.7
 }
 
 .price{
-font-size:21px;
-font-weight:850;
-white-space:nowrap;
-color:#fff
+ font-size:21px;
+ font-weight:850;
+ white-space:nowrap
 }
 
 .empty{
-text-align:center;
-color:#888;
-padding:42px 10px
+ text-align:center;
+ color:#888;
+ padding:42px 10px
 }
 
-.back{
-width:100%;
-height:46px;
-border-radius:12px;
-margin-top:10px;
-color:#aaa;
-background:#111;
-border:1px solid #333
+.back,.settingsBtn{
+ width:100%;
+ height:46px;
+ border-radius:12px;
+ margin-top:10px;
+ color:#fff;
+ background:#111;
+ border:1px solid #333
 }
 
 .settingsBtn{
-width:100%;
-height:46px;
-border-radius:12px;
-margin-top:10px;
-color:#fff;
-background:#111;
-border:1px solid #333;
-font-size:15px;
-font-weight:800
+ font-size:15px;
+ font-weight:800
 }
 
-.file{
-display:none
-}
+.file{display:none}
 
 .modal{
-display:none;
-position:fixed;
-inset:0;
-background:#000c;
-align-items:flex-end;
-z-index:50
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#000c;
+ align-items:flex-end;
+ z-index:50
 }
 
 .sheet{
-width:min(680px,100%);
-background:#111;
-border:1px solid #333;
-border-radius:22px 22px 0 0;
-padding:20px 18px 28px;
-max-height:92vh;
-overflow-y:auto
+ width:min(680px,100%);
+ max-height:92vh;
+ overflow:auto;
+ background:#111;
+ border:1px solid #333;
+ border-radius:22px 22px 0 0;
+ padding:20px 18px 28px
 }
 
-h2{
-margin:0 0 12px
-}
+h2{margin:0 0 12px}
 
 .input{
-width:100%;
-height:53px;
-background:#1b1b1b;
-border:1px solid #444;
-border-radius:12px;
-color:#fff;
-font-size:17px;
-padding:0 14px;
-margin:5px 0;
-outline:0
+ width:100%;
+ height:53px;
+ background:#1b1b1b;
+ border:1px solid #444;
+ border-radius:12px;
+ color:#fff;
+ font-size:17px;
+ padding:0 14px;
+ margin:5px 0;
+ outline:0
 }
 
 .textarea{
-height:82px;
-padding-top:12px;
-resize:none
+ height:82px;
+ padding-top:12px;
+ resize:none
 }
 
 .actions{
-display:flex;
-gap:8px;
-margin-top:9px
+ display:flex;
+ gap:8px;
+ margin-top:9px
 }
 
 .btn{
-flex:1;
-height:51px;
-border:0;
-border-radius:13px;
-background:#fff;
-color:#000;
-font-weight:800
+ flex:1;
+ height:51px;
+ border:0;
+ border-radius:13px;
+ background:#fff;
+ color:#000;
+ font-weight:800
 }
 
 .dark{
-background:#252525;
-color:#fff;
-border:1px solid #444
+ background:#252525;
+ color:#fff;
+ border:1px solid #444
 }
 
 .danger{
-background:#351010;
-color:#fff
+ background:#351010;
+ color:#fff
 }
 
-/* دفتر حساب */
-
-.ledgerSheet{
-padding-bottom:30px
+.modeBadge{
+ text-align:center;
+ font-size:11px;
+ color:#777
 }
 
-.ledgerHeader{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:8px;
-margin-bottom:12px
-}
-
-.ledgerHeader h2{
-margin:0
-}
-
-.ledgerSmallBtn{
-height:42px;
-padding:0 13px;
-border-radius:11px;
-border:1px solid #444;
-background:#252525;
-color:#fff;
-font-weight:800
-}
-
-.accountCard{
-background:#181818;
-border:1px solid #333;
-border-radius:15px;
-padding:14px;
-margin:9px 0
-}
-
-.accountTop{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px
-}
-
-.accountName{
-font-size:18px;
-font-weight:850
-}
-
-.accountPhone{
-font-size:12px;
-color:#888;
-margin-top:4px
-}
-
-.accountBalance{
-font-size:18px;
-font-weight:850;
-white-space:nowrap
-}
-
-.balanceDebit{
-color:#ff6b6b
-}
-
-.balanceCredit{
-color:#55d98b
-}
-
-.balanceZero{
-color:#aaa
-}
-
-.accountNote{
-font-size:12px;
-color:#888;
-line-height:1.7;
-margin-top:7px
-}
-
-.accountButtons{
-display:flex;
-gap:7px;
-margin-top:10px
-}
-
-.accountButtons button{
-flex:1;
-height:40px;
-border-radius:10px;
-border:1px solid #444;
-background:#252525;
-color:#fff;
-font-weight:750
-}
-
-.accountButtons .danger{
-background:#351010
-}
-
-.ledgerEmpty{
-text-align:center;
-padding:35px 10px;
-color:#888;
-line-height:2
-}
-
-.ledgerSummary{
-display:flex;
-gap:8px;
-margin:10px 0
-}
-
-.ledgerSummaryBox{
-flex:1;
-border:1px solid #333;
-border-radius:12px;
-padding:10px;
-text-align:center;
-background:#151515
-}
-
-.ledgerSummaryTitle{
-font-size:11px;
-color:#888
-}
-
-.ledgerSummaryValue{
-font-size:16px;
-font-weight:850;
-margin-top:4px
-}
-
-.transaction{
-border:1px solid #303030;
-border-radius:13px;
-padding:12px;
-margin:8px 0;
-background:#151515
-}
-
-.transactionTop{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px
-}
-
-.transactionType{
-font-size:13px;
-font-weight:850
-}
-
-.transactionAmount{
-font-size:17px;
-font-weight:850
-}
-
-.transaction.debit .transactionType,
-.transaction.debit .transactionAmount{
-color:#ff6b6b
-}
-
-.transaction.credit .transactionType,
-.transaction.credit .transactionAmount{
-color:#55d98b
-}
-
-.transactionNote{
-font-size:12px;
-color:#888;
-margin-top:5px;
-line-height:1.7
-}
-
-.transactionActions{
-display:flex;
-gap:7px;
-margin-top:9px
-}
-
-.transactionActions button{
-flex:1;
-height:37px;
-border-radius:9px;
-border:1px solid #444;
-background:#252525;
-color:#fff;
-font-weight:700
-}
-
-.transactionActions .danger{
-background:#351010
-}
-
-.ledgerBack{
-width:100%;
-height:46px;
-margin-top:10px;
-border-radius:12px;
-border:1px solid #444;
-background:#252525;
-color:#fff;
-font-weight:800
-}
-
-/* پنجره تنظیمات */
-
-.settingsSheet{
-padding-bottom:30px
-}
+.modeBadge.seller{color:#aaa}
 
 .settingTitle{
-font-size:13px;
-color:#888;
-margin:17px 2px 8px
+ font-size:13px;
+ color:#888;
+ margin:17px 2px 8px
 }
 
 .settingRow{
-display:flex;
-gap:8px;
-flex-wrap:wrap
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap
 }
 
 .settingOption{
-flex:1;
-min-width:90px;
-height:44px;
-border-radius:11px;
-background:#181818;
-border:1px solid #333;
-color:#fff;
-font-size:14px;
-font-weight:700
+ flex:1;
+ min-width:90px;
+ height:44px;
+ border-radius:11px;
+ background:#181818;
+ border:1px solid #333;
+ color:#fff;
+ font-size:14px;
+ font-weight:700;
+ transition:.15s
 }
 
 .settingOption.active{
-border-color:#aaa;
-background:#292929
+ border-color:#fff;
+ background:#303030;
+ box-shadow:0 0 0 2px rgba(255,255,255,.18) inset
 }
 
 .colorOption{
-height:38px;
-min-width:55px
+ height:42px;
+ min-width:55px;
+ position:relative
 }
 
-.colorWhite{
-color:#fff
+.colorOption.active:after{
+ content:"✓";
+ position:absolute;
+ left:50%;
+ top:50%;
+ transform:translate(-50%,-50%);
+ font-size:19px;
+ font-weight:900;
+ text-shadow:0 1px 3px #000
 }
 
-.colorBlue{
-color:#64B4FF
-}
-
-.colorGreen{
-color:#55d98b
-}
-
-.colorYellow{
-color:#ffd75a
-}
-
-.colorRed{
-color:#ff6b6b
-}
+.colorWhite{color:#fff}
+.colorBlue{color:#64B4FF}
+.colorGreen{color:#55d98b}
+.colorYellow{color:#ffd75a}
+.colorRed{color:#ff6b6b}
 
 .settingsClose{
-margin-top:18px;
-width:100%;
-height:48px;
-border-radius:12px;
-border:1px solid #444;
-background:#252525;
-color:#fff;
-font-weight:800
+ margin-top:18px;
+ width:100%;
+ height:48px;
+ border-radius:12px;
+ border:1px solid #444;
+ background:#252525;
+ color:#fff;
+ font-weight:800
 }
 
-/* حالت روشن */
+/* دفتر حساب */
+.ledgerHeader{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+ margin-bottom:12px
+}
+
+.ledgerHeader h2{margin:0}
+
+.ledgerAdd{
+ height:43px;
+ border-radius:11px;
+ border:1px solid #444;
+ background:#351010;
+ color:#fff;
+ padding:0 14px;
+ font-weight:800
+}
+
+.ledgerSearch{
+ width:100%;
+ height:48px;
+ margin-bottom:10px;
+ background:#1b1b1b;
+ border:1px solid #444;
+ border-radius:12px;
+ color:#fff;
+ padding:0 14px;
+ font-size:16px;
+ outline:0
+}
+
+.ledgerFilters{
+ display:flex;
+ gap:7px;
+ margin-bottom:10px
+}
+
+.ledgerFilter{
+ flex:1;
+ height:40px;
+ border-radius:10px;
+ border:1px solid #444;
+ background:#222;
+ color:#fff;
+ font-weight:700
+}
+
+.ledgerFilter.active{
+ background:#fff;
+ color:#000
+}
+
+.accountGroupTitle{
+ margin:17px 3px 7px;
+ font-size:13px;
+ color:#888;
+ font-weight:800
+}
+
+.accountRow{
+ padding:14px;
+ border:1px solid #292929;
+ border-radius:14px;
+ background:#151515;
+ margin:8px 0;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px
+}
+
+.accountName{
+ font-size:17px;
+ font-weight:850
+}
+
+.accountMeta{
+ font-size:12px;
+ color:#888;
+ margin-top:4px
+}
+
+.balance{
+ font-weight:850;
+ white-space:nowrap;
+ text-align:left
+}
+
+.balance.debtor{color:#ff6b6b}
+.balance.creditor{color:#55d98b}
+
+.accountType{
+ font-size:11px;
+ margin-top:4px;
+ color:#999
+}
+
+.typeBox{
+ display:flex;
+ gap:8px
+}
+
+.typeOption{
+ flex:1;
+ height:46px;
+ border-radius:11px;
+ background:#181818;
+ border:1px solid #333;
+ color:#fff;
+ font-weight:800
+}
+
+.typeOption.active{
+ border-color:#fff;
+ background:#303030
+}
+
+.accountActions{
+ display:flex;
+ gap:7px;
+ margin-top:12px;
+ flex-wrap:wrap
+}
+
+.smallBtn{
+ height:42px;
+ flex:1;
+ min-width:100px;
+ border-radius:11px;
+ border:1px solid #444;
+ background:#252525;
+ color:#fff;
+ font-weight:800
+}
+
+.smallBtn.danger{
+ background:#351010
+}
+
+.txRow{
+ padding:12px;
+ border:1px solid #292929;
+ border-radius:13px;
+ background:#151515;
+ margin:7px 0
+}
+
+.txTop{
+ display:flex;
+ justify-content:space-between;
+ gap:8px
+}
+
+.txDate{
+ font-size:12px;
+ color:#888;
+ margin-bottom:5px
+}
+
+.txAmount{
+ font-weight:850
+}
+
+.txNote{
+ font-size:12px;
+ color:#888;
+ margin-top:5px
+}
+
+.txActions{
+ display:flex;
+ gap:6px;
+ margin-top:8px
+}
+
+.txActions button{
+ flex:1;
+ height:35px;
+ border-radius:9px;
+ border:1px solid #444;
+ background:#222;
+ color:#fff
+}
+
+.summary{
+ padding:15px;
+ border:1px solid #292929;
+ border-radius:14px;
+ background:#151515;
+ margin:8px 0
+}
+
+.summaryMain{
+ text-align:center;
+ padding:5px 0 12px;
+ border-bottom:1px solid #292929;
+ margin-bottom:9px
+}
+
+.summaryLabel{
+ font-size:12px;
+ color:#888
+}
+
+.summaryAmount{
+ font-size:25px;
+ font-weight:900;
+ margin-top:4px
+}
+
+.summaryLine{
+ display:flex;
+ justify-content:space-between;
+ margin:7px 0
+}
+
+.summaryLine strong{
+ font-weight:850
+}
+
+.ledgerBack{
+ width:100%;
+ height:45px;
+ border-radius:11px;
+ background:#252525;
+ color:#fff;
+ border:1px solid #444;
+ margin-top:10px;
+ font-weight:800
+}
+
+.dateInput{
+ direction:ltr;
+ text-align:left
+}
 
 body.light .storeBtn,
 body.light .search,
@@ -798,123 +757,90 @@ body.light .settingsBtn,
 body.light .add,
 body.light .more,
 body.light .ledgerBtn{
-background:#fff;
-color:#111;
-border-color:#ddd
+ background:#fff;
+ color:#111;
+ border-color:#ddd
 }
 
 body.light .storeMenu{
-background:#fff;
-border-color:#ddd;
-box-shadow:0 15px 40px #0002
+ background:#fff;
+ border-color:#ddd;
+ box-shadow:0 15px 40px #0002
 }
 
-body.light .storeItem.active{
-background:#eee
-}
+body.light .storeItem.active{background:#eee}
 
 body.light .storeActions{
-border-top-color:#ddd
-}
-
-body.light .search::placeholder{
-color:#999
-}
-
-body.light .searchIcon{
-color:#777
-}
-
-body.light .section span,
-body.light .sub,
-body.light .buy{
-color:#777
+ border-top-color:#ddd
 }
 
 body.light .sheet{
-background:#fff;
-color:#111;
-border-color:#ddd
+ background:#fff;
+ color:#111;
+ border-color:#ddd
 }
 
-body.light .input{
-background:#f5f5f5;
-color:#111;
-border-color:#ccc
+body.light .input,
+body.light .ledgerSearch{
+ background:#f5f5f5;
+ color:#111;
+ border-color:#ccc
 }
 
-body.light .dark{
-background:#eee;
-color:#111;
-border-color:#ccc
+body.light .dark,
+body.light .ledgerBack,
+body.light .smallBtn,
+body.light .ledgerFilter,
+body.light .typeOption{
+ background:#eee;
+ color:#111;
+ border-color:#ccc
 }
 
 body.light .settingOption{
-background:#f5f5f5;
-color:#111;
-border-color:#ddd
+ background:#f5f5f5;
+ color:#111;
+ border-color:#ddd
 }
 
-body.light .settingOption.active{
-background:#e5e5e5;
-border-color:#999
+body.light .settingOption.active,
+body.light .typeOption.active{
+ background:#e5e5e5;
+ border-color:#999
 }
 
 body.light .settingsClose{
-background:#eee;
-color:#111;
-border-color:#ccc
+ background:#eee;
+ color:#111;
+ border-color:#ccc
 }
 
-body.light .accountCard,
-body.light .ledgerSummaryBox,
-body.light .transaction{
-background:#f5f5f5;
-border-color:#ddd
-}
-
-body.light .accountButtons button,
-body.light .transactionActions button,
-body.light .ledgerBack,
-body.light .ledgerSmallBtn{
-background:#eee;
-color:#111;
-border-color:#ccc
+body.light .accountRow,
+body.light .txRow,
+body.light .summary{
+ background:#f8f8f8;
+ border-color:#ddd
 }
 
 body.light .storeBtn:after{
-border-color:rgba(0,0,0,.12);
-background:
-linear-gradient(#555,#555) center 11px/20px 2px no-repeat,
-linear-gradient(#555,#555) center 21px/13px 2px no-repeat,
-rgba(0,0,0,.035)
+ border-color:rgba(0,0,0,.12);
+ background:
+ linear-gradient(#555,#555) center 11px/20px 2px no-repeat,
+ linear-gradient(#555,#555) center 21px/13px 2px no-repeat,
+ rgba(0,0,0,.035)
 }
 
 @media(max-width:430px){
+ .app{
+  padding-left:10px;
+  padding-right:10px;
+  padding-top:25px
+ }
 
-.app{
-padding-left:10px;
-padding-right:10px;
-padding-top:25px
+ .storeBtn{font-size:21px}
+ .add,.more{font-size:14px}
+ .name,.price{font-size:20px}
 }
-
-.storeBtn{
-font-size:21px;
-padding-top:5px
-}
-
-.add,
-.more{
-font-size:14px
-}
-
-.name,
-.price{
-font-size:20px
-}
-
-}
-
 </style>
 </head>
 
@@ -925,3865 +851,2928 @@ font-size:20px
 <div class="head">
 
 <div class="storeBox">
-
-<button
-class="storeBtn emptyStore"
-id="storeBtn">
-</button>
-
-<div
-id="storeMenu"
-class="storeMenu">
-</div>
-
+<button class="storeBtn emptyStore" id="storeBtn"></button>
+<div id="storeMenu" class="storeMenu"></div>
 </div>
 
 <div class="topTools">
-
-<button
-class="ledgerBtn"
-onclick="openLedger()">
-دفتر حساب
-</button>
-
-<div
-id="modeBadge"
-class="modeBadge">
-</div>
-
+<button class="ledgerBtn" onclick="openLedger()">دفتر حساب</button>
+<div id="modeBadge" class="modeBadge"></div>
 </div>
 
 </div>
 
 <div class="searchWrap">
-
-<span class="searchIcon">
-⌕
-</span>
-
-<input
-id="search"
-class="search"
-autocomplete="off"
-placeholder="جستجوی کالا...">
-
+<span class="searchIcon">⌕</span>
+<input id="search"
+       class="search"
+       autocomplete="off"
+       placeholder="جستجوی کالا...">
 </div>
 
 <div class="quickRow">
-
-<button
-class="add"
-onclick="openAdd()">
-＋ افزودن کالا
-</button>
-
-<button
-class="more"
-id="moreBtn"
-onclick="toggleMore()">
-اطلاعات ○
-</button>
-
+<button class="add" onclick="openAdd()">＋ افزودن کالا</button>
+<button class="more" id="moreBtn" onclick="toggleMore()">اطلاعات ○</button>
 </div>
 
 <div class="section">
-
-<b id="title">
-کالاهای اخیر
-</b>
-
-<span id="count">
-</span>
-
+<b id="title">کالاهای اخیر</b>
+<span id="count"></span>
 </div>
 
-<div id="list">
-</div>
+<div id="list"></div>
 
-<button
-class="back"
-onclick="exportPriceList()">
-<span style="color:#fff">
-➤
-</span>
-ارسال لیست
-</button>
+<button class="back" onclick="exportPriceList()">➤ ارسال لیست</button>
+<button class="back" onclick="updatePriceList()">↻ به‌روزرسانی لیست</button>
+<button class="settingsBtn" onclick="openSettings()">⚙ تنظیمات</button>
 
-<button
-class="back"
-onclick="updatePriceList()">
-<span style="color:#fff">
-↻
-</span>
-به‌روزرسانی لیست
-</button>
-
-<button
-class="settingsBtn"
-onclick="openSettings()">
-⚙ تنظیمات
-</button>
-
-<input
-id="updateFile"
-class="file"
-type="file"
-accept=".json,application/json"
-onchange="importPriceList(event)">
+<input id="updateFile"
+       class="file"
+       type="file"
+       accept=".json,application/json"
+       onchange="importPriceList(event)">
 
 </main>
 
-<!-- پنجره افزودن / ویرایش کالا -->
 
-<div
-id="modal"
-class="modal">
+<!-- کالا -->
 
+<div id="modal" class="modal">
 <div class="sheet">
 
-<h2 id="mtitle">
-افزودن کالا
-</h2>
+<h2 id="mtitle">افزودن کالا</h2>
 
-<input
-id="name"
-class="input"
-placeholder="نام کالا">
+<input id="name"
+       class="input"
+       placeholder="نام کالا">
 
-<input
-id="price"
-class="input"
-placeholder="قیمت"
-inputmode="numeric">
+<input id="price"
+       class="input"
+       placeholder="قیمت"
+       inputmode="numeric">
 
 <div id="buyWrap">
-
-<input
-id="buy"
-class="input"
-placeholder="قیمت خرید (اختیاری)"
-inputmode="numeric">
-
+<input id="buy"
+       class="input"
+       placeholder="قیمت خرید (اختیاری)"
+       inputmode="numeric">
 </div>
 
-<textarea
-id="desc"
-class="input textarea"
-placeholder="توضیحات (اختیاری)">
-</textarea>
+<textarea id="desc"
+          class="input textarea"
+          placeholder="توضیحات (اختیاری)"></textarea>
 
 <div class="actions">
-
-<button
-class="btn"
-onclick="saveItem()">
-ذخیره
-</button>
-
-<button
-class="btn dark"
-onclick="closeModal()">
-انصراف
-</button>
-
-<button
-id="del"
-class="btn danger"
-onclick="deleteItem()">
-حذف
-</button>
-
+<button class="btn" onclick="saveItem()">ذخیره</button>
+<button class="btn dark" onclick="closeModal()">انصراف</button>
+<button id="del"
+        class="btn danger"
+        onclick="deleteItem()">حذف</button>
 </div>
 
 </div>
 </div>
+
+
+<!-- تنظیمات -->
+
+<div id="settingsModal" class="modal">
+<div class="sheet">
+
+<h2>تنظیمات</h2>
+
+<div class="settingTitle">حالت نمایش</div>
+
+<div class="settingRow">
+<button id="darkOption"
+        class="settingOption"
+        onclick="setTheme('dark')">تیره</button>
+
+<button id="lightOption"
+        class="settingOption"
+        onclick="setTheme('light')">روشن</button>
+</div>
+
+
+<div class="settingTitle">رنگ قیمت‌ها</div>
+
+<div class="settingRow">
+
+<button data-price-color="#fff"
+        class="settingOption colorOption colorWhite"
+        onclick="setPriceColor('#fff')">سفید</button>
+
+<button data-price-color="#64B4FF"
+        class="settingOption colorOption colorBlue"
+        onclick="setPriceColor('#64B4FF')">آبی</button>
+
+<button data-price-color="#55d98b"
+        class="settingOption colorOption colorGreen"
+        onclick="setPriceColor('#55d98b')">سبز</button>
+
+<button data-price-color="#ffd75a"
+        class="settingOption colorOption colorYellow"
+        onclick="setPriceColor('#ffd75a')">زرد</button>
+
+<button data-price-color="#ff6b6b"
+        class="settingOption colorOption colorRed"
+        onclick="setPriceColor('#ff6b6b')">قرمز</button>
+
+</div>
+
+
+<div class="settingTitle">نمایش اعداد</div>
+
+<div class="settingRow">
+
+<button id="faDigitsOption"
+        class="settingOption"
+        onclick="setDigits('fa')">فارسی</button>
+
+<button id="enDigitsOption"
+        class="settingOption"
+        onclick="setDigits('en')">لاتین</button>
+
+</div>
+
+<button class="settingsClose"
+        onclick="closeSettings()">بستن</button>
+
+</div>
+</div>
+
 
 <!-- دفتر حساب -->
 
-<div
-id="ledgerModal"
-class="modal">
-
-<div class="sheet ledgerSheet">
-
-<div class="ledgerHeader">
-
-<h2>
-دفتر حساب
-</h2>
-
-<button
-class="ledgerSmallBtn"
-onclick="openAccountEdit(-1)">
-＋ حساب جدید
-</button>
-
-</div>
-
-<div id="ledgerContent">
-</div>
-
-<button
-class="ledgerBack"
-onclick="closeLedger()">
-بستن
-</button>
-
-</div>
-</div>
-
-<!-- پنجره حساب -->
-
-<div
-id="accountModal"
-class="modal">
-
+<div id="ledgerModal" class="modal">
 <div class="sheet">
 
-<h2 id="accountTitle">
-حساب جدید
-</h2>
-
-<input
-id="accountName"
-class="input"
-placeholder="نام طرف حساب">
-
-<input
-id="accountPhone"
-class="input"
-placeholder="شماره تماس"
-inputmode="tel">
-
-<textarea
-id="accountNote"
-class="input textarea"
-placeholder="توضیحات (اختیاری)">
-</textarea>
-
-<div class="actions">
-
-<button
-class="btn"
-onclick="saveAccount()">
-ذخیره
-</button>
-
-<button
-class="btn dark"
-onclick="closeAccountModal()">
-انصراف
-</button>
-
-<button
-id="accountDelete"
-class="btn danger"
-onclick="deleteAccount()">
-حذف
-</button>
-
-</div>
-
-</div>
-</div>
-
-<!-- پنجره حساب و تراکنش‌ها -->
-
-<div
-id="accountDetailModal"
-class="modal">
-
-<div class="sheet ledgerSheet">
-
 <div class="ledgerHeader">
+<h2>دفتر حساب</h2>
 
-<h2 id="accountDetailTitle">
-حساب
-</h2>
-
-<button
-id="addTransactionButton"
-class="ledgerSmallBtn"
-onclick="openTransactionEdit(-1)">
-＋ ثبت حساب
-</button>
-
+<button id="ledgerAddBtn"
+        class="ledgerAdd"
+        onclick="openAccountForm()">＋ حساب جدید</button>
 </div>
 
-<div id="accountDetailContent">
+<input id="ledgerSearch"
+       class="ledgerSearch"
+       placeholder="جستجوی حساب..."
+       autocomplete="off">
+
+<div id="ledgerFilters" class="ledgerFilters">
+<button class="ledgerFilter active"
+        data-filter="all"
+        onclick="setLedgerFilter('all')">همه</button>
+
+<button class="ledgerFilter"
+        data-filter="creditor"
+        onclick="setLedgerFilter('creditor')">بستانکار</button>
+
+<button class="ledgerFilter"
+        data-filter="debtor"
+        onclick="setLedgerFilter('debtor')">بدهکار</button>
 </div>
 
-<button
-class="ledgerBack"
-onclick="closeAccountDetail()">
-بازگشت
-</button>
+<div id="accountList"></div>
+
+<button class="ledgerBack"
+        onclick="closeLedger()">بستن</button>
 
 </div>
 </div>
 
-<!-- پنجره تراکنش -->
 
-<div
-id="transactionModal"
-class="modal">
+<!-- جزئیات حساب -->
 
+<div id="accountModal" class="modal">
 <div class="sheet">
 
-<h2 id="transactionTitle">
-ثبت حساب
-</h2>
+<h2 id="accountTitle">حساب</h2>
 
-<div class="settingTitle">
-نوع تراکنش
+<div id="accountContent"></div>
+
+<button class="ledgerBack"
+        onclick="closeAccount()">بازگشت</button>
+
+</div>
 </div>
 
-<div class="settingRow">
 
-<button
-id="debitTypeButton"
-class="settingOption"
-onclick="setTransactionType('debit')">
-بدهکار
-</button>
+<!-- ساخت / ویرایش حساب -->
 
-<button
-id="creditTypeButton"
-class="settingOption"
-onclick="setTransactionType('credit')">
+<div id="accountFormModal" class="modal">
+<div class="sheet">
+
+<h2 id="accountFormTitle">حساب جدید</h2>
+
+<div class="settingTitle">نوع حساب</div>
+
+<div id="accountTypeBox" class="typeBox">
+
+<button id="creditorTypeBtn"
+        class="typeOption"
+        onclick="setAccountType('creditor')">
 بستانکار
 </button>
 
+<button id="debtorTypeBtn"
+        class="typeOption"
+        onclick="setAccountType('debtor')">
+بدهکار
+</button>
+
 </div>
 
-<input
-id="transactionAmount"
-class="input"
-placeholder="مبلغ"
-inputmode="numeric">
+<input id="accountName"
+       class="input"
+       placeholder="نام شخص / مشتری / شرکت">
 
-<textarea
-id="transactionNote"
-class="input textarea"
-placeholder="توضیحات تراکنش">
-</textarea>
+<input id="accountPhone"
+       class="input"
+       placeholder="شماره تماس (اختیاری)"
+       inputmode="tel">
+
+<textarea id="accountNote"
+          class="input textarea"
+          placeholder="توضیحات (اختیاری)"></textarea>
 
 <div class="actions">
-
-<button
-class="btn"
-onclick="saveTransaction()">
-ذخیره
-</button>
-
-<button
-class="btn dark"
-onclick="closeTransactionModal()">
-انصراف
-</button>
-
-<button
-id="transactionDelete"
-class="btn danger"
-onclick="deleteTransaction()">
-حذف
-</button>
-
+<button class="btn" onclick="saveAccount()">ذخیره</button>
+<button class="btn dark" onclick="closeAccountForm()">انصراف</button>
 </div>
 
 </div>
 </div>
 
-<!-- پنجره تنظیمات -->
 
-<div
-id="settingsModal"
-class="modal">
+<!-- تراکنش -->
 
-<div class="sheet settingsSheet">
+<div id="txModal" class="modal">
+<div class="sheet">
 
-<h2>
-تنظیمات
-</h2>
+<h2 id="txTitle">ثبت مبلغ</h2>
 
-<div class="settingTitle">
-حالت نمایش
+<div class="summary">
+<div class="summaryLine">
+<span>نوع حساب</span>
+<strong id="txAccountType"></strong>
+</div>
 </div>
 
-<div class="settingRow">
+<label class="settingTitle">مبلغ</label>
 
-<button
-id="darkOption"
-class="settingOption"
-onclick="setTheme('dark')">
-تیره
-</button>
+<input id="txAmount"
+       class="input"
+       placeholder="مبلغ"
+       inputmode="numeric">
 
-<button
-id="lightOption"
-class="settingOption"
-onclick="setTheme('light')">
-روشن
-</button>
+<label class="settingTitle">تاریخ</label>
 
+<input id="txDate"
+       class="input dateInput"
+       type="date">
+
+<textarea id="txNote"
+          class="input textarea"
+          placeholder="شرح / بابت چه چیزی (اختیاری)"></textarea>
+
+<div class="actions">
+<button class="btn"
+        onclick="saveTransaction()">ذخیره</button>
+
+<button class="btn dark"
+        onclick="closeTx()">انصراف</button>
 </div>
-
-<div class="settingTitle">
-رنگ قیمت‌ها
-</div>
-
-<div class="settingRow">
-
-<button
-class="settingOption colorOption colorWhite"
-onclick="setPriceColor('#fff')">
-سفید
-</button>
-
-<button
-class="settingOption colorOption colorBlue"
-onclick="setPriceColor('#64B4FF')">
-آبی
-</button>
-
-<button
-class="settingOption colorOption colorGreen"
-onclick="setPriceColor('#55d98b')">
-سبز
-</button>
-
-<button
-class="settingOption colorOption colorYellow"
-onclick="setPriceColor('#ffd75a')">
-زرد
-</button>
-
-<button
-class="settingOption colorOption colorRed"
-onclick="setPriceColor('#ff6b6b')">
-قرمز
-</button>
-
-</div>
-
-<div class="settingTitle">
-نمایش اعداد
-</div>
-
-<div class="settingRow">
-
-<button
-id="faDigitsOption"
-class="settingOption"
-onclick="setDigits('fa')">
-فارسی
-</button>
-
-<button
-id="enDigitsOption"
-class="settingOption"
-onclick="setDigits('en')">
-لاتین
-</button>
-
-</div>
-
-<button
-class="settingsClose"
-onclick="closeSettings()">
-بستن
-</button>
 
 </div>
 </div>
+
 
 <script>
 
 const K="priceYarStoresV3";
-
 const MODE_KEY="priceYarAppMode";
-
 const SETTINGS_KEY="priceYarSettingsV1";
-
-/* اطلاعات دفتر حساب جدا از لیست قیمت نگهداری می‌شود */
 const LEDGER_KEY="priceYarLedgerV1";
 
-let data=
-JSON.parse(
-localStorage.getItem(K)||"null"
-)
-||
-{
-active:-1,
-stores:[],
-deleted:{}
-};
+let data=JSON.parse(localStorage.getItem(K)||"null")
+ ||{active:-1,stores:[],deleted:{}};
 
-let appMode=
-localStorage.getItem(MODE_KEY)
-||
-"management";
+let appMode=localStorage.getItem(MODE_KEY)||"management";
 
 let settings=
-JSON.parse(
-localStorage.getItem(SETTINGS_KEY)||"null"
-)
-||
-{
-theme:"dark",
-priceColor:"#fff",
-digits:"fa"
-};
+ JSON.parse(localStorage.getItem(SETTINGS_KEY)||"null")
+ ||{
+   theme:"dark",
+   priceColor:"#fff",
+   digits:"fa"
+ };
 
-/* دفتر حساب */
-let ledgerData=
-JSON.parse(
-localStorage.getItem(LEDGER_KEY)||"null"
-)
-||
-{
-accounts:[]
-};
+let ledger=
+ JSON.parse(localStorage.getItem(LEDGER_KEY)||"null")
+ ||{accounts:[]};
 
 let edit=-1;
-
 let more=false;
 
 let accountEdit=-1;
+let activeAccount=-1;
 
-let selectedAccountId=null;
+let accountType="creditor";
 
-let transactionEdit=-1;
+let txEdit=-1;
 
-let transactionType="debit";
+let ledgerFilter="all";
 
-/* وضعیت حرکت کالا */
+const $=id=>document.getElementById(id);
 
-let swipeState={
-active:false,
-wrap:null,
-row:null,
-startX:0,
-startY:0,
-currentX:0,
-index:-1,
-horizontal:false,
-moved:false
-};
+const st=()=>data.stores[data.active];
 
-const $=id=>
-document.getElementById(id);
-
-const st=()=>
-data.stores[data.active];
-
-function normalizeName(name){
-
-return String(name||"")
-.trim()
-.replace(/\s+/g," ")
-.toLocaleLowerCase();
-
-}
-
-function isSeller(){
-
-return appMode==="seller";
-
-}
-
-function setMode(mode){
-
-appMode=
-mode==="seller"
-?
-"seller"
-:
-"management";
-
-localStorage.setItem(
-MODE_KEY,
-appMode
-);
-
-applyMode();
-
-}
-
-function applyMode(){
-
-const seller=isSeller();
-
-const buyWrap=$("buyWrap");
-
-if(buyWrap){
-
-buyWrap.style.display=
-seller
-?
-"none"
-:
-"block";
-
-}
-
-if(seller){
-
-$("modeBadge").textContent=
-"حالت فروشندگان";
-
-$("modeBadge").classList.add("seller");
-
-}else{
-
-$("modeBadge").textContent=
-"حالت مدیریت";
-
-$("modeBadge").classList.remove("seller");
-
-}
-
-$("moreBtn").textContent=
-more
-?
-"اطلاعات ✓"
-:
-"اطلاعات ○";
-
-applySettings();
-
-render();
-
-}
-
-function applySettings(){
-
-document.body.classList.toggle(
-"light",
-settings.theme==="light"
-);
-
-document.documentElement.style.setProperty(
-"--price-color",
-settings.priceColor
-);
-
-const darkOption=$("darkOption");
-const lightOption=$("lightOption");
-
-if(darkOption){
-
-darkOption.classList.toggle(
-"active",
-settings.theme==="dark"
-);
-
-}
-
-if(lightOption){
-
-lightOption.classList.toggle(
-"active",
-settings.theme==="light"
-);
-
-}
-
-const faOption=$("faDigitsOption");
-const enOption=$("enDigitsOption");
-
-if(faOption){
-
-faOption.classList.toggle(
-"active",
-settings.digits==="fa"
-);
-
-}
-
-if(enOption){
-
-enOption.classList.toggle(
-"active",
-settings.digits==="en"
-);
-
-}
-
-document
-.querySelectorAll(".price")
-.forEach(
-el=>{
-el.style.color=
-settings.priceColor;
-}
-);
-
-}
-
-function saveSettings(){
-
-localStorage.setItem(
-SETTINGS_KEY,
-JSON.stringify(settings)
-);
-
-applySettings();
-
-}
-
-function setTheme(theme){
-
-settings.theme=
-theme==="light"
-?
-"light"
-:
-"dark";
-
-saveSettings();
-
-}
-
-function setPriceColor(color){
-
-settings.priceColor=
-color;
-
-saveSettings();
-
-}
-
-function setDigits(type){
-
-settings.digits=
-type==="en"
-?
-"en"
-:
-"fa";
-
-saveSettings();
-
-render();
-
-}
-
-function openSettings(){
-
-applySettings();
-
-$("settingsModal").style.display=
-"flex";
-
-}
-
-function closeSettings(){
-
-$("settingsModal").style.display=
-"none";
-
-}
 
 function makeId(){
 
-if(
-window.crypto&&
-window.crypto.randomUUID
-){
-
-return window.crypto.randomUUID();
+ return window.crypto&&crypto.randomUUID
+ ?crypto.randomUUID()
+ :"id-"+Date.now()+"-"+Math.random().toString(36).slice(2);
 
 }
 
-return
-"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
-.replace(
-/[xy]/g,
-c=>{
 
-let r=
-Math.random()*16|0;
+function normalizeName(n){
 
-let v=
-c==="x"
-?
-r
-:
-(r&3|8);
-
-return v.toString(16);
-
-}
-);
+ return String(n||"")
+ .trim()
+ .replace(/\s+/g," ")
+ .toLocaleLowerCase();
 
 }
 
-function ensureIds(){
 
-if(!Array.isArray(data.stores)){
+function isSeller(){
 
-data.stores=[];
-
-}
-
-data.stores.forEach(
-s=>{
-
-if(!s.id){
-
-s.id=makeId();
+ return appMode==="seller";
 
 }
 
-if(!Array.isArray(s.items)){
 
-s.items=[];
+function faDigits(v){
 
-}
+ let t=String(v??"");
 
-});
+ if(settings.digits==="en")return t;
 
-if(
-data.stores.length===0
-){
-
-data.active=-1;
-
-}else if(
-data.active<0||
-data.active>=data.stores.length
-){
-
-data.active=0;
+ return t.replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d]);
 
 }
 
-}
 
-function ensureItemIds(){
+function normalizeDigits(v){
 
-data.stores.forEach(
-store=>{
-
-if(!Array.isArray(store.items)){
-
-store.items=[];
+ return String(v??"")
+ .replace(/[۰-۹]/g,d=>String("۰۱۲۳۴۵۶۷۸۹".indexOf(d)))
+ .replace(/[٠-٩]/g,d=>String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
 
 }
 
-store.items.forEach(
-item=>{
 
-if(!item.id){
+function parseAmount(v){
 
-item.id=makeId();
+ let s=normalizeDigits(v)
+ .replace(/[,\s٬،]/g,"")
+ .replace(/[^\d.-]/g,"");
 
-}
+ let n=Number(s);
 
-if(!item.last){
-
-item.last=Date.now();
+ return Number.isFinite(n)?n:0;
 
 }
 
-});
 
-});
+function formatAmount(n){
 
-if(!data.deleted){
+ let x=Number(n)||0;
 
-data.deleted={};
+ let s=Number.isInteger(x)
+ ?x.toLocaleString("en-US")
+ :x.toLocaleString("en-US",{maximumFractionDigits:2});
 
-}
-
-}
-
-function cleanSellerData(){
-
-if(!isSeller()){
-
-return;
+ return faDigits(s);
 
 }
 
-data.stores.forEach(
-store=>{
-
-if(!Array.isArray(store.items)){
-
-return;
-
-}
-
-store.items.forEach(
-item=>{
-
-delete item.buy;
-delete item.buyPrice;
-delete item.purchasePrice;
-
-});
-
-});
-
-}
-
-function faDigits(value){
-
-let text=String(
-value??""
-);
-
-if(settings.digits==="en"){
-
-return text;
-
-}
-
-return text.replace(
-/\d/g,
-d=>"۰۱۲۳۴۵۶۷۸۹"[d]
-);
-
-}
-
-function save(){
-
-ensureIds();
-
-ensureItemIds();
-
-if(isSeller()){
-
-cleanSellerData();
-
-}
-
-localStorage.setItem(
-K,
-JSON.stringify(data)
-);
-
-if(
-window.AndroidBridge&&
-AndroidBridge.saveData
-){
-
-try{
-
-AndroidBridge.saveData(
-JSON.stringify(data)
-);
-
-}catch(e){
-
-console.log(
-"Native save error:",
-e
-);
-
-}
-
-}
-
-}
-
-function saveLedger(){
-
-if(!ledgerData||
-!Array.isArray(ledgerData.accounts)){
-
-ledgerData={
-accounts:[]
-};
-
-}
-
-localStorage.setItem(
-LEDGER_KEY,
-JSON.stringify(ledgerData)
-);
-
-}
-
-function ensureLedger(){
-
-if(
-!ledgerData||
-!Array.isArray(ledgerData.accounts)
-){
-
-ledgerData={
-accounts:[]
-};
-
-}
-
-ledgerData.accounts.forEach(
-account=>{
-
-if(!account.id){
-
-account.id=makeId();
-
-}
-
-if(!Array.isArray(account.transactions)){
-
-account.transactions=[];
-
-}
-
-account.transactions.forEach(
-transaction=>{
-
-if(!transaction.id){
-
-transaction.id=makeId();
-
-}
-
-if(
-transaction.type!=="credit"&&
-transaction.type!=="debit"
-){
-
-transaction.type="debit";
-
-}
-
-});
-
-});
-
-saveLedger();
-
-}
 
 function esc(s){
 
-return String(
-s??""
-)
-.replace(
-/[&<>"']/g,
-m=>
-({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#39;"
-}[m])
-);
+ return String(s??"").replace(
+  /[&<>"']/g,
+  m=>({
+   "&":"&amp;",
+   "<":"&lt;",
+   ">":"&gt;",
+   '"':"&quot;",
+   "'":"&#39;"
+  }[m])
+ );
 
 }
+
+
+function todayIso(){
+
+ let d=new Date();
+
+ return d.getFullYear()+"-"+
+ String(d.getMonth()+1).padStart(2,"0")+"-"+
+ String(d.getDate()).padStart(2,"0");
+
+}
+
+
+function formatLedgerDate(v){
+
+ if(!v)return "-";
+
+ let d=new Date(v+"T12:00:00");
+
+ if(Number.isNaN(d.getTime()))return faDigits(v);
+
+ try{
+
+  return d.toLocaleDateString(
+   "fa-IR-u-ca-persian"
+  );
+
+ }catch(e){
+
+  return faDigits(v);
+
+ }
+
+}
+
+
+function ensureIds(){
+
+ if(!Array.isArray(data.stores))
+  data.stores=[];
+
+ data.stores.forEach(s=>{
+
+  if(!s.id)s.id=makeId();
+
+  if(!Array.isArray(s.items))
+   s.items=[];
+
+ });
+
+ if(!data.stores.length){
+
+  data.active=-1;
+
+ }else if(
+  data.active<0||
+  data.active>=data.stores.length
+ ){
+
+  data.active=0;
+
+ }
+
+}
+
+
+function ensureItemIds(){
+
+ data.stores.forEach(s=>
+  (s.items||[]).forEach(x=>{
+
+   if(!x.id)x.id=makeId();
+
+   if(!x.last)x.last=Date.now();
+
+  })
+ );
+
+ if(!data.deleted)
+  data.deleted={};
+
+}
+
+
+function cleanSellerData(){
+
+ if(!isSeller())return;
+
+ data.stores.forEach(s=>
+  (s.items||[]).forEach(x=>{
+
+   delete x.buy;
+   delete x.buyPrice;
+   delete x.purchasePrice;
+
+  })
+ );
+
+}
+
+
+function save(){
+
+ ensureIds();
+ ensureItemIds();
+
+ if(isSeller())
+  cleanSellerData();
+
+ localStorage.setItem(
+  K,
+  JSON.stringify(data)
+ );
+
+ try{
+
+  if(
+   window.AndroidBridge &&
+   window.AndroidBridge.saveData
+  ){
+
+   window.AndroidBridge.saveData(
+    JSON.stringify(data)
+   );
+
+  }
+
+ }catch(e){}
+
+}
+
+
+function saveLedger(){
+
+ ensureLedger();
+
+ localStorage.setItem(
+  LEDGER_KEY,
+  JSON.stringify(ledger)
+ );
+
+}
+
+
+function setMode(m){
+
+ appMode=
+  m==="seller"
+  ?"seller"
+  :"management";
+
+ localStorage.setItem(
+  MODE_KEY,
+  appMode
+ );
+
+ applyMode();
+
+}
+
+
+function applyMode(){
+
+ if($("buyWrap"))
+  $("buyWrap").style.display=
+   isSeller()?"none":"block";
+
+ if($("modeBadge")){
+
+  $("modeBadge").textContent=
+   isSeller()
+   ?"حالت فروشندگان"
+   :"حالت مدیریت";
+
+  $("modeBadge")
+   .classList
+   .toggle("seller",isSeller());
+
+ }
+
+ if($("moreBtn")){
+
+  $("moreBtn").textContent=
+   more
+   ?"اطلاعات ✓"
+   :"اطلاعات ○";
+
+ }
+
+ applySettings();
+
+ render();
+
+}
+
+
+function applySettings(){
+
+ document.body.classList.toggle(
+  "light",
+  settings.theme==="light"
+ );
+
+ document.documentElement.style.setProperty(
+  "--price-color",
+  settings.priceColor
+ );
+
+ if($("darkOption"))
+  $("darkOption").classList.toggle(
+   "active",
+   settings.theme==="dark"
+  );
+
+ if($("lightOption"))
+  $("lightOption").classList.toggle(
+   "active",
+   settings.theme==="light"
+  );
+
+ if($("faDigitsOption"))
+  $("faDigitsOption").classList.toggle(
+   "active",
+   settings.digits==="fa"
+  );
+
+ if($("enDigitsOption"))
+  $("enDigitsOption").classList.toggle(
+   "active",
+   settings.digits==="en"
+  );
+
+ document
+ .querySelectorAll("[data-price-color]")
+ .forEach(btn=>{
+
+  btn.classList.toggle(
+   "active",
+   String(btn.dataset.priceColor).toLowerCase()===
+   String(settings.priceColor).toLowerCase()
+  );
+
+ });
+
+ document
+ .querySelectorAll(".price")
+ .forEach(e=>{
+  e.style.color=settings.priceColor;
+ });
+
+}
+
+
+function saveSettings(){
+
+ localStorage.setItem(
+  SETTINGS_KEY,
+  JSON.stringify(settings)
+ );
+
+ applySettings();
+
+}
+
+
+function setTheme(x){
+
+ settings.theme=
+  x==="light"
+  ?"light"
+  :"dark";
+
+ saveSettings();
+
+}
+
+
+function setPriceColor(x){
+
+ settings.priceColor=x;
+
+ saveSettings();
+
+}
+
+
+function setDigits(x){
+
+ settings.digits=
+  x==="en"
+  ?"en"
+  :"fa";
+
+ saveSettings();
+
+ render();
+
+}
+
+
+function openSettings(){
+
+ applySettings();
+
+ $("settingsModal").style.display="flex";
+
+}
+
+
+function closeSettings(){
+
+ $("settingsModal").style.display="none";
+
+}
+
+
+/* کالاها */
 
 function render(){
 
-ensureIds();
+ ensureIds();
+ ensureItemIds();
 
-ensureItemIds();
+ if(!st()){
 
-if(!st()){
+  $("storeBtn").textContent="";
+  $("storeBtn").classList.add("emptyStore");
 
-$("storeBtn").textContent="";
+  $("title").textContent=
+   "فروشگاهی انتخاب نشده";
 
-$("storeBtn")
-.classList.add("emptyStore");
+  $("count").textContent="";
 
-$("title").textContent=
-"فروشگاهی انتخاب نشده";
+  $("list").innerHTML=
+   '<div class="empty">'+
+   'برای شروع، از منوی بالا یک فروشگاه بسازید یا فایل لیست را وارد کنید.'+
+   '</div>';
 
-$("count").textContent="";
+  return;
 
-$("list").innerHTML=
-'<div class="empty">برای شروع، از منوی بالا یک فروشگاه بسازید یا فایل لیست را وارد کنید.</div>';
+ }
 
-return;
+ $("storeBtn").classList.remove("emptyStore");
 
-}
+ $("storeBtn").textContent=st().name;
 
-$("storeBtn")
-.classList.remove("emptyStore");
+ let q=
+  $("search").value
+  .trim()
+  .toLocaleLowerCase();
 
-$("storeBtn").textContent=
-st().name;
+ let a=st().items
+ .filter(x=>
+  !q||
+  String(x.name||"")
+  .toLocaleLowerCase()
+  .includes(q)
+ )
+ .sort(
+  (x,y)=>(y.last||0)-(x.last||0)
+ );
 
-let q=
-$("search")
-.value
-.trim()
-.toLocaleLowerCase();
+ $("title").textContent=
+  q
+  ?"نتایج جستجو"
+  :"کالاهای اخیر";
 
-let a=
-st().items
-.filter(
-x=>
-!q||
-String(x.name||"")
-.toLocaleLowerCase()
-.includes(q)
-)
-.sort(
-(x,y)=>
-(y.last||0)-
-(x.last||0)
-);
+ $("count").textContent=
+  q
+  ?a.length+" نتیجه"
+  :st().items.length+" کالا";
 
-$("title").textContent=
-q
-?
-"نتایج جستجو"
-:
-"کالاهای اخیر";
+ $("list").innerHTML="";
 
-$("count").textContent=
-q
-?
-a.length+" نتیجه"
-:
-st().items.length+" کالا";
+ if(!a.length){
 
-$("list").innerHTML="";
+  $("list").innerHTML=
+   '<div class="empty">'+
+   (q
+    ?"کالایی پیدا نشد"
+    :"هنوز کالایی اضافه نشده")+
+   '</div>';
 
-if(!a.length){
+  return;
 
-$("list").innerHTML=
-'<div class="empty">'+
-(
-q
-?
-"کالایی پیدا نشد"
-:
-"هنوز کالایی اضافه نشده"
-)+
-"</div>";
+ }
 
-return;
+ a.forEach(x=>{
 
-}
+  let i=st().items.indexOf(x);
 
-a.forEach(
-x=>{
+  let extra="";
 
-let i=
-st().items.indexOf(x);
+  if(more){
 
-let extra="";
+   if(!isSeller()&&x.buy){
 
-if(more){
+    extra+=
+     '<div class="buy">'+
+     'قیمت خرید: '+
+     esc(faDigits(x.buy))+
+     '</div>';
 
-if(
-!isSeller() &&
-x.buy
-){
+   }
 
-extra+=
-'<div class="buy">'+
-"قیمت خرید: "+
-esc(faDigits(x.buy))+
-"</div>";
+   if(x.desc){
 
-}
+    extra+=
+     '<div class="sub">'+
+     esc(x.desc)+
+     '</div>';
 
-if(x.desc){
+   }
 
-extra+=
-'<div class="sub">'+
-esc(x.desc)+
-"</div>";
+  }
 
-}
+  let w=document.createElement("div");
 
-}
+  w.className="swipeWrap";
 
-let wrap=
-document.createElement("div");
+  w.innerHTML=
+   '<div class="deleteBg left">'+
+    '<div class="trash">'+
+     '<div class="trashCan"></div>'+
+    '</div>'+
+   '</div>'+
+   '<div class="deleteBg right">'+
+    '<div class="trash">'+
+     '<div class="trashCan"></div>'+
+    '</div>'+
+   '</div>'+
+   '<div class="row">'+
+    '<div class="info">'+
+     '<div class="name">'+
+      esc(x.name)+
+     '</div>'+
+     extra+
+    '</div>'+
+    '<div class="price">'+
+     esc(faDigits(x.price))+
+    '</div>'+
+   '</div>';
 
-wrap.className=
-"swipeWrap";
+  $("list").appendChild(w);
 
-let bgLeft=
-document.createElement("div");
+  setupSwipe(
+   w,
+   w.querySelector(".row"),
+   w.querySelector(".left .trash"),
+   w.querySelector(".right .trash"),
+   i
+  );
 
-bgLeft.className=
-"deleteBg left";
+ });
 
-let trashLeft=
-document.createElement("div");
-
-trashLeft.className="trash";
-
-trashLeft.innerHTML=
-'<div class="trashCan"></div>';
-
-bgLeft.appendChild(trashLeft);
-
-let bgRight=
-document.createElement("div");
-
-bgRight.className=
-"deleteBg right";
-
-let trashRight=
-document.createElement("div");
-
-trashRight.className="trash";
-
-trashRight.innerHTML=
-'<div class="trashCan"></div>';
-
-bgRight.appendChild(trashRight);
-
-let r=
-document.createElement("div");
-
-r.className="row";
-
-r.innerHTML=
-'<div class="info">'+
-'<div class="name">'+
-esc(x.name)+
-"</div>"+
-extra+
-'</div>'+
-'<div class="price">'+
-esc(faDigits(x.price))+
-"</div>";
-
-r.style.setProperty(
-"--price-color",
-settings.priceColor
-);
-
-r.querySelector(".price").style.color=
-settings.priceColor;
-
-wrap.appendChild(bgLeft);
-wrap.appendChild(bgRight);
-wrap.appendChild(r);
-
-setupSwipe(
-wrap,
-r,
-trashLeft,
-trashRight,
-i
-);
-
-$("list")
-.appendChild(wrap);
-
-});
-
-applySettings();
+ applySettings();
 
 }
+
 
 function setupSwipe(
-wrap,
-row,
-trashLeft,
-trashRight,
-index
+ w,
+ r,
+ tl,
+ tr,
+ index
 ){
 
-let startX=0;
-let startY=0;
-let currentX=0;
-let horizontal=false;
-let moved=false;
+ let sx=null;
+ let sy=null;
+ let dx=0;
+ let horizontal=false;
+ let moved=false;
 
-function pointerDown(e){
+ function down(e){
 
-if(e.pointerType==="mouse"&&e.button!==0){
+  if(
+   e.pointerType==="mouse"&&
+   e.button!==0
+  )return;
 
-return;
+  sx=e.clientX;
+  sy=e.clientY;
+  dx=0;
+  horizontal=false;
+  moved=false;
+
+  try{
+   r.setPointerCapture(e.pointerId);
+  }catch(_){}
+
+ }
+
+ function move(e){
+
+  if(sx===null)return;
+
+  let x=e.clientX-sx;
+  let y=e.clientY-sy;
+
+  if(!horizontal){
+
+   if(
+    Math.abs(x)<8&&
+    Math.abs(y)<8
+   )return;
+
+   if(Math.abs(y)>Math.abs(x)){
+
+    sx=null;
+    sy=null;
+
+    return;
+
+   }
+
+   horizontal=true;
+
+  }
+
+  e.preventDefault();
+
+  moved=true;
+  dx=x;
+
+  let max=
+   Math.min(
+    Math.abs(x),
+    Math.max(
+     160,
+     innerWidth*.55
+    )
+   );
+
+  let s=
+   x<0
+   ?-max
+   :max;
+
+  r.classList.add("swiping");
+
+  r.style.transform=
+   "translate3d("+s+"px,0,0)";
+
+  let opacity=
+   Math.min(Math.abs(s)/90,1);
+
+  let left=
+   w.querySelector(".deleteBg.left");
+
+  let right=
+   w.querySelector(".deleteBg.right");
+
+  left.style.opacity=
+   x>0?opacity:0;
+
+  right.style.opacity=
+   x<0?opacity:0;
+
+  tl.classList.toggle(
+   "open",
+   x>35
+  );
+
+  tr.classList.toggle(
+   "open",
+   x<-35
+  );
+
+ }
+
+ function up(){
+
+  if(sx===null)return;
+
+  sx=null;
+  sy=null;
+
+  if(!horizontal)return;
+
+  let threshold=
+   Math.max(
+    90,
+    Math.min(
+     125,
+     innerWidth*.23
+    )
+   );
+
+  if(Math.abs(dx)>=threshold){
+
+   w.classList.add("removing");
+
+   let direction=
+    dx>0
+    ?innerWidth+120
+    :-innerWidth-120;
+
+   r.style.transform=
+    "translate3d("+direction+"px,0,0)";
+
+   setTimeout(
+    ()=>removeItemByIndex(index),
+    170
+   );
+
+  }else{
+
+   r.style.transform=
+    "translate3d(0,0,0)";
+
+   w.querySelector(".deleteBg.left")
+    .style.opacity=0;
+
+   w.querySelector(".deleteBg.right")
+    .style.opacity=0;
+
+  }
+
+  horizontal=false;
+
+ }
+
+ r.addEventListener(
+  "pointerdown",
+  down
+ );
+
+ r.addEventListener(
+  "pointermove",
+  move,
+  {passive:false}
+ );
+
+ r.addEventListener(
+  "pointerup",
+  up
+ );
+
+ r.addEventListener(
+  "pointercancel",
+  up
+ );
+
+ r.addEventListener(
+  "click",
+  e=>{
+
+   if(moved){
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    moved=false;
+
+    return;
+
+   }
+
+   openEdit(index);
+
+  }
+ );
 
 }
 
-startX=e.clientX;
-startY=e.clientY;
-currentX=0;
-horizontal=false;
-moved=false;
 
-row.classList.remove("swiping");
+function removeItemByIndex(i){
 
-try{
+ if(
+  !st()||
+  i<0||
+  i>=st().items.length
+ )return;
 
-row.setPointerCapture(e.pointerId);
+ st().items.splice(i,1);
 
-}catch(_){}
+ save();
 
-}
-
-function pointerMove(e){
-
-if(
-startX===null||
-startY===null
-){
-
-return;
+ render();
 
 }
 
-const dx=
-e.clientX-startX;
 
-const dy=
-e.clientY-startY;
-
-if(!horizontal){
-
-if(
-Math.abs(dx)<8&&
-Math.abs(dy)<8
-){
-
-return;
-
-}
-
-if(
-Math.abs(dy)>
-Math.abs(dx)
-){
-
-startX=null;
-startY=null;
-return;
-
-}
-
-horizontal=true;
-
-}
-
-if(!horizontal){
-
-return;
-
-}
-
-e.preventDefault();
-
-moved=true;
-
-currentX=dx;
-
-const limit=
-Math.min(
-Math.abs(dx),
-window.innerWidth*0.55
-);
-
-const signed=
-dx<0
-?
--limit
-:
-limit;
-
-row.classList.add("swiping");
-
-row.style.transform=
-"translateX("+signed+"px)";
-
-const progress=
-Math.min(
-Math.abs(signed)/110,
-1
-);
-
-const opacity=
-Math.min(
-progress,
-1
-);
-
-if(dx>0){
-
-bgLeft.style.opacity=opacity;
-bgRight.style.opacity=0;
-
-trashLeft.classList.toggle(
-"open",
-Math.abs(signed)>35
-);
-
-trashRight.classList.remove("open");
-
-}else{
-
-bgRight.style.opacity=opacity;
-bgLeft.style.opacity=0;
-
-trashRight.classList.toggle(
-"open",
-Math.abs(signed)>35
-);
-
-trashLeft.classList.remove("open");
-
-}
-
-}
-
-function pointerUp(e){
-
-if(
-startX===null
-){
-
-return;
-
-}
-
-const dx=currentX;
-
-startX=null;
-startY=null;
-
-if(!horizontal){
-
-return;
-
-}
-
-const threshold=
-Math.max(
-95,
-Math.min(
-140,
-window.innerWidth*.25
-)
-);
-
-if(
-Math.abs(dx)>=threshold
-){
-
-const direction=
-dx>0
-?
-1
-:
--1;
-
-row.style.transition=
-"transform .18s ease";
-
-row.style.transform=
-"translateX("+
-(direction*
-(window.innerWidth+100))+
-"px)";
-
-bgLeft.style.opacity=
-dx>0
-?
-1
-:
-0;
-
-bgRight.style.opacity=
-dx<0
-?
-1
-:
-0;
-
-setTimeout(
-()=>{
-
-removeItemByIndex(index);
-
-},
-180
-);
-
-}else{
-
-row.style.transition=
-"transform .18s ease";
-
-row.style.transform=
-"translateX(0)";
-
-bgLeft.style.opacity=0;
-bgRight.style.opacity=0;
-
-trashLeft.classList.remove("open");
-trashRight.classList.remove("open");
-
-}
-
-}
-
-function pointerCancel(){
-
-startX=null;
-startY=null;
-horizontal=false;
-
-row.style.transition=
-"transform .18s ease";
-
-row.style.transform=
-"translateX(0)";
-
-bgLeft.style.opacity=0;
-bgRight.style.opacity=0;
-
-trashLeft.classList.remove("open");
-trashRight.classList.remove("open");
-
-}
-
-row.addEventListener(
-"pointerdown",
-pointerDown,
-{
-passive:true
-}
-);
-
-row.addEventListener(
-"pointermove",
-pointerMove,
-{
-passive:false
-}
-);
-
-row.addEventListener(
-"pointerup",
-pointerUp
-);
-
-row.addEventListener(
-"pointercancel",
-pointerCancel
-);
-
-row.addEventListener(
-"click",
-e=>{
-
-if(moved){
-
-e.preventDefault();
-e.stopPropagation();
-return;
-
-}
-
-openEdit(index);
-
-});
-
-}
-
-function removeItemByIndex(index){
-
-if(!st()||index<0){
-
-return;
-
-}
-
-if(index>=st().items.length){
-
-return;
-
-}
-
-st().items.splice(
-index,
-1
-);
-
-save();
-
-render();
-
-}
+/* فروشگاه */
 
 $("storeBtn").onclick=()=>{
 
-let menu=
-$("storeMenu");
+ $("storeMenu").classList.toggle("open");
 
-if(
-menu.classList.contains("open")
-){
-
-menu.classList.remove("open");
-
-}else{
-
-stores();
-
-menu.classList.add("open");
-
-}
+ if(
+  $("storeMenu")
+  .classList
+  .contains("open")
+ )
+  stores();
 
 };
+
 
 function stores(){
 
-let m=
-$("storeMenu");
+ let m=$("storeMenu");
 
-m.innerHTML="";
+ m.innerHTML="";
 
-data.stores.forEach(
-(s,i)=>{
+ data.stores.forEach((s,i)=>{
 
-let d=
-document.createElement("div");
+  let d=document.createElement("div");
 
-d.className=
-"storeItem"+
-(
-i===data.active
-?
-" active"
-:
-""
-);
+  d.className=
+   "storeItem"+
+   (i===data.active?" active":"");
 
-d.textContent=
-(
-i===data.active
-?
-"✓ "
-:
-""
-)+
-s.name;
+  d.textContent=
+   (i===data.active?"✓ ":"")+
+   s.name;
 
-d.onclick=()=>{
+  d.onclick=()=>{
 
-data.active=i;
+   data.active=i;
 
-save();
+   save();
 
-$("storeMenu")
-.classList.remove("open");
+   m.classList.remove("open");
 
-updateStoreButton();
+   updateStoreButton();
 
-render();
+   render();
 
-};
+  };
 
-m.appendChild(d);
+  m.appendChild(d);
 
-});
+ });
 
-let actions=
-document.createElement("div");
 
-actions.className=
-"storeActions";
+ let a=document.createElement("div");
 
-let add=
-document.createElement("button");
+ a.className="storeActions";
 
-add.className=
-"storeAction addStore";
+ a.innerHTML=
+  '<button class="storeAction">＋ ساختن فروشگاه</button>'+
+  '<button class="storeAction">＋ ورود لیست</button>';
 
-add.textContent=
-"＋ ساختن فروشگاه";
+ a.children[0].onclick=()=>{
 
-add.onclick=()=>{
+  m.classList.remove("open");
 
-$("storeMenu")
-.classList.remove("open");
+  createStore();
 
-createStore();
+ };
 
-};
+ a.children[1].onclick=()=>{
 
-let importStore=
-document.createElement("button");
+  m.classList.remove("open");
 
-importStore.className=
-"storeAction";
+  updatePriceList();
 
-importStore.textContent=
-"＋ ورود لیست";
+ };
 
-importStore.onclick=()=>{
+ if(data.stores.length){
 
-$("storeMenu")
-.classList.remove("open");
+  let b=document.createElement("button");
 
-updatePriceList();
+  b.className="storeAction";
 
-};
+  b.textContent="− حذف فروشگاه";
 
-actions.appendChild(add);
+  b.onclick=()=>{
 
-actions.appendChild(importStore);
+   m.classList.remove("open");
 
-if(data.stores.length>0){
+   deleteStore();
 
-let del=
-document.createElement("button");
+  };
 
-del.className=
-"storeAction deleteStore";
+  a.appendChild(b);
 
-del.textContent=
-"− حذف فروشگاه";
+ }
 
-del.onclick=()=>{
-
-$("storeMenu")
-.classList.remove("open");
-
-deleteStore();
-
-};
-
-actions.appendChild(del);
+ m.appendChild(a);
 
 }
 
-m.appendChild(actions);
-
-}
 
 function updateStoreButton(){
 
-if(!st()){
+ if(!st()){
 
-$("storeBtn").textContent="";
+  $("storeBtn").textContent="";
 
-$("storeBtn")
-.classList.add("emptyStore");
+  $("storeBtn")
+   .classList
+   .add("emptyStore");
 
-return;
+ }else{
+
+  $("storeBtn")
+   .classList
+   .remove("emptyStore");
+
+  $("storeBtn").textContent=st().name;
+
+ }
 
 }
 
-$("storeBtn")
-.classList.remove("emptyStore");
-
-$("storeBtn").textContent=
-st().name;
-
-}
 
 function createStore(){
 
-let n=
-prompt(
-"نام فروشگاه جدید را وارد کنید:"
-);
+ let n=prompt(
+  "نام فروشگاه جدید را وارد کنید:"
+ );
 
-if(
-!n||
-!n.trim()
-){
+ if(!n||!n.trim())return;
 
-return;
+ n=n.trim();
 
-}
+ let e=data.stores.find(
+  s=>
+   normalizeName(s.name)===
+   normalizeName(n)
+ );
 
-n=n.trim();
+ if(e){
 
-const existing=
-data.stores.find(
-s=>
-normalizeName(s.name)===
-normalizeName(n)
-);
+  data.active=data.stores.indexOf(e);
 
-if(existing){
+  save();
 
-data.active=
-data.stores.indexOf(existing);
+  updateStoreButton();
 
-save();
+  render();
 
-updateStoreButton();
+  alert(
+   "این فروشگاه قبلاً وجود دارد و انتخاب شد."
+  );
 
-render();
+  return;
 
-alert(
-"این فروشگاه قبلاً وجود دارد و انتخاب شد."
-);
+ }
 
-return;
+ data.stores.push({
+  id:makeId(),
+  name:n,
+  items:[]
+ });
 
-}
+ data.active=data.stores.length-1;
 
-data.stores.push(
-{
-id:makeId(),
-name:n,
-items:[]
-}
-);
+ save();
 
-data.active=
-data.stores.length-1;
+ updateStoreButton();
 
-save();
-
-updateStoreButton();
-
-render();
+ render();
 
 }
+
 
 function deleteStore(){
 
-if(!st()){
+ if(!st())return;
 
-return;
+ if(
+  !confirm(
+   "فروشگاه «"+
+   st().name+
+   "» حذف شود؟\n\n"+
+   "تمام کالاهای این فروشگاه هم حذف می‌شوند."
+  )
+ )return;
 
-}
+ data.stores.splice(
+  data.active,
+  1
+ );
 
-let name=
-st().name;
+ data.active=
+  data.stores.length
+  ?Math.min(
+    data.active,
+    data.stores.length-1
+   )
+  :-1;
 
-if(
-!confirm(
-"فروشگاه «"+
-name+
-"» حذف شود؟\n\n"+
-"تمام کالاهای این فروشگاه هم حذف می‌شوند."
-)
-){
+ save();
 
-return;
+ updateStoreButton();
 
-}
-
-data.stores.splice(
-data.active,
-1
-);
-
-if(
-data.stores.length===0
-){
-
-data.active=-1;
-
-}else if(
-data.active>=data.stores.length
-){
-
-data.active=
-data.stores.length-1;
+ render();
 
 }
 
-save();
-
-updateStoreButton();
-
-render();
-
-}
 
 function toggleMore(){
 
-more=!more;
+ more=!more;
 
-$("moreBtn").textContent=
-more
-?
-"اطلاعات ✓"
-:
-"اطلاعات ○";
+ $("moreBtn")
+ .classList
+ .toggle("on",more);
 
-$("moreBtn")
-.classList.toggle(
-"on",
-more
-);
-
-render();
+ render();
 
 }
+
+
+/* کالا */
 
 function openAdd(){
 
-if(!st()){
+ if(!st()){
 
-alert(
-"ابتدا یک فروشگاه بسازید یا یک لیست وارد کنید."
-);
+  alert(
+   "ابتدا یک فروشگاه بسازید یا یک لیست وارد کنید."
+  );
 
-return;
+  return;
 
-}
+ }
 
-edit=-1;
+ edit=-1;
 
-$("mtitle").textContent=
-"افزودن کالا";
+ $("mtitle").textContent=
+  "افزودن کالا";
 
-$("name").value="";
+ $("name").value="";
+ $("price").value="";
+ $("buy").value="";
+ $("desc").value="";
 
-$("price").value="";
+ $("del").style.display="none";
 
-$("buy").value="";
+ applyMode();
 
-$("desc").value="";
+ $("modal").style.display="flex";
 
-$("del").style.display=
-"none";
-
-applyMode();
-
-$("modal").style.display=
-"flex";
-
-setTimeout(
-()=>
-$("name").focus(),
-80
-);
+ setTimeout(
+  ()=>$("name").focus(),
+  80
+ );
 
 }
+
 
 function openEdit(i){
 
-if(!st()){
+ if(!st())return;
 
-return;
+ edit=i;
 
-}
+ let x=st().items[i];
 
-edit=i;
+ $("mtitle").textContent=
+  "ویرایش کالا";
 
-let x=
-st().items[i];
+ $("name").value=x.name||"";
+ $("price").value=x.price||"";
+ $("buy").value=
+  isSeller()
+  ?""
+  :(x.buy||"");
 
-$("mtitle").textContent=
-"ویرایش کالا";
+ $("desc").value=x.desc||"";
 
-$("name").value=
-x.name||"";
+ $("del").style.display="block";
 
-$("price").value=
-x.price||"";
+ applyMode();
 
-$("buy").value=
-isSeller()
-?
-""
-:
-(x.buy||"");
-
-$("desc").value=
-x.desc||"";
-
-$("del").style.display=
-"block";
-
-applyMode();
-
-$("modal").style.display=
-"flex";
+ $("modal").style.display="flex";
 
 }
+
 
 function closeModal(){
 
-$("modal").style.display=
-"none";
+ $("modal").style.display="none";
 
-render();
+ render();
 
 }
+
 
 function saveItem(){
 
-if(!st()){
+ if(!st())return;
 
-return;
+ let n=$("name").value.trim();
+ let p=$("price").value.trim();
 
-}
+ if(!n||!p){
 
-let n=
-$("name").value.trim();
+  alert(
+   "نام و قیمت را وارد کن"
+  );
 
-let p=
-$("price").value.trim();
+  return;
 
-if(!n||!p){
+ }
 
-alert(
-"نام و قیمت را وارد کن"
-);
+ let old=
+  edit>=0
+  ?st().items[edit]
+  :null;
 
-return;
+ let x={
+  id:old?.id||makeId(),
+  name:n,
+  price:p,
+  desc:$("desc").value.trim(),
+  last:Date.now()
+ };
 
-}
+ if(!isSeller())
+  x.buy=$("buy").value.trim();
 
-let old=
-edit>=0
-?
-st().items[edit]
-:
-null;
+ if(edit<0)
+  st().items.push(x);
+ else
+  st().items[edit]=x;
 
-let itemId=
-old&&old.id
-?
-old.id
-:
-makeId();
+ save();
 
-let x;
-
-if(isSeller()){
-
-x={
-id:itemId,
-name:n,
-price:p,
-desc:$("desc").value.trim(),
-last:Date.now()
-};
-
-}else{
-
-x={
-id:itemId,
-name:n,
-price:p,
-buy:$("buy").value.trim(),
-desc:$("desc").value.trim(),
-last:Date.now()
-};
+ closeModal();
 
 }
 
-if(edit<0){
-
-st().items.push(x);
-
-}else{
-
-st().items[edit]=x;
-
-}
-
-save();
-
-closeModal();
-
-}
 
 function deleteItem(){
 
-if(edit<0){
+ if(edit<0)return;
 
-return;
+ st().items.splice(
+  edit,
+  1
+ );
 
-}
-
-st().items.splice(
-edit,
-1
-);
-
-save();
-
-closeModal();
-
-}
-
-/* =========================================================
-   دفتر حساب
-   ========================================================= */
-
-function accountById(id){
-
-ensureLedger();
-
-return ledgerData.accounts.find(
-account=>
-account.id===id
-);
-
-}
-
-function accountBalance(account){
-
-if(!account){
-
-return 0;
-
-}
-
-let debit=0;
-let credit=0;
-
-(account.transactions||[]).forEach(
-transaction=>{
-
-let amount=
-Number(
-String(
-transaction.amount||""
-)
-.replace(/,/g,"")
-)||0;
-
-if(transaction.type==="credit"){
-
-credit+=amount;
-
-}else{
-
-debit+=amount;
-
-}
-
-});
-
-return debit-credit;
-
-}
-
-function accountTotals(account){
-
-let debit=0;
-let credit=0;
-
-(account.transactions||[]).forEach(
-transaction=>{
-
-let amount=
-Number(
-String(
-transaction.amount||""
-)
-.replace(/,/g,"")
-)||0;
-
-if(transaction.type==="credit"){
-
-credit+=amount;
-
-}else{
-
-debit+=amount;
-
-}
-
-});
-
-return {
-debit:debit,
-credit:credit,
-balance:debit-credit
-};
-
-}
-
-function formatMoney(value){
-
-return faDigits(
-Number(value||0).toLocaleString("en-US")
-);
-
-}
-
-function balanceClass(balance){
-
-if(balance>0){
-
-return "balanceDebit";
-
-}
-
-if(balance<0){
-
-return "balanceCredit";
-
-}
-
-return "balanceZero";
-
-}
-
-function balanceText(balance){
-
-if(balance>0){
-
-return "بدهکار: "+
-formatMoney(balance);
-
-}
-
-if(balance<0){
-
-return "بستانکار: "+
-formatMoney(Math.abs(balance));
-
-}
-
-return "تسویه";
-
-}
-
-function openLedger(){
-
-ensureLedger();
-
-$("ledgerModal").style.display=
-"flex";
-
-renderLedger();
-
-}
-
-function closeLedger(){
-
-$("ledgerModal").style.display=
-"none";
-
-}
-
-function renderLedger(){
-
-ensureLedger();
-
-const box=
-$("ledgerContent");
-
-if(!ledgerData.accounts.length){
-
-box.innerHTML=
-'<div class="ledgerEmpty">'+
-"هنوز حسابی ساخته نشده است.<br>"+
-(
-isSeller()
-?
-"در حالت فروشندگان فقط حساب‌ها قابل مشاهده هستند."
-:
-"برای شروع روی «＋ حساب جدید» بزنید."
-)+
-"</div>";
-
-return;
-
-}
-
-let totalDebit=0;
-let totalCredit=0;
-
-ledgerData.accounts.forEach(
-account=>{
-
-const totals=
-accountTotals(account);
-
-totalDebit+=totals.debit;
-totalCredit+=totals.credit;
-
-});
-
-let html=
-'<div class="ledgerSummary">'+
-'<div class="ledgerSummaryBox">'+
-'<div class="ledgerSummaryTitle">جمع بدهکار</div>'+
-'<div class="ledgerSummaryValue balanceDebit">'+
-formatMoney(totalDebit)+
-"</div>"+
-"</div>"+
-'<div class="ledgerSummaryBox">'+
-'<div class="ledgerSummaryTitle">جمع بستانکار</div>'+
-'<div class="ledgerSummaryValue balanceCredit">'+
-formatMoney(totalCredit)+
-"</div>"+
-"</div>"+
-"</div>";
-
-ledgerData.accounts.forEach(
-account=>{
-
-let totals=
-accountTotals(account);
-
-html+=
-'<div class="accountCard">'+
-
-'<div class="accountTop">'+
-
-'<div>'+
-'<div class="accountName">'+
-esc(account.name)+
-"</div>"+
-
-(
-account.phone
-?
-'<div class="accountPhone">'+
-esc(account.phone)+
-"</div>"
-:
-""
-)+
-
-"</div>"+
-
-'<div class="accountBalance '+
-balanceClass(totals.balance)+
-'">'+
-balanceText(totals.balance)+
-"</div>"+
-
-"</div>"+
-
-(
-account.note
-?
-'<div class="accountNote">'+
-esc(account.note)+
-"</div>"
-:
-""
-)+
-
-'<div class="accountButtons">'+
-
-'<button onclick="openAccountDetail(\''+
-account.id+
-'\')">'+
-"مشاهده"+
-"</button>";
-
-if(!isSeller()){
-
-html+=
-'<button onclick="openAccountEditById(\''+
-account.id+
-'\')">'+
-"ویرایش"+
-"</button>"+
-
-'<button class="danger" onclick="deleteAccountById(\''+
-account.id+
-'\')">'+
-"حذف"+
-"</button>";
-
-}
-
-html+=
-"</div>"+
-"</div>";
-
-});
-
-box.innerHTML=html;
-
-}
-
-function openAccountEdit(index){
-
-if(isSeller()){
-
-alert(
-"در حالت فروشندگان امکان ساخت یا تغییر حساب وجود ندارد."
-);
-
-return;
-
-}
-
-accountEdit=index;
-
-$("accountTitle").textContent=
-index<0
-?
-"حساب جدید"
-:
-"ویرایش حساب";
-
-if(index<0){
-
-$("accountName").value="";
-$("accountPhone").value="";
-$("accountNote").value="";
-$("accountDelete").style.display=
-"none";
-
-}else{
-
-let account=
-ledgerData.accounts[index];
-
-if(!account){
-
-return;
-
-}
-
-$("accountName").value=
-account.name||"";
-
-$("accountPhone").value=
-account.phone||"";
-
-$("accountNote").value=
-account.note||"";
-
-$("accountDelete").style.display=
-"block";
-
-}
-
-$("accountModal").style.display=
-"flex";
-
-setTimeout(
-()=>
-$("accountName").focus(),
-80
-);
-
-}
-
-function openAccountEditById(id){
-
-if(isSeller()){
-
-return;
-
-}
-
-let index=
-ledgerData.accounts.findIndex(
-account=>
-account.id===id
-);
-
-if(index<0){
-
-return;
-
-}
-
-openAccountEdit(index);
-
-}
-
-function closeAccountModal(){
-
-$("accountModal").style.display=
-"none";
-
-}
-
-function saveAccount(){
-
-if(isSeller()){
-
-return;
-
-}
-
-let name=
-$("accountName").value.trim();
-
-if(!name){
-
-alert(
-"نام طرف حساب را وارد کنید."
-);
-
-return;
-
-}
-
-let phone=
-$("accountPhone").value.trim();
-
-let note=
-$("accountNote").value.trim();
-
-if(accountEdit<0){
-
-ledgerData.accounts.push(
-{
-id:makeId(),
-name:name,
-phone:phone,
-note:note,
-transactions:[]
-}
-);
-
-}else{
-
-let account=
-ledgerData.accounts[accountEdit];
-
-if(!account){
-
-return;
-
-}
-
-account.name=name;
-account.phone=phone;
-account.note=note;
-
-}
-
-saveLedger();
-
-closeAccountModal();
-
-renderLedger();
-
-}
-
-function deleteAccount(){
-
-if(isSeller()){
-
-return;
-
-}
-
-if(accountEdit<0){
-
-return;
-
-}
-
-let account=
-ledgerData.accounts[accountEdit];
-
-if(!account){
-
-return;
-
-}
-
-if(
-!confirm(
-"حساب «"+
-account.name+
-"» حذف شود؟\n\n"+
-"تمام تراکنش‌های این حساب هم حذف می‌شوند."
-)
-){
-
-return;
-
-}
-
-ledgerData.accounts.splice(
-accountEdit,
-1
-);
-
-saveLedger();
-
-closeAccountModal();
-
-renderLedger();
-
-}
-
-function deleteAccountById(id){
-
-if(isSeller()){
-
-return;
-
-}
-
-let index=
-ledgerData.accounts.findIndex(
-account=>
-account.id===id
-);
-
-if(index<0){
-
-return;
-
-}
-
-let account=
-ledgerData.accounts[index];
-
-if(
-!confirm(
-"حساب «"+
-account.name+
-"» حذف شود؟\n\n"+
-"تمام تراکنش‌های این حساب هم حذف می‌شوند."
-)
-){
-
-return;
-
-}
-
-ledgerData.accounts.splice(
-index,
-1
-);
-
-saveLedger();
-
-renderLedger();
-
-}
-
-function openAccountDetail(id){
-
-ensureLedger();
-
-let account=
-accountById(id);
-
-if(!account){
-
-return;
-
-}
-
-selectedAccountId=id;
-
-$("accountDetailTitle").textContent=
-account.name;
-
-if(isSeller()){
-
-$("addTransactionButton").style.display=
-"none";
-
-}else{
-
-$("addTransactionButton").style.display=
-"block";
-
-}
-
-renderAccountDetail();
-
-$("accountDetailModal").style.display=
-"flex";
-
-}
-
-function closeAccountDetail(){
-
-$("accountDetailModal").style.display=
-"none";
-
-selectedAccountId=null;
-
-}
-
-function renderAccountDetail(){
-
-let account=
-accountById(selectedAccountId);
-
-if(!account){
-
-return;
-
-}
-
-let totals=
-accountTotals(account);
-
-let html=
-'<div class="ledgerSummary">'+
-
-'<div class="ledgerSummaryBox">'+
-'<div class="ledgerSummaryTitle">بدهکار</div>'+
-'<div class="ledgerSummaryValue balanceDebit">'+
-formatMoney(totals.debit)+
-"</div>"+
-"</div>"+
-
-'<div class="ledgerSummaryBox">'+
-'<div class="ledgerSummaryTitle">بستانکار</div>'+
-'<div class="ledgerSummaryValue balanceCredit">'+
-formatMoney(totals.credit)+
-"</div>"+
-"</div>"+
-
-'<div class="ledgerSummaryBox">'+
-'<div class="ledgerSummaryTitle">مانده</div>'+
-'<div class="ledgerSummaryValue '+
-balanceClass(totals.balance)+
-'">'+
-balanceText(totals.balance)+
-"</div>"+
-"</div>"+
-
-"</div>";
-
-if(account.phone){
-
-html+=
-'<div class="accountNote">'+
-"شماره تماس: "+
-esc(account.phone)+
-"</div>";
-
-}
-
-if(account.note){
-
-html+=
-'<div class="accountNote">'+
-esc(account.note)+
-"</div>";
-
-}
-
-if(!account.transactions.length){
-
-html+=
-'<div class="ledgerEmpty">'+
-"هنوز تراکنشی برای این حساب ثبت نشده است."+
-"</div>";
-
-}else{
-
-account.transactions
-.slice()
-.reverse()
-.forEach(
-transaction=>{
-
-let amount=
-Number(
-String(
-transaction.amount||""
-)
-.replace(/,/g,"")
-)||0;
-
-let typeText=
-transaction.type==="credit"
-?
-"بستانکار"
-:
-"بدهکار";
-
-html+=
-'<div class="transaction '+
-(
-transaction.type==="credit"
-?
-"credit"
-:
-"debit"
-)+
-'">'+
-
-'<div class="transactionTop">'+
-
-'<div class="transactionType">'+
-typeText+
-"</div>"+
-
-'<div class="transactionAmount">'+
-formatMoney(amount)+
-"</div>"+
-
-"</div>"+
-
-(
-transaction.note
-?
-'<div class="transactionNote">'+
-esc(transaction.note)+
-"</div>"
-:
-""
-);
-
-if(!isSeller()){
-
-html+=
-'<div class="transactionActions">'+
-
-'<button onclick="openTransactionEditById(\''+
-transaction.id+
-'\')">'+
-"ویرایش"+
-"</button>"+
-
-'<button class="danger" onclick="deleteTransactionById(\''+
-transaction.id+
-'\')">'+
-"حذف"+
-"</button>"+
-
-"</div>";
-
-}
-
-html+=
-"</div>";
-
-});
-
-}
-
-$("accountDetailContent").innerHTML=
-html;
-
-}
-
-function openTransactionEdit(index){
-
-if(isSeller()){
-
-alert(
-"در حالت فروشندگان امکان ثبت یا تغییر تراکنش وجود ندارد."
-);
-
-return;
-
-}
-
-if(!selectedAccountId){
-
-return;
-
-}
-
-let account=
-accountById(selectedAccountId);
-
-if(!account){
-
-return;
-
-}
-
-transactionEdit=index;
-
-$("transactionTitle").textContent=
-index<0
-?
-"ثبت حساب"
-:
-"ویرایش حساب";
-
-if(index<0){
-
-transactionType="debit";
-
-$("transactionAmount").value="";
-
-$("transactionNote").value="";
-
-$("transactionDelete").style.display=
-"none";
-
-}else{
-
-let transaction=
-account.transactions[index];
-
-if(!transaction){
-
-return;
-
-}
-
-transactionType=
-transaction.type==="credit"
-?
-"credit"
-:
-"debit";
-
-$("transactionAmount").value=
-transaction.amount||"";
-
-$("transactionNote").value=
-transaction.note||"";
-
-$("transactionDelete").style.display=
-"block";
-
-}
-
-updateTransactionTypeButtons();
-
-$("transactionModal").style.display=
-"flex";
-
-setTimeout(
-()=>
-$("transactionAmount").focus(),
-80
-);
-
-}
-
-function openTransactionEditById(id){
-
-if(isSeller()){
-
-return;
-
-}
-
-let account=
-accountById(selectedAccountId);
-
-if(!account){
-
-return;
-
-}
-
-let index=
-account.transactions.findIndex(
-transaction=>
-transaction.id===id
-);
-
-if(index<0){
-
-return;
-
-}
-
-openTransactionEdit(index);
-
-}
-
-function setTransactionType(type){
-
-if(isSeller()){
-
-return;
-
-}
-
-transactionType=
-type==="credit"
-?
-"credit"
-:
-"debit";
-
-updateTransactionTypeButtons();
-
-}
-
-function updateTransactionTypeButtons(){
-
-$("debitTypeButton")
-.classList.toggle(
-"active",
-transactionType==="debit"
-);
-
-$("creditTypeButton")
-.classList.toggle(
-"active",
-transactionType==="credit"
-);
-
-}
-
-function closeTransactionModal(){
-
-$("transactionModal").style.display=
-"none";
-
-}
-
-function saveTransaction(){
-
-if(isSeller()){
-
-return;
-
-}
-
-let account=
-accountById(selectedAccountId);
-
-if(!account){
-
-return;
-
-}
-
-let amount=
-$("transactionAmount")
-.value
-.trim();
-
-if(!amount){
-
-alert(
-"مبلغ را وارد کنید."
-);
-
-return;
-
-}
-
-let numeric=
-Number(
-String(amount)
-.replace(/,/g,"")
-);
-
-if(
-!isFinite(numeric)||
-numeric<=0
-){
-
-alert(
-"مبلغ واردشده معتبر نیست."
-);
-
-return;
+ save();
 
-}
-
-let note=
-$("transactionNote")
-.value
-.trim();
-
-if(transactionEdit<0){
-
-account.transactions.push(
-{
-id:makeId(),
-type:transactionType,
-amount:String(numeric),
-note:note
-}
-);
-
-}else{
-
-let transaction=
-account.transactions[transactionEdit];
-
-if(!transaction){
-
-return;
-
-}
-
-transaction.type=
-transactionType;
-
-transaction.amount=
-String(numeric);
-
-transaction.note=
-note;
-
-}
-
-saveLedger();
-
-closeTransactionModal();
-
-renderAccountDetail();
-
-renderLedger();
-
-}
-
-function deleteTransaction(){
-
-if(isSeller()){
-
-return;
-
-}
-
-let account=
-accountById(selectedAccountId);
-
-if(!account||transactionEdit<0){
+ closeModal();
 
-return;
-
-}
-
-if(
-!confirm(
-"این تراکنش حذف شود؟"
-)
-){
-
-return;
-
-}
-
-account.transactions.splice(
-transactionEdit,
-1
-);
-
-saveLedger();
-
-closeTransactionModal();
-
-renderAccountDetail();
-
-renderLedger();
-
-}
-
-function deleteTransactionById(id){
-
-if(isSeller()){
-
-return;
-
-}
-
-let account=
-accountById(selectedAccountId);
-
-if(!account){
-
-return;
-
-}
-
-let index=
-account.transactions.findIndex(
-transaction=>
-transaction.id===id
-);
-
-if(index<0){
-
-return;
-
 }
 
-if(
-!confirm(
-"این تراکنش حذف شود؟"
-)
-){
 
-return;
-
-}
+/* ارسال و دریافت */
 
-account.transactions.splice(
-index,
-1
-);
+function buildLedgerExport(){
 
-saveLedger();
+ ensureLedger();
 
-renderAccountDetail();
+ let accounts=
+  ledger.accounts
+  .filter(a=>
+   !isSeller()||
+   a.type==="creditor"
+  )
+  .map(a=>
+   JSON.parse(
+    JSON.stringify(a)
+   )
+  );
 
-renderLedger();
+ return{
+  version:1,
+  shareMode:
+   isSeller()
+   ?"seller"
+   :"management",
+  accounts
+ };
 
 }
 
-/* =========================================================
-   ارسال و دریافت لیست قیمت
-   ========================================================= */
 
 function exportPriceList(){
 
-if(!st()){
+ if(!st()){
 
-alert(
-"ابتدا یک فروشگاه انتخاب کنید."
-);
+  alert(
+   "ابتدا یک فروشگاه انتخاب کنید."
+  );
 
-return;
+  return;
 
-}
+ }
 
-ensureIds();
+ ensureIds();
+ ensureItemIds();
+ ensureLedger();
 
-ensureItemIds();
+ save();
+ saveLedger();
 
-save();
+ let exportedStore=
+  JSON.parse(
+   JSON.stringify(st())
+  );
 
-const packageData={
-type:"priceyar-price-list",
-version:2,
-createdAt:Date.now(),
-shareMode:isSeller()
-?
-"seller"
-:
-"management",
-stores:[
-JSON.parse(
-JSON.stringify(st())
-)
-],
-deleted:{}
-};
+ if(isSeller()){
 
-const json=
-JSON.stringify(
-packageData,
-null,
-2
-);
+  exportedStore.items.forEach(x=>{
 
-const fileName=
-"لیست جدید قیمت‌ها - برای به‌روزرسانی لمس کنید.json";
+   delete x.buy;
+   delete x.buyPrice;
+   delete x.purchasePrice;
 
-if(
-window.AndroidBridge&&
-AndroidBridge.sharePriceList
-){
+  });
 
-try{
+ }
 
-AndroidBridge.sharePriceList(
-json,
-fileName
-);
+ let p={
+  type:"priceyar-price-list",
+  version:3,
+  createdAt:Date.now(),
+  shareMode:
+   isSeller()
+   ?"seller"
+   :"management",
+  stores:[
+   exportedStore
+  ],
+  ledger:buildLedgerExport(),
+  deleted:{}
+ };
 
-return;
+ let j=
+  JSON.stringify(
+   p,
+   null,
+   2
+  );
 
-}catch(e){
+ let fn=
+  "لیست جدید قیمت‌ها - برای به‌روزرسانی لمس کنید.json";
 
-console.log(
-"Native share error:",
-e
-);
 
-}
+ try{
 
-}
+  if(
+   window.AndroidBridge&&
+   window.AndroidBridge.sharePriceList
+  ){
 
-if(
-window.AndroidBridge&&
-AndroidBridge.exportPriceList
-){
+   return window.AndroidBridge.sharePriceList(
+    j,
+    fn
+   );
 
-try{
+  }
 
-AndroidBridge.exportPriceList(
-json,
-fileName
-);
+ }catch(e){}
 
-return;
 
-}catch(e){
+ try{
 
-console.log(
-"Native export error:",
-e
-);
+  if(
+   window.AndroidBridge&&
+   window.AndroidBridge.exportPriceList
+  ){
 
-}
+   return window.AndroidBridge.exportPriceList(
+    j,
+    fn
+   );
 
-}
+  }
 
-try{
+ }catch(e){}
 
-const blob=
-new Blob(
-[json],
-{
-type:
-"application/json;charset=utf-8"
-}
-);
 
-const a=
-document.createElement("a");
+ try{
 
-const url=
-URL.createObjectURL(blob);
+  let a=document.createElement("a");
 
-a.href=url;
+  let u=URL.createObjectURL(
+   new Blob(
+    [j],
+    {
+     type:"application/json;charset=utf-8"
+    }
+   )
+  );
 
-a.download=fileName;
+  a.href=u;
+  a.download=fn;
+  a.click();
 
-document.body.appendChild(a);
+  setTimeout(
+   ()=>URL.revokeObjectURL(u),
+   2000
+  );
 
-a.click();
+ }catch(e){
 
-a.remove();
+  alert(
+   "امکان ساخت فایل وجود ندارد."
+  );
 
-setTimeout(
-()=>{
-URL.revokeObjectURL(url);
-},
-2000
-);
-
-}catch(e){
-
-alert(
-"امکان ساخت فایل وجود ندارد."
-);
+ }
 
 }
 
-}
 
 function updatePriceList(){
 
-if(
-window.AndroidBridge&&
-AndroidBridge.importPriceList
+ try{
+
+  if(
+   window.AndroidBridge&&
+   window.AndroidBridge.importPriceList
+  ){
+
+   return window.AndroidBridge.importPriceList();
+
+  }
+
+ }catch(e){}
+
+ $("updateFile").value="";
+
+ $("updateFile").click();
+
+}
+
+
+function importLedgerFromPackage(
+ incomingLedger,
+ incomingShareMode
 ){
 
-try{
+ if(
+  !incomingLedger||
+  !Array.isArray(incomingLedger.accounts)
+ )
+  return;
 
-AndroidBridge.importPriceList();
+ ensureLedger();
 
-return;
+ let incomingAccounts=
+  incomingLedger.accounts
+  .filter(Boolean)
+  .map(a=>{
 
-}catch(e){
+   let type=
+    a.type==="debtor"
+    ?"debtor"
+    :"creditor";
 
-console.log(
-"Native import error:",
-e
-);
+   return{
+    id:a.id||makeId(),
+    type,
+    name:String(a.name||"").trim(),
+    phone:String(a.phone||"").trim(),
+    note:String(a.note||"").trim(),
+    transactions:
+     Array.isArray(a.transactions)
+     ?a.transactions.map(t=>({
+       id:t.id||makeId(),
+       amount:
+        t.amount!==undefined
+        ?String(t.amount)
+        :"0",
+       date:
+        t.date||todayIso(),
+       note:
+        String(t.note||"").trim()
+      }))
+     :[]
+   };
 
-}
+  })
+  .filter(a=>a.name);
 
-}
 
-const input=
-$("updateFile");
+ let sellerFile=
+  incomingShareMode==="seller";
 
-input.value="";
+ if(sellerFile){
 
-input.click();
+  /*
+   فایل فروشنده فقط بستانکار دارد.
+   بدهکارهای موجود مدیریت دست‌نخورده باقی می‌مانند.
+  */
 
-}
+  let localDebtors=
+   ledger.accounts.filter(
+    a=>a.type==="debtor"
+   );
 
-window.receiveImportedPriceList=
-function(text){
+  let incomingCreditors=
+   incomingAccounts.filter(
+    a=>a.type==="creditor"
+   );
 
-try{
+  ledger.accounts=[
+   ...localDebtors,
+   ...incomingCreditors
+  ];
 
-const incoming=
-JSON.parse(text);
+ }else{
 
-if(
-!incoming||
-incoming.type!=="priceyar-price-list"||
-!Array.isArray(incoming.stores)
-){
+  /*
+   فایل مدیریت شامل هر دو نوع حساب است.
+  */
 
-throw new Error("invalid");
+  ledger.accounts=
+   incomingAccounts;
 
-}
+ }
 
-let isSellerFile=false;
-
-if(
-incoming.shareMode==="seller"
-){
-
-isSellerFile=true;
-
-}else if(
-incoming.shareMode==="management"
-){
-
-isSellerFile=false;
-
-}else{
-
-let allItems=[];
-
-incoming.stores.forEach(
-store=>{
-
-if(
-Array.isArray(store.items)
-){
-
-allItems=
-allItems.concat(
-store.items
-);
-
-}
-
-});
-
-if(allItems.length>0){
-
-isSellerFile=
-allItems.every(
-item=>
-!Object.prototype.hasOwnProperty.call(
-item,
-"buy"
-)
-);
+ saveLedger();
 
 }
 
-}
 
-setMode(
-isSellerFile
-?
-"seller"
-:
-"management"
-);
+/* ورود لیست */
 
-if(!Array.isArray(data.stores)){
+window.receiveImportedPriceList=function(text){
 
-data.stores=[];
+ try{
 
-}
+  let incoming=
+   JSON.parse(text);
 
-let updatedStores=0;
+  if(
+   !incoming||
+   incoming.type!=="priceyar-price-list"||
+   !Array.isArray(incoming.stores)
+  )
+   throw 0;
 
-let addedStores=0;
 
-let updatedItems=0;
+  let seller=
+   incoming.shareMode==="seller";
 
-let addedItems=0;
 
-let firstImportedStore=null;
+  /*
+   سازگاری با فایل‌های قدیمی
+  */
 
-incoming.stores.forEach(
-inStore=>{
+  if(
+   incoming.shareMode!=="seller"&&
+   incoming.shareMode!=="management"
+  ){
 
-if(!inStore){
+   let all=
+    incoming.stores.flatMap(
+     s=>
+      Array.isArray(s.items)
+      ?s.items
+      :[]
+    );
 
-return;
+   seller=
+    all.length>0&&
+    all.every(
+     x=>
+      !Object.prototype.hasOwnProperty
+       .call(x,"buy")
+    );
 
-}
+  }
 
-const incomingName=
-String(
-inStore.name||
-""
-).trim();
 
-if(!incomingName){
+  setMode(
+   seller
+   ?"seller"
+   :"management"
+  );
 
-return;
 
-}
+  let first=null;
 
-let localIndex=
-data.stores.findIndex(
-s=>
-normalizeName(s.name)===
-normalizeName(incomingName)
-);
 
-let localStore;
+  incoming.stores.forEach(ins=>{
 
-if(localIndex<0){
+   if(!ins)return;
 
-localStore={
-id:
-inStore.id||
-makeId(),
+   let name=
+    String(ins.name||"").trim();
 
-name:
-incomingName,
+   if(!name)return;
 
-items:[]
-};
 
-data.stores.push(localStore);
+   let i=
+    data.stores.findIndex(
+     s=>
+      normalizeName(s.name)===
+      normalizeName(name)
+    );
 
-localIndex=
-data.stores.length-1;
 
-addedStores++;
+   let s;
 
-}else{
+   if(i<0){
 
-localStore=
-data.stores[localIndex];
+    s={
+     id:ins.id||makeId(),
+     name,
+     items:[]
+    };
 
-updatedStores++;
+    data.stores.push(s);
 
-if(!localStore.id){
+    i=data.stores.length-1;
 
-localStore.id=
-inStore.id||
-makeId();
+   }else{
 
-}
+    s=data.stores[i];
 
-}
+   }
 
-if(!Array.isArray(inStore.items)){
 
-inStore.items=[];
+   if(!Array.isArray(ins.items))
+    ins.items=[];
 
-}
 
-const newItems=[];
+   /*
+    کالاهای فروشگاه واردشده
+    منبع اصلی هستند.
+   */
 
-inStore.items.forEach(
-remoteItem=>{
+   s.name=name;
 
-if(!remoteItem){
+   s.items=
+    ins.items
+    .filter(Boolean)
+    .map(r=>{
 
-return;
+     let old=
+      s.items.find(
+       x=>
+        normalizeName(x.name)===
+        normalizeName(r.name)
+      );
 
-}
+     let x={
+      id:r.id||old?.id||makeId(),
+      name:
+       String(r.name||"").trim(),
+      price:
+       r.price||"",
+      desc:
+       r.desc||"",
+      last:
+       Number(r.last||Date.now())
+     };
 
-const remoteName=
-String(
-remoteItem.name||
-""
-).trim();
+     if(!seller)
+      x.buy=r.buy||"";
 
-if(!remoteName){
+     return x;
 
-return;
+    });
 
-}
 
-const oldItem=
-localStore.items.find(
-item=>
-normalizeName(item.name)===
-normalizeName(remoteName)
-);
+   if(!first)
+    first=s;
 
-const newItem={
-id:
-remoteItem.id||
-(oldItem&&oldItem.id)||
-makeId(),
+  });
 
-name:
-remoteName,
 
-price:
-remoteItem.price||"",
+  if(first)
+   data.active=
+    data.stores.indexOf(first);
 
-desc:
-remoteItem.desc||"",
 
-last:
-Number(
-remoteItem.last||
-Date.now()
-)
-};
+  ensureIds();
+  ensureItemIds();
 
-if(!isSellerFile){
+  if(seller)
+   cleanSellerData();
 
-newItem.buy=
-remoteItem.buy||
-"";
 
-}
+  save();
 
-newItems.push(newItem);
 
-if(oldItem){
+  /*
+   دفتر حساب جداگانه وارد می‌شود.
+  */
 
-updatedItems++;
+  importLedgerFromPackage(
+   incoming.ledger,
+   incoming.shareMode
+  );
 
-}else{
 
-addedItems++;
+  updateStoreButton();
 
-}
+  applyMode();
 
-});
 
-localStore.name=
-incomingName;
+  alert(
+   "لیست با موفقیت وارد شد.\n\n"+
+   "فروشگاه، کالاها و اطلاعات دفتر حساب مطابق نسخه فایل وارد شدند."
+  );
 
-localStore.items=
-newItems;
 
-if(!firstImportedStore){
+ }catch(e){
 
-firstImportedStore=
-localStore;
+  alert(
+   "فایل انتخاب‌شده معتبر نیست.\n\n"+
+   "لطفاً فایل لیست PriceYar را انتخاب کن."
+  );
 
-}
-
-});
-
-if(firstImportedStore){
-
-const importedIndex=
-data.stores.indexOf(
-firstImportedStore
-);
-
-if(importedIndex>=0){
-
-data.active=
-importedIndex;
+ }
 
 }
 
-}
-
-ensureIds();
-
-ensureItemIds();
-
-if(isSellerFile){
-
-cleanSellerData();
-
-}
-
-save();
-
-updateStoreButton();
-
-applyMode();
-
-const totalChanged=
-updatedStores+
-addedStores+
-updatedItems+
-addedItems;
-
-if(totalChanged){
-
-alert(
-"لیست با موفقیت وارد شد.\n\n"+
-"فروشگاه و کالاها دقیقاً مطابق فایل تنظیم شدند."
-);
-
-}else{
-
-alert(
-"لیست وارد شد و وضعیت فروشگاه مطابق فایل تنظیم شد."
-);
-
-}
-
-}catch(error){
-
-console.log(
-"Import error:",
-error
-);
-
-alert(
-"فایل انتخاب‌شده معتبر نیست.\n\n"+
-"لطفاً فایل لیست PriceYar را انتخاب کن."
-);
-
-}
-
-};
 
 function importPriceList(e){
 
-const file=
-e.target.files[0];
+ let f=e.target.files[0];
 
-if(!file){
+ if(!f)return;
 
-return;
+ let r=new FileReader();
+
+ r.onload=()=>
+  receiveImportedPriceList(
+   r.result
+  );
+
+ r.readAsText(f);
+
+ e.target.value="";
 
 }
 
-const reader=
-new FileReader();
 
-reader.onload=()=>
-{
+/* دفتر حساب */
 
-window.receiveImportedPriceList(
-reader.result
+function ensureLedger(){
+
+ if(!Array.isArray(ledger.accounts))
+  ledger.accounts=[];
+
+
+ ledger.accounts.forEach(a=>{
+
+  if(!a.id)
+   a.id=makeId();
+
+  if(
+   a.type!=="creditor"&&
+   a.type!=="debtor"
+  )
+   a.type="creditor";
+
+
+  if(!Array.isArray(a.transactions))
+   a.transactions=[];
+
+
+  a.transactions=
+   a.transactions.map(t=>{
+
+    /*
+     سازگاری با ساختار قدیمی
+    */
+
+    return{
+     id:t.id||makeId(),
+     amount:
+      t.amount!==undefined
+      ?String(t.amount)
+      :"0",
+     date:
+      t.date||todayIso(),
+     note:
+      String(t.note||"")
+    };
+
+   });
+
+ });
+
+}
+
+
+function accountTotal(a){
+
+ return (a.transactions||[])
+ .reduce(
+  (sum,t)=>
+   sum+
+   parseAmount(t.amount),
+  0
+ );
+
+}
+
+
+function openLedger(){
+
+ ensureLedger();
+
+ $("ledgerAddBtn").style.display=
+  isSeller()
+  ?"none"
+  :"block";
+
+
+ $("debtorTypeBtn").style.display=
+  isSeller()
+  ?"none"
+  :"block";
+
+
+ $("ledgerSearch").value="";
+
+ ledgerFilter=
+  isSeller()
+  ?"creditor"
+  :"all";
+
+
+ updateLedgerFilterButtons();
+
+ renderAccounts();
+
+ $("ledgerModal").style.display="flex";
+
+}
+
+
+function closeLedger(){
+
+ $("ledgerModal").style.display="none";
+
+}
+
+
+function setLedgerFilter(filter){
+
+ if(isSeller()){
+
+  ledgerFilter="creditor";
+
+ }else{
+
+  ledgerFilter=
+   filter==="creditor"||
+   filter==="debtor"
+   ?filter
+   :"all";
+
+ }
+
+ updateLedgerFilterButtons();
+
+ renderAccounts();
+
+}
+
+
+function updateLedgerFilterButtons(){
+
+ document
+ .querySelectorAll(".ledgerFilter")
+ .forEach(btn=>{
+
+  btn.classList.toggle(
+   "active",
+   btn.dataset.filter===ledgerFilter
+  );
+
+ });
+
+}
+
+
+$("ledgerSearch").addEventListener(
+ "input",
+ renderAccounts
 );
 
+
+function renderAccounts(){
+
+ ensureLedger();
+
+ let q=
+  $("ledgerSearch")
+  ?$("ledgerSearch").value
+   .trim()
+   .toLocaleLowerCase()
+  :"";
+
+
+ let accounts=
+  ledger.accounts.filter(a=>{
+
+   if(isSeller()&&a.type!=="creditor")
+    return false;
+
+   if(
+    !isSeller()&&
+    ledgerFilter!=="all"&&
+    a.type!==ledgerFilter
+   )
+    return false;
+
+   if(!q)
+    return true;
+
+   return(
+    String(a.name||"")
+     .toLocaleLowerCase()
+     .includes(q)||
+    String(a.phone||"")
+     .toLocaleLowerCase()
+     .includes(q)||
+    String(a.note||"")
+     .toLocaleLowerCase()
+     .includes(q)
+   );
+
+  });
+
+
+ let box=$("accountList");
+
+ box.innerHTML="";
+
+
+ if(!accounts.length){
+
+  box.innerHTML=
+   '<div class="empty">'+
+   (
+    q
+    ?"حسابی با این مشخصات پیدا نشد."
+    :"هنوز حسابی ساخته نشده است."
+   )+
+   '</div>';
+
+  return;
+
+ }
+
+
+ let groups=[
+  {
+   type:"creditor",
+   title:"بستانکاران — طلب ما"
+  },
+  {
+   type:"debtor",
+   title:"بدهکاران — بدهی ما"
+  }
+ ];
+
+
+ groups.forEach(group=>{
+
+  let list=
+   accounts.filter(
+    a=>a.type===group.type
+   );
+
+  if(!list.length)return;
+
+
+  let title=
+   document.createElement("div");
+
+  title.className=
+   "accountGroupTitle";
+
+  title.textContent=
+   group.title;
+
+  box.appendChild(title);
+
+
+  list.forEach(a=>{
+
+   let total=
+    accountTotal(a);
+
+   let d=
+    document.createElement("div");
+
+   d.className="accountRow";
+
+   d.innerHTML=
+    '<div>'+
+     '<div class="accountName">'+
+      esc(a.name)+
+     '</div>'+
+     '<div class="accountMeta">'+
+      (a.phone
+       ?esc(a.phone)+" • "
+       :"")+
+      faDigits(
+       a.transactions.length
+      )+
+      " ثبت"+
+     '</div>'+
+     '<div class="accountType">'+
+      (
+       a.type==="debtor"
+       ?"بدهی ما به این شخص / شرکت"
+       :"مبلغی که این شخص به ما بدهکار است"
+      )+
+     '</div>'+
+    '</div>'+
+    '<div class="balance '+
+     a.type+
+     '">'+
+     formatAmount(total)+
+     '</div>';
+
+
+   d.onclick=()=>
+    openAccount(
+     ledger.accounts.indexOf(a)
+    );
+
+
+   box.appendChild(d);
+
+  });
+
+ });
+
+}
+
+
+function openAccount(i){
+
+ activeAccount=i;
+
+ let a=
+  ledger.accounts[i];
+
+ if(!a)return;
+
+ $("accountTitle").textContent=
+  a.name;
+
+ $("accountModal").style.display=
+  "flex";
+
+ renderAccount();
+
+}
+
+
+function closeAccount(){
+
+ $("accountModal").style.display=
+  "none";
+
+ activeAccount=-1;
+
+}
+
+
+function renderAccount(){
+
+ let a=
+  ledger.accounts[activeAccount];
+
+ if(!a)return;
+
+
+ let total=
+  accountTotal(a);
+
+
+ let typeText=
+  a.type==="debtor"
+  ?"بدهکار — بدهی ما"
+  :"بستانکار — طلب ما";
+
+
+ let h=
+  '<div class="summary">'+
+
+   '<div class="summaryMain">'+
+    '<div class="summaryLabel">'+
+     esc(typeText)+
+    '</div>'+
+    '<div class="summaryAmount">'+
+     formatAmount(total)+
+    '</div>'+
+    '<div class="summaryLabel">'+
+     'مبلغ کل حساب'+
+    '</div>'+
+   '</div>'+
+
+   '<div class="summaryLine">'+
+    '<span>تعداد ثبت‌ها</span>'+
+    '<strong>'+
+     faDigits(
+      a.transactions.length
+     )+
+    '</strong>'+
+   '</div>'+
+
+  '</div>';
+
+
+ if(a.phone){
+
+  h+=
+   '<div class="sub">'+
+   'تلفن: '+
+   esc(a.phone)+
+   '</div>';
+
+ }
+
+
+ if(a.note){
+
+  h+=
+   '<div class="sub">'+
+   esc(a.note)+
+   '</div>';
+
+ }
+
+
+ if(!isSeller()){
+
+  h+=
+   '<div class="accountActions">'+
+
+    '<button class="smallBtn" '+
+     'onclick="openAccountForm('+activeAccount+')">'+
+     'ویرایش حساب'+
+    '</button>'+
+
+    '<button class="smallBtn danger" '+
+     'onclick="deleteAccount('+activeAccount+')">'+
+     'حذف حساب'+
+    '</button>'+
+
+    '<button class="smallBtn" '+
+     'onclick="openTxForm()">'+
+     '＋ ثبت مبلغ'+
+    '</button>'+
+
+   '</div>';
+
+ }
+
+
+ h+=
+  '<div class="section">'+
+   '<b>جزئیات حساب</b>'+
+   '<span>'+
+    faDigits(
+     a.transactions.length
+    )+
+   ' ثبت</span>'+
+  '</div>';
+
+
+ if(!a.transactions.length){
+
+  h+=
+   '<div class="empty">'+
+   (
+    isSeller()
+    ?"هنوز مبلغی برای این حساب ثبت نشده است."
+    :"هنوز مبلغی ثبت نشده است."
+   )+
+   '</div>';
+
+ }else{
+
+  a.transactions
+   .slice()
+   .sort(
+    (x,y)=>
+     String(y.date||"")
+     .localeCompare(
+      String(x.date||"")
+     )
+   )
+   .forEach(t=>{
+
+    let real=
+     a.transactions.indexOf(t);
+
+    h+=
+     '<div class="txRow">'+
+
+      '<div class="txDate">'+
+       'تاریخ: '+
+       formatLedgerDate(t.date)+
+      '</div>'+
+
+      '<div class="txTop">'+
+       '<span>مبلغ</span>'+
+       '<span class="txAmount">'+
+        formatAmount(
+         parseAmount(t.amount)
+        )+
+       '</span>'+
+      '</div>'+
+
+      (
+       t.note
+       ?'<div class="txNote">'+
+        esc(t.note)+
+        '</div>'
+       :""
+      )+
+
+      (
+       !isSeller()
+       ?
+       '<div class="txActions">'+
+        '<button onclick="openTxForm('+real+')">'+
+         'ویرایش'+
+        '</button>'+
+        '<button onclick="deleteTransaction('+real+')">'+
+         'حذف'+
+        '</button>'+
+       '</div>'
+       :""
+      )+
+
+     '</div>';
+
+   });
+
+ }
+
+
+ $("accountContent").innerHTML=h;
+
+}
+
+
+/* ساخت / ویرایش حساب */
+
+function setAccountType(type){
+
+ if(isSeller()){
+
+  accountType="creditor";
+
+ }else{
+
+  accountType=
+   type==="debtor"
+   ?"debtor"
+   :"creditor";
+
+ }
+
+
+ $("creditorTypeBtn")
+  .classList
+  .toggle(
+   "active",
+   accountType==="creditor"
+  );
+
+
+ $("debtorTypeBtn")
+  .classList
+  .toggle(
+   "active",
+   accountType==="debtor"
+  );
+
+}
+
+
+function openAccountForm(i=-1){
+
+ if(isSeller())return;
+
+ accountEdit=i;
+
+ $("accountFormTitle").textContent=
+  i<0
+  ?"حساب جدید"
+  :"ویرایش حساب";
+
+
+ let a=
+  i<0
+  ?{
+    name:"",
+    phone:"",
+    note:"",
+    type:"creditor"
+   }
+  :ledger.accounts[i];
+
+
+ accountType=
+  a.type==="debtor"
+  ?"debtor"
+  :"creditor";
+
+
+ $("accountName").value=
+  a.name||"";
+
+ $("accountPhone").value=
+  a.phone||"";
+
+ $("accountNote").value=
+  a.note||"";
+
+
+ $("debtorTypeBtn").style.display=
+  "block";
+
+
+ setAccountType(accountType);
+
+
+ $("accountFormModal")
+  .style
+  .display="flex";
+
+}
+
+
+function closeAccountForm(){
+
+ $("accountFormModal")
+  .style
+  .display="none";
+
+}
+
+
+function saveAccount(){
+
+ if(isSeller())return;
+
+ let n=
+  $("accountName")
+  .value
+  .trim();
+
+
+ if(!n){
+
+  alert(
+   "نام حساب را وارد کن"
+  );
+
+  return;
+
+ }
+
+
+ let a;
+
+
+ if(accountEdit<0){
+
+  a={
+   id:makeId(),
+   type:accountType,
+   name:n,
+   phone:$("accountPhone")
+    .value
+    .trim(),
+   note:$("accountNote")
+    .value
+    .trim(),
+   transactions:[]
+  };
+
+  ledger.accounts.push(a);
+
+  activeAccount=
+   ledger.accounts.length-1;
+
+ }else{
+
+  a=
+   ledger.accounts[accountEdit];
+
+  a.type=accountType;
+
+  a.name=n;
+
+  a.phone=
+   $("accountPhone")
+   .value
+   .trim();
+
+  a.note=
+   $("accountNote")
+   .value
+   .trim();
+
+  activeAccount=accountEdit;
+
+ }
+
+
+ saveLedger();
+
+ closeAccountForm();
+
+ renderAccounts();
+
+ if(
+  $("accountModal").style.display==="flex"
+ )
+  renderAccount();
+
+}
+
+
+/* حذف حساب */
+
+function deleteAccount(i){
+
+ if(isSeller())return;
+
+ if(
+  !confirm(
+   "این حساب و تمام جزئیات آن حذف شود؟"
+  )
+ )
+  return;
+
+ ledger.accounts.splice(
+  i,
+  1
+ );
+
+ saveLedger();
+
+ closeAccount();
+
+ renderAccounts();
+
+}
+
+
+/* ثبت مبلغ */
+
+function openTxForm(i=-1){
+
+ if(
+  isSeller()||
+  activeAccount<0
+ )return;
+
+
+ txEdit=i;
+
+ let a=
+  ledger.accounts[activeAccount];
+
+
+ let t=
+  i<0
+  ?{
+    amount:"",
+    date:todayIso(),
+    note:""
+   }
+  :a.transactions[i];
+
+
+ $("txTitle").textContent=
+  i<0
+  ?"ثبت مبلغ"
+  :"ویرایش مبلغ";
+
+
+ $("txAccountType").textContent=
+  a.type==="debtor"
+  ?"بدهکار — بدهی ما"
+  :"بستانکار — طلب ما";
+
+
+ $("txAmount").value=
+  t.amount||"";
+
+ $("txDate").value=
+  t.date||todayIso();
+
+ $("txNote").value=
+  t.note||"";
+
+
+ $("txModal").style.display=
+  "flex";
+
+ setTimeout(
+  ()=>$("txAmount").focus(),
+  80
+ );
+
+}
+
+
+function closeTx(){
+
+ $("txModal").style.display=
+  "none";
+
+}
+
+
+function saveTransaction(){
+
+ if(
+  isSeller()||
+  activeAccount<0
+ )
+  return;
+
+
+ let amount=
+  parseAmount(
+   $("txAmount").value
+  );
+
+
+ if(amount<=0){
+
+  alert(
+   "مبلغ را وارد کن"
+  );
+
+  return;
+
+ }
+
+
+ let date=
+  $("txDate").value||
+  todayIso();
+
+
+ let a=
+  ledger.accounts[activeAccount];
+
+
+ let t;
+
+
+ if(txEdit<0){
+
+  t={
+   id:makeId(),
+   amount:String(amount),
+   date,
+   note:
+    $("txNote").value.trim()
+  };
+
+  a.transactions.push(t);
+
+ }else{
+
+  t=a.transactions[txEdit];
+
+  t.amount=String(amount);
+
+  t.date=date;
+
+  t.note=
+   $("txNote").value.trim();
+
+ }
+
+
+ saveLedger();
+
+ closeTx();
+
+ renderAccount();
+
+}
+
+
+function deleteTransaction(i){
+
+ if(
+  isSeller()||
+  activeAccount<0
+ )
+  return;
+
+
+ if(
+  !confirm(
+   "این مبلغ از حساب حذف شود؟"
+  )
+ )
+  return;
+
+
+ ledger.accounts[
+  activeAccount
+ ].transactions.splice(
+  i,
+  1
+ );
+
+
+ saveLedger();
+
+ renderAccount();
+
+}
+
+
+/* بستن مودال با لمس بیرون */
+
+[
+ "modal",
+ "settingsModal",
+ "ledgerModal",
+ "accountModal",
+ "accountFormModal",
+ "txModal"
+].forEach(id=>{
+
+ $(id).addEventListener(
+  "click",
+  e=>{
+
+   if(e.target.id!==id)
+    return;
+
+   if(id==="modal")
+    closeModal();
+
+   else if(id==="settingsModal")
+    closeSettings();
+
+   else if(id==="ledgerModal")
+    closeLedger();
+
+   else if(id==="accountModal")
+    closeAccount();
+
+   else if(id==="accountFormModal")
+    closeAccountForm();
+
+   else
+    closeTx();
+
+  }
+ );
+
+});
+
+
+$("search").addEventListener(
+ "input",
+ render
+);
+
+
+$("search").addEventListener(
+ "focus",
+ ()=>setTimeout(
+  ()=>
+   $("search").scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+   }),
+  250
+ )
+);
+
+
+/* سازگاری با AndroidBridge */
+
+window.exportFinished=function(){};
+
+window.exportCancelled=function(){};
+
+window.exportFailed=function(){
+ alert("ارسال فایل انجام نشد.");
 };
 
-reader.readAsText(file);
-
-e.target.value="";
-
-}
-
-window.exportFinished=
-function(){};
-
-window.exportCancelled=
-function(){};
-
-window.exportFailed=
-function(){
-
-alert(
-"ارسال یا آماده‌سازی فایل انجام نشد.\n\n"+
-"لطفاً دوباره تلاش کن."
-);
-
+window.importFailed=function(){
+ alert("وارد کردن فایل انجام نشد.");
 };
 
-window.importFailed=
-function(){
 
-alert(
-"خواندن فایل انجام نشد.\n\n"+
-"لطفاً دوباره فایل را انتخاب کن."
-);
-
-};
-
-/* =========================================================
-   رویدادها
-   ========================================================= */
-
-$("search")
-.addEventListener(
-"input",
-render
-);
-
-$("search")
-.addEventListener(
-"focus",
-()=>{
-
-setTimeout(
-()=>
-$("search").scrollIntoView(
-{
-behavior:"smooth",
-block:"start"
-}
-),
-250
-);
-
-});
-
-$("modal")
-.addEventListener(
-"click",
-e=>{
-
-if(
-e.target.id==="modal"
-){
-
-closeModal();
-
-}
-
-});
-
-$("settingsModal")
-.addEventListener(
-"click",
-e=>{
-
-if(
-e.target.id==="settingsModal"
-){
-
-closeSettings();
-
-}
-
-});
-
-$("ledgerModal")
-.addEventListener(
-"click",
-e=>{
-
-if(
-e.target.id==="ledgerModal"
-){
-
-closeLedger();
-
-}
-
-});
-
-$("accountModal")
-.addEventListener(
-"click",
-e=>{
-
-if(
-e.target.id==="accountModal"
-){
-
-closeAccountModal();
-
-}
-
-});
-
-$("accountDetailModal")
-.addEventListener(
-"click",
-e=>{
-
-if(
-e.target.id==="accountDetailModal"
-){
-
-closeAccountDetail();
-
-}
-
-});
-
-$("transactionModal")
-.addEventListener(
-"click",
-e=>{
-
-if(
-e.target.id==="transactionModal"
-){
-
-closeTransactionModal();
-
-}
-
-});
-
-/* شروع برنامه */
+/* شروع */
 
 ensureIds();
 
@@ -4795,93 +3784,62 @@ updateStoreButton();
 
 applyMode();
 
-if(
-window.AndroidBridge&&
-AndroidBridge.loadData
-){
-
 try{
 
-const native=
-AndroidBridge.loadData();
+ if(
+  window.AndroidBridge&&
+  window.AndroidBridge.loadData
+ ){
 
-if(native){
+  let n=
+   window.AndroidBridge.loadData();
 
-data=
-JSON.parse(native);
+  if(n){
 
-ensureIds();
+   data=JSON.parse(n);
 
-ensureItemIds();
+   ensureIds();
 
-localStorage.setItem(
-K,
-JSON.stringify(data)
-);
+   ensureItemIds();
 
-updateStoreButton();
+   localStorage.setItem(
+    K,
+    JSON.stringify(data)
+   );
 
-render();
+  }else{
 
-}else{
+   if(
+    window.AndroidBridge.saveData
+   ){
 
-if(!data.stores.length){
+    window.AndroidBridge.saveData(
+     JSON.stringify(data)
+    );
 
-data.active=-1;
+   }
 
-}
+  }
 
-AndroidBridge.saveData(
-JSON.stringify(data)
-);
+ }
 
-}
+}catch(e){}
 
-}catch(e){
-
-console.log(
-"Native load error:",
-e
-);
-
-}
-
-}
-
-if(!data.stores.length){
-
-data.active=-1;
 
 updateStoreButton();
 
 render();
 
-}else{
 
-ensureIds();
+if("serviceWorker"in navigator){
 
-ensureItemIds();
-
-updateStoreButton();
-
-render();
-
-}
-
-if(
-"serviceWorker"
-in navigator
-){
-
-window.addEventListener(
-"load",
-()=>{
-
-navigator.serviceWorker
-.register("sw.js")
-.catch(()=>{});
-
-});
+ window.addEventListener(
+  "load",
+  ()=>
+   navigator.serviceWorker
+   .register("sw.js")
+   .catch(()=>{})
+ );
 
 }
 
