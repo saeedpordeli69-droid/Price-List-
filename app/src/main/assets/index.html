@@ -11,6 +11,7 @@
 <link rel="manifest" href="manifest.json">
 <title>مدیریت قیمت فروشگاه</title>
 <style>
+:root{--font-scale:1;--app-font:system-ui}
 *{
 box-sizing:border-box}
 html,body{
@@ -18,7 +19,7 @@ margin:0;
 padding:0;
 background:#000;
 color:#fff;
-font-family:system-ui,-apple-system,"Noto Sans Arabic","Noto Sans",sans-serif}
+font-family:var(--app-font,system-ui),system-ui,-apple-system,"Noto Sans Arabic","Noto Sans",sans-serif}
 body{
 min-height:100vh}
 body.light{
@@ -36,26 +37,12 @@ justify-content:space-between;
 align-items:center;
 gap:10px;
 margin-top:8px}
-.ledgerMiniLogo{
-display:inline-block;
-width:30px;
-height:22px;
-position:relative;
-margin-left:8px;
-vertical-align:-5px;
-opacity:.95}
-.ledgerMiniLogo:before{
-content:"";
-position:absolute;
-right:2px;
-left:2px;
-top:3px;
-height:2px;
-background:currentColor;
-box-shadow:0 7px 0 currentColor,0 14px 0 currentColor;
-border-radius:2px}
-.ledgerMiniLogo:after{display:none}
+.ledgerMiniLogo{display:inline-block;width:34px;height:38px;position:relative;margin-left:8px;vertical-align:-9px;opacity:.95}
+.ledgerMiniLogo:before{content:"";position:absolute;right:3px;top:2px;width:25px;height:29px;border:3px solid currentColor;border-radius:5px;background:linear-gradient(currentColor,currentColor) 5px 7px/15px 2px no-repeat,linear-gradient(currentColor,currentColor) 5px 14px/15px 2px no-repeat,linear-gradient(currentColor,currentColor) 5px 21px/15px 2px no-repeat}
+.ledgerMiniLogo:after{content:"";position:absolute;left:0;bottom:0;width:13px;height:13px;border:3px solid currentColor;border-radius:50%;background:inherit}
 .ledgerMiniLogo i{display:none}
+.infoIcon{display:inline-block;width:19px;height:16px;position:relative;vertical-align:-2px;margin-right:5px}
+.infoIcon:before{content:"";position:absolute;right:0;left:0;top:2px;height:2px;background:currentColor;box-shadow:0 6px 0 currentColor,0 12px 0 currentColor;border-radius:2px}
 .ledgerBtn{
 height:40px;
 padding:0 15px;
@@ -63,7 +50,7 @@ border-radius:12px;
 background:#111;
 color:#fff;
 border:1px solid #333;
-font-size:14px;
+font-size:calc(14px * var(--font-scale));
 font-weight:800}
 .storeBox{
 position:relative;
@@ -75,7 +62,7 @@ border-radius:16px;
 background:#111;
 color:#fff;
 border:1px solid #333;
-font-size:23px;
+font-size:calc(23px * var(--font-scale));
 font-weight:850;
 text-align:center;
 padding:5px 55px 0;
@@ -111,7 +98,7 @@ display:block}
 .storeItem{
 padding:13px;
 border-radius:10px;
-font-size:16px;
+font-size:calc(16px * var(--font-scale));
 margin-bottom:4px}
 .storeItem.active{
 background:#252525}
@@ -128,7 +115,7 @@ border-radius:12px;
 border:1px solid #444;
 background:#351010;
 color:#fff;
-font-size:15px;
+font-size:calc(15px * var(--font-scale));
 font-weight:800}
 .searchWrap{
 position:relative}
@@ -139,7 +126,7 @@ background:#151515;
 border:1px solid #363636;
 border-radius:16px;
 color:#fff;
-font-size:18px;
+font-size:calc(18px * var(--font-scale));
 padding:0 52px 0 18px;
 outline:0}
 .searchIcon{
@@ -147,7 +134,7 @@ position:absolute;
 right:17px;
 top:14px;
 color:#aaa;
-font-size:25px;
+font-size:calc(25px * var(--font-scale));
 pointer-events:none}
 .quickRow{
 display:flex;
@@ -157,7 +144,7 @@ margin-top:10px}
 flex:1;
 height:51px;
 border-radius:14px;
-font-size:16px;
+font-size:calc(16px * var(--font-scale));
 font-weight:800}
 .add{
 background:#000;
@@ -175,7 +162,7 @@ display:flex;
 justify-content:space-between;
 margin:23px 5px 8px}
 .section span{
-font-size:12px;
+font-size:calc(12px * var(--font-scale));
 color:#777}
 .rowWrap{
 position:relative;
@@ -196,9 +183,9 @@ user-select:none;
 touch-action:pan-y}
 .info{min-width:0;
 flex:1}
-.name{font-size:18px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.price{font-size:20px;font-weight:900;white-space:nowrap;flex:0 0 auto;color:var(--price-color,#fff)}
-.buy,.sub{font-size:12px;color:#888;margin-top:4px}
+.name{font-size:calc(18px * var(--font-scale));font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.price{font-size:calc(20px * var(--font-scale));font-weight:900;white-space:nowrap;flex:0 0 auto;color:var(--price-color,#fff)}
+.buy,.sub{font-size:calc(12px * var(--font-scale));color:#888;margin-top:4px}
 .empty{
 text-align:center;
 color:#888;
@@ -212,7 +199,7 @@ color:#fff;
 background:#111;
 border:1px solid #333}
 .settingsBtn{
-font-size:15px;
+font-size:calc(15px * var(--font-scale));
 font-weight:800}
 .file{
 display:none}
@@ -252,7 +239,7 @@ background:#1b1b1b;
 border:1px solid #444;
 border-radius:12px;
 color:#fff;
-font-size:17px;
+font-size:calc(17px * var(--font-scale));
 padding:0 14px;
 margin:5px 0;
 outline:0}
@@ -281,12 +268,12 @@ background:#351010;
 color:#fff}
 .modeBadge{
 text-align:center;
-font-size:11px;
+font-size:calc(11px * var(--font-scale));
 color:#777}
 .modeBadge.seller{
 color:#aaa}
 .settingTitle{
-font-size:13px;
+font-size:calc(13px * var(--font-scale));
 color:#888;
 margin:17px 2px 8px}
 .settingRow{
@@ -301,7 +288,7 @@ border-radius:11px;
 background:#181818;
 border:1px solid #333;
 color:#fff;
-font-size:14px;
+font-size:calc(14px * var(--font-scale));
 font-weight:700}
 .settingOption.active{
 border-color:#aaa;
@@ -319,6 +306,7 @@ color:#55d98b}
 color:#ffd75a}
 .colorRed{
 color:#ff6b6b}
+.colorOption.active{border:2px solid #fff;box-shadow:0 0 0 1px #fff, inset 0 0 0 1px #000;background:#292929}
 .settingsClose{
 margin-top:18px;
 width:100%;
@@ -355,10 +343,10 @@ align-items:center;
 justify-content:space-between;
 gap:10px}
 .accountName{
-font-size:17px;
+font-size:calc(17px * var(--font-scale));
 font-weight:850}
 .accountMeta{
-font-size:12px;
+font-size:calc(12px * var(--font-scale));
 color:#888;
 margin-top:4px}
 .balance{
@@ -384,11 +372,11 @@ font-weight:800}
 background:#351010}
 .actionPopup{max-width:520px;padding:22px 18px 20px}
 .actionPopup h2{margin:0 0 14px;text-align:center}
-.popupAction,.popupCancel{width:100%;height:48px;border-radius:12px;border:1px solid #444;background:#252525;color:#fff;font-size:16px;font-weight:850;margin-top:8px}
+.popupAction,.popupCancel{width:100%;height:48px;border-radius:12px;border:1px solid #444;background:#252525;color:#fff;font-size:calc(16px * var(--font-scale));font-weight:850;margin-top:8px}
 .popupAction.danger{background:#351010}
 .popupText{text-align:center;font-weight:750;color:#fff;margin:2px 0 8px}
 .popupCancel{background:#151515}
-.summary .sub{font-size:15px;color:#fff;font-weight:850;line-height:1.7;margin-top:10px}
+.summary .sub{font-size:calc(15px * var(--font-scale));color:#fff;font-weight:850;line-height:1.7;margin-top:10px}
 .txRow{
 padding:12px;
 border:1px solid #292929;
@@ -400,7 +388,7 @@ display:flex;
 justify-content:space-between;
 gap:8px}
 .txType{
-font-size:12px}
+font-size:calc(12px * var(--font-scale))}
 .txType.debit{
 color:#ff6b6b}
 .txType.credit{
@@ -408,7 +396,7 @@ color:#55d98b}
 .txAmount{
 font-weight:850}
 .txNote{
-font-size:12px;
+font-size:calc(12px * var(--font-scale));
 color:#888;
 margin-top:5px}
 .txActions{
@@ -454,7 +442,7 @@ border-radius:13px;
 background:#151515;
 color:#aaa;
 border:1px solid #333;
-font-size:17px;
+font-size:calc(17px * var(--font-scale));
 font-weight:850}
 .ledgerTab.creditor{
 color:#fff;
@@ -479,7 +467,7 @@ background:#151515;
 border:1px solid #333;
 border-radius:13px;
 color:#fff;
-font-size:16px;
+font-size:calc(16px * var(--font-scale));
 padding:0 14px;
 outline:0;
 margin:4px 0 8px}
@@ -512,11 +500,11 @@ align-items:center;
 justify-content:space-between;
 gap:10px}
 .accountName{
-font-size:18px;
+font-size:calc(18px * var(--font-scale));
 font-weight:850;
 color:#fff}
 .accountMeta{
-font-size:12px;
+font-size:calc(12px * var(--font-scale));
 color:#888;
 margin-top:4px}
 .balance{
@@ -538,7 +526,7 @@ display:flex;
 justify-content:space-between;
 gap:8px}
 .txDate{
-font-size:12px;
+font-size:calc(12px * var(--font-scale));
 color:#999}
 .txAmount{
 font-weight:900}
@@ -549,7 +537,7 @@ cursor:pointer}
 .txRow:active{
 background:#1b1b1b}
 .txNote{
-font-size:12px;
+font-size:calc(12px * var(--font-scale));
 color:#888;
 margin-top:5px}
 .amountInput{
@@ -630,11 +618,11 @@ padding-left:10px;
 padding-right:10px;
 padding-top:25px}
 .storeBtn{
-font-size:21px}
+font-size:calc(21px * var(--font-scale))}
 .add,.more{
-font-size:14px}
+font-size:calc(14px * var(--font-scale))}
 .name,.price{
-font-size:20px}
+font-size:calc(20px * var(--font-scale))}
 }
 
 </style>
@@ -648,7 +636,7 @@ font-size:20px}
 <div class="topTools"><button class="ledgerBtn" onclick="openLedger()"><span class="ledgerMiniLogo" aria-hidden="true"><i></i></span> دفتر حساب</button><div id="modeBadge" class="modeBadge"></div></div>
 </div>
 <div class="searchWrap"><span class="searchIcon">⌕</span><input id="search" class="search" autocomplete="off" placeholder="جستجوی کالا..."></div>
-<div class="quickRow"><button class="add" onclick="openAdd()">＋ افزودن کالا</button><button class="more" id="moreBtn" onclick="toggleMore()">اطلاعات ○</button></div>
+<div class="quickRow"><button class="add" onclick="openAdd()">＋ افزودن کالا</button><button class="more" id="moreBtn" onclick="toggleMore()"><span class="infoIcon" aria-hidden="true"></span>اطلاعات</button></div>
 <div class="section"><b id="title">کالاهای اخیر</b><span id="count"></span></div>
 <div id="list"></div>
 <button class="back" onclick="exportPriceList()">➤ ارسال لیست</button>
@@ -659,7 +647,7 @@ font-size:20px}
 
 <div id="modal" class="modal"><div class="sheet"><h2 id="mtitle">افزودن کالا</h2><input id="name" class="input" placeholder="نام کالا"><input id="price" class="input" placeholder="قیمت" inputmode="numeric"><div id="buyWrap"><input id="buy" class="input" placeholder="قیمت خرید (اختیاری)" inputmode="numeric"></div><textarea id="desc" class="input textarea" placeholder="توضیحات (اختیاری)"></textarea><div class="actions"><button class="btn" onclick="saveItem()">ذخیره</button><button class="btn dark" onclick="closeModal()">انصراف</button><button id="del" class="btn danger" onclick="deleteItem()">حذف</button></div></div></div>
 
-<div id="settingsModal" class="modal"><div class="sheet"><h2>تنظیمات</h2><div class="settingTitle">حالت نمایش</div><div class="settingRow"><button id="darkOption" class="settingOption" onclick="setTheme('dark')">تیره</button><button id="lightOption" class="settingOption" onclick="setTheme('light')">روشن</button></div><div class="settingTitle">رنگ قیمت‌ها</div><div class="settingRow"><button class="settingOption colorOption colorWhite" onclick="setPriceColor('#fff')">سفید</button><button class="settingOption colorOption colorBlue" onclick="setPriceColor('#64B4FF')">آبی</button><button class="settingOption colorOption colorGreen" onclick="setPriceColor('#55d98b')">سبز</button><button class="settingOption colorOption colorYellow" onclick="setPriceColor('#ffd75a')">زرد</button><button class="settingOption colorOption colorRed" onclick="setPriceColor('#ff6b6b')">قرمز</button></div><div class="settingTitle">نمایش اعداد</div><div class="settingRow"><button id="faDigitsOption" class="settingOption" onclick="setDigits('fa')">فارسی</button><button id="enDigitsOption" class="settingOption" onclick="setDigits('en')">لاتین</button></div><button class="settingsClose" onclick="closeSettings()">بستن</button></div></div>
+<div id="settingsModal" class="modal"><div class="sheet"><h2>تنظیمات</h2><div class="settingTitle">حالت نمایش</div><div class="settingRow"><button id="darkOption" class="settingOption" onclick="setTheme('dark')">تیره</button><button id="lightOption" class="settingOption" onclick="setTheme('light')">روشن</button></div><div class="settingTitle">رنگ قیمت‌ها</div><div class="settingRow"><button data-color="#fff" class="settingOption colorOption colorWhite" onclick="setPriceColor('#fff')">سفید</button><button data-color="#64B4FF" class="settingOption colorOption colorBlue" onclick="setPriceColor('#64B4FF')">آبی</button><button data-color="#55d98b" class="settingOption colorOption colorGreen" onclick="setPriceColor('#55d98b')">سبز</button><button data-color="#ffd75a" class="settingOption colorOption colorYellow" onclick="setPriceColor('#ffd75a')">زرد</button><button data-color="#ff6b6b" class="settingOption colorOption colorRed" onclick="setPriceColor('#ff6b6b')">قرمز</button></div><div class="settingTitle">اندازه نوشته‌ها</div><div class="settingRow"><button id="fontSmallOption" class="settingOption" onclick="setFontScale(0.9)">کوچک</button><button id="fontMediumOption" class="settingOption" onclick="setFontScale(1)">متوسط</button><button id="fontLargeOption" class="settingOption" onclick="setFontScale(1.1)">بزرگ</button><button id="fontXLargeOption" class="settingOption" onclick="setFontScale(1.2)">خیلی بزرگ</button></div><div class="settingTitle">نوع فونت</div><div class="settingRow"><button id="fontSystemOption" class="settingOption" onclick="setFontFamily('system-ui')">پیش‌فرض</button><button id="fontNaskhOption" class="settingOption" onclick="setFontFamily('Droid Arabic Naskh')">نسخ</button><button id="fontSerifOption" class="settingOption" onclick="setFontFamily('serif')">سریف</button><button id="fontSansOption" class="settingOption" onclick="setFontFamily('sans-serif')">ساده</button></div><div class="settingTitle">نمایش اعداد</div><div class="settingRow"><button id="faDigitsOption" class="settingOption" onclick="setDigits('fa')">فارسی</button><button id="enDigitsOption" class="settingOption" onclick="setDigits('en')">لاتین</button></div><button class="settingsClose" onclick="closeSettings()">بستن</button></div></div>
 
 <div id="ledgerModal" class="modal"><div class="sheet ledgerSheet sheetScrollFix"><div class="ledgerHeader"><h2><span class="ledgerMiniLogo" aria-hidden="true"><i></i></span> دفتر حساب</h2><button id="ledgerAddBtn" class="ledgerAdd" onclick="openAccountForm()">＋ حساب جدید</button></div><div class="ledgerTabs"><button id="creditorTab" class="ledgerTab creditor active" onclick="setLedgerTab('creditor')">طلب</button><button id="debtorTab" class="ledgerTab debtor" onclick="setLedgerTab('debtor')">بدهی</button></div><input id="ledgerSearch" class="ledgerSearch" autocomplete="off" placeholder="جستجوی حساب..." oninput="renderAccounts()"><div id="ledgerTotal" class="ledgerTotal"><span id="ledgerTotalTitle">جمع کل طلب‌ها</span><span id="ledgerTotalValue" class="totalValue credit">۰</span></div><div id="accountList"></div></div></div>
 
@@ -676,7 +664,7 @@ font-size:20px}
 const K="priceYarStoresV3",MODE_KEY="priceYarAppMode",SETTINGS_KEY="priceYarSettingsV1",LEDGER_KEY="priceYarLedgerV1";
 let data=JSON.parse(localStorage.getItem(K)||"null")||{active:-1,stores:[],deleted:{}};
 let appMode=localStorage.getItem(MODE_KEY)||"management";
-let settings=JSON.parse(localStorage.getItem(SETTINGS_KEY)||"null")||{theme:"dark",priceColor:"#fff",digits:"fa"};
+let settings=JSON.parse(localStorage.getItem(SETTINGS_KEY)||"null")||{theme:"dark",priceColor:"#fff",digits:"fa",fontScale:1,fontFamily:"system-ui"};
 let ledger=JSON.parse(localStorage.getItem(LEDGER_KEY)||"null")||{accounts:[]};
 let edit=-1,more=false,accountEdit=-1,activeAccount=-1,txEdit=-1,txType="debit";
 const $=id=>document.getElementById(id),st=()=>data.stores[data.active];
@@ -702,15 +690,19 @@ function saveLedger(){localStorage.setItem(LEDGER_KEY,JSON.stringify(ledger))}
 
 function setMode(m){appMode=m==="seller"?"seller":"management";localStorage.setItem(MODE_KEY,appMode);applyMode()}
 
-function applyMode(){$("buyWrap").style.display=isSeller()?"none":"block";$("modeBadge").textContent=isSeller()?"حالت فروشندگان":"حالت مدیریت";$("modeBadge").classList.toggle("seller",isSeller());$("moreBtn").textContent=more?"اطلاعات ✓":"اطلاعات ○";applySettings();render()}
+function applyMode(){$("buyWrap").style.display=isSeller()?"none":"block";$("modeBadge").textContent=isSeller()?"حالت فروشندگان":"حالت مدیریت";$("modeBadge").classList.toggle("seller",isSeller());$("moreBtn").innerHTML='<span class="infoIcon" aria-hidden="true"></span>اطلاعات'+(more?" ✓":"");applySettings();render()}
 
-function applySettings(){document.body.classList.toggle("light",settings.theme==="light");document.documentElement.style.setProperty("--price-color",settings.priceColor);if($("darkOption"))$("darkOption").classList.toggle("active",settings.theme==="dark");if($("lightOption"))$("lightOption").classList.toggle("active",settings.theme==="light");if($("faDigitsOption"))$("faDigitsOption").classList.toggle("active",settings.digits==="fa");if($("enDigitsOption"))$("enDigitsOption").classList.toggle("active",settings.digits==="en");document.querySelectorAll(".price").forEach(e=>e.style.color=settings.priceColor)}
+function applySettings(){document.body.classList.toggle("light",settings.theme==="light");document.documentElement.style.setProperty("--price-color",settings.priceColor);document.documentElement.style.setProperty("--font-scale",settings.fontScale||1);document.documentElement.style.setProperty("--app-font",settings.fontFamily||"system-ui");if($("darkOption"))$("darkOption").classList.toggle("active",settings.theme==="dark");if($("lightOption"))$("lightOption").classList.toggle("active",settings.theme==="light");if($("faDigitsOption"))$("faDigitsOption").classList.toggle("active",settings.digits==="fa");if($("enDigitsOption"))$("enDigitsOption").classList.toggle("active",settings.digits==="en");document.querySelectorAll(".colorOption").forEach(e=>e.classList.toggle("active",e.dataset.color===settings.priceColor));const fs={0.9:"fontSmallOption",1:"fontMediumOption",1.1:"fontLargeOption",1.2:"fontXLargeOption"};Object.entries(fs).forEach(([v,id])=>{if($(id))$(id).classList.toggle("active",Number(settings.fontScale||1)===Number(v))});const ff={"system-ui":"fontSystemOption","Droid Arabic Naskh":"fontNaskhOption","serif":"fontSerifOption","sans-serif":"fontSansOption"};Object.entries(ff).forEach(([v,id])=>{if($(id))$(id).classList.toggle("active",(settings.fontFamily||"system-ui")===v)});document.querySelectorAll(".price").forEach(e=>e.style.color=settings.priceColor)}
 
 function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));applySettings()}
 
 function setTheme(x){settings.theme=x==="light"?"light":"dark";saveSettings()}
 
 function setPriceColor(x){settings.priceColor=x;saveSettings()}
+
+function setFontScale(x){settings.fontScale=[0.9,1,1.1,1.2].includes(Number(x))?Number(x):1;saveSettings()}
+
+function setFontFamily(x){settings.fontFamily=["system-ui","Droid Arabic Naskh","serif","sans-serif"].includes(x)?x:"system-ui";saveSettings()}
 
 function setDigits(x){settings.digits=x==="en"?"en":"fa";saveSettings();render()}
 
