@@ -29,6 +29,11 @@ body{
 min-height:100vh
 }
 
+body.light{
+background:#f5f5f5;
+color:#111
+}
+
 .app{
 max-width:680px;
 margin:auto;
@@ -58,16 +63,21 @@ padding:5px 55px 0;
 position:relative
 }
 
-/* فقط یک سه نقطه در سمت چپ */
 .storeBtn:after{
-content:"⋮";
+content:"";
 position:absolute;
-left:18px;
+left:10px;
 top:50%;
-transform:translateY(-45%);
-color:#aaa;
-font-size:27px;
-font-weight:700
+width:36px;
+height:36px;
+transform:translateY(-50%);
+border-radius:50%;
+border:1px solid rgba(255,255,255,.12);
+background:
+linear-gradient(#aaa,#aaa) center 11px/20px 2px no-repeat,
+linear-gradient(#aaa,#aaa) center 21px/13px 2px no-repeat,
+rgba(255,255,255,.035);
+opacity:.88
 }
 
 .storeBtn.emptyStore{
@@ -131,6 +141,38 @@ border-color:#444
 .storeAction.deleteStore{
 background:#351010;
 color:#fff
+}
+
+/* ابزار بالای صفحه */
+.topTools{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+margin-top:8px
+}
+
+.ledgerBtn{
+height:38px;
+padding:0 15px;
+border-radius:11px;
+border:1px solid #333;
+background:#151515;
+color:#fff;
+font-size:14px;
+font-weight:800
+}
+
+.modeBadge{
+text-align:left;
+font-size:11px;
+color:#777;
+margin:0;
+flex:1
+}
+
+.modeBadge.seller{
+color:#aaa
 }
 
 .searchWrap{
@@ -208,16 +250,137 @@ font-size:12px;
 color:#777
 }
 
+.swipeWrap{
+position:relative;
+margin:8px 0;
+border-radius:15px;
+overflow:hidden;
+touch-action:pan-y
+}
+
+.deleteBg{
+position:absolute;
+inset:0;
+background:#b00000;
+display:flex;
+align-items:center;
+z-index:0;
+opacity:0;
+transition:opacity .12s ease
+}
+
+.deleteBg.left{
+justify-content:flex-start;
+padding-left:24px
+}
+
+.deleteBg.right{
+justify-content:flex-end;
+padding-right:24px
+}
+
+.trash{
+width:40px;
+height:48px;
+position:relative;
+display:flex;
+align-items:center;
+justify-content:center
+}
+
+.trashCan{
+width:20px;
+height:25px;
+border:2px solid rgba(255,255,255,.95);
+border-top:0;
+border-radius:2px 2px 4px 4px;
+position:relative;
+margin-top:7px
+}
+
+.trashCan:before{
+content:"";
+position:absolute;
+width:24px;
+height:2px;
+background:#fff;
+left:50%;
+top:-5px;
+transform:translateX(-50%);
+border-radius:2px
+}
+
+.trashCan:after{
+content:"";
+position:absolute;
+width:8px;
+height:3px;
+border:2px solid #fff;
+border-bottom:0;
+left:50%;
+top:-10px;
+transform:translateX(-50%);
+border-radius:3px 3px 0 0
+}
+
+.trash .trashCan{
+background:
+linear-gradient(
+to right,
+transparent 0,
+transparent 5px,
+rgba(255,255,255,.9) 5px,
+rgba(255,255,255,.9) 7px,
+transparent 7px,
+transparent 12px,
+rgba(255,255,255,.9) 12px,
+rgba(255,255,255,.9) 14px,
+transparent 14px
+)
+}
+
+.trash.open .trashCan:before{
+transform:
+translateX(-50%)
+rotate(-16deg);
+transform-origin:right center;
+transition:transform .12s ease
+}
+
+.trash.open .trashCan:after{
+transform:
+translateX(-50%)
+rotate(-16deg);
+transform-origin:right center;
+transition:transform .12s ease
+}
+
+.trashCan:before,
+.trashCan:after{
+transition:transform .12s ease
+}
+
 .row{
+position:relative;
+z-index:1;
 background:#101010;
 border:1px solid #252525;
 border-radius:15px;
-margin:8px 0;
 padding:13px 15px;
 min-height:76px;
 display:flex;
 gap:12px;
-align-items:center
+align-items:center;
+transition:
+transform .18s ease,
+background .18s ease;
+will-change:transform;
+user-select:none;
+-webkit-user-select:none
+}
+
+.row.swiping{
+transition:none
 }
 
 .info{
@@ -244,7 +407,8 @@ line-height:1.7
 .price{
 font-size:21px;
 font-weight:850;
-white-space:nowrap
+white-space:nowrap;
+color:#fff
 }
 
 .empty{
@@ -263,7 +427,6 @@ background:#111;
 border:1px solid #333
 }
 
-/* دکمه تنظیمات */
 .settingsBtn{
 width:100%;
 height:46px;
@@ -294,7 +457,9 @@ width:min(680px,100%);
 background:#111;
 border:1px solid #333;
 border-radius:22px 22px 0 0;
-padding:20px 18px 28px
+padding:20px 18px 28px;
+max-height:92vh;
+overflow-y:auto
 }
 
 h2{
@@ -347,15 +512,382 @@ background:#351010;
 color:#fff
 }
 
-.modeBadge{
-text-align:center;
-font-size:11px;
-color:#777;
-margin-top:8px
+/* دفتر حساب */
+
+.ledgerSheet{
+padding-bottom:30px
 }
 
-.modeBadge.seller{
+.ledgerHeader{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+margin-bottom:12px
+}
+
+.ledgerHeader h2{
+margin:0
+}
+
+.ledgerSmallBtn{
+height:42px;
+padding:0 13px;
+border-radius:11px;
+border:1px solid #444;
+background:#252525;
+color:#fff;
+font-weight:800
+}
+
+.accountCard{
+background:#181818;
+border:1px solid #333;
+border-radius:15px;
+padding:14px;
+margin:9px 0
+}
+
+.accountTop{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px
+}
+
+.accountName{
+font-size:18px;
+font-weight:850
+}
+
+.accountPhone{
+font-size:12px;
+color:#888;
+margin-top:4px
+}
+
+.accountBalance{
+font-size:18px;
+font-weight:850;
+white-space:nowrap
+}
+
+.balanceDebit{
+color:#ff6b6b
+}
+
+.balanceCredit{
+color:#55d98b
+}
+
+.balanceZero{
 color:#aaa
+}
+
+.accountNote{
+font-size:12px;
+color:#888;
+line-height:1.7;
+margin-top:7px
+}
+
+.accountButtons{
+display:flex;
+gap:7px;
+margin-top:10px
+}
+
+.accountButtons button{
+flex:1;
+height:40px;
+border-radius:10px;
+border:1px solid #444;
+background:#252525;
+color:#fff;
+font-weight:750
+}
+
+.accountButtons .danger{
+background:#351010
+}
+
+.ledgerEmpty{
+text-align:center;
+padding:35px 10px;
+color:#888;
+line-height:2
+}
+
+.ledgerSummary{
+display:flex;
+gap:8px;
+margin:10px 0
+}
+
+.ledgerSummaryBox{
+flex:1;
+border:1px solid #333;
+border-radius:12px;
+padding:10px;
+text-align:center;
+background:#151515
+}
+
+.ledgerSummaryTitle{
+font-size:11px;
+color:#888
+}
+
+.ledgerSummaryValue{
+font-size:16px;
+font-weight:850;
+margin-top:4px
+}
+
+.transaction{
+border:1px solid #303030;
+border-radius:13px;
+padding:12px;
+margin:8px 0;
+background:#151515
+}
+
+.transactionTop{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px
+}
+
+.transactionType{
+font-size:13px;
+font-weight:850
+}
+
+.transactionAmount{
+font-size:17px;
+font-weight:850
+}
+
+.transaction.debit .transactionType,
+.transaction.debit .transactionAmount{
+color:#ff6b6b
+}
+
+.transaction.credit .transactionType,
+.transaction.credit .transactionAmount{
+color:#55d98b
+}
+
+.transactionNote{
+font-size:12px;
+color:#888;
+margin-top:5px;
+line-height:1.7
+}
+
+.transactionActions{
+display:flex;
+gap:7px;
+margin-top:9px
+}
+
+.transactionActions button{
+flex:1;
+height:37px;
+border-radius:9px;
+border:1px solid #444;
+background:#252525;
+color:#fff;
+font-weight:700
+}
+
+.transactionActions .danger{
+background:#351010
+}
+
+.ledgerBack{
+width:100%;
+height:46px;
+margin-top:10px;
+border-radius:12px;
+border:1px solid #444;
+background:#252525;
+color:#fff;
+font-weight:800
+}
+
+/* پنجره تنظیمات */
+
+.settingsSheet{
+padding-bottom:30px
+}
+
+.settingTitle{
+font-size:13px;
+color:#888;
+margin:17px 2px 8px
+}
+
+.settingRow{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.settingOption{
+flex:1;
+min-width:90px;
+height:44px;
+border-radius:11px;
+background:#181818;
+border:1px solid #333;
+color:#fff;
+font-size:14px;
+font-weight:700
+}
+
+.settingOption.active{
+border-color:#aaa;
+background:#292929
+}
+
+.colorOption{
+height:38px;
+min-width:55px
+}
+
+.colorWhite{
+color:#fff
+}
+
+.colorBlue{
+color:#64B4FF
+}
+
+.colorGreen{
+color:#55d98b
+}
+
+.colorYellow{
+color:#ffd75a
+}
+
+.colorRed{
+color:#ff6b6b
+}
+
+.settingsClose{
+margin-top:18px;
+width:100%;
+height:48px;
+border-radius:12px;
+border:1px solid #444;
+background:#252525;
+color:#fff;
+font-weight:800
+}
+
+/* حالت روشن */
+
+body.light .storeBtn,
+body.light .search,
+body.light .row,
+body.light .back,
+body.light .settingsBtn,
+body.light .add,
+body.light .more,
+body.light .ledgerBtn{
+background:#fff;
+color:#111;
+border-color:#ddd
+}
+
+body.light .storeMenu{
+background:#fff;
+border-color:#ddd;
+box-shadow:0 15px 40px #0002
+}
+
+body.light .storeItem.active{
+background:#eee
+}
+
+body.light .storeActions{
+border-top-color:#ddd
+}
+
+body.light .search::placeholder{
+color:#999
+}
+
+body.light .searchIcon{
+color:#777
+}
+
+body.light .section span,
+body.light .sub,
+body.light .buy{
+color:#777
+}
+
+body.light .sheet{
+background:#fff;
+color:#111;
+border-color:#ddd
+}
+
+body.light .input{
+background:#f5f5f5;
+color:#111;
+border-color:#ccc
+}
+
+body.light .dark{
+background:#eee;
+color:#111;
+border-color:#ccc
+}
+
+body.light .settingOption{
+background:#f5f5f5;
+color:#111;
+border-color:#ddd
+}
+
+body.light .settingOption.active{
+background:#e5e5e5;
+border-color:#999
+}
+
+body.light .settingsClose{
+background:#eee;
+color:#111;
+border-color:#ccc
+}
+
+body.light .accountCard,
+body.light .ledgerSummaryBox,
+body.light .transaction{
+background:#f5f5f5;
+border-color:#ddd
+}
+
+body.light .accountButtons button,
+body.light .transactionActions button,
+body.light .ledgerBack,
+body.light .ledgerSmallBtn{
+background:#eee;
+color:#111;
+border-color:#ccc
+}
+
+body.light .storeBtn:after{
+border-color:rgba(0,0,0,.12);
+background:
+linear-gradient(#555,#555) center 11px/20px 2px no-repeat,
+linear-gradient(#555,#555) center 21px/13px 2px no-repeat,
+rgba(0,0,0,.035)
 }
 
 @media(max-width:430px){
@@ -406,9 +938,19 @@ class="storeMenu">
 
 </div>
 
+<div class="topTools">
+
+<button
+class="ledgerBtn"
+onclick="openLedger()">
+دفتر حساب
+</button>
+
 <div
 id="modeBadge"
 class="modeBadge">
+</div>
+
 </div>
 
 </div>
@@ -491,6 +1033,8 @@ onchange="importPriceList(event)">
 
 </main>
 
+<!-- پنجره افزودن / ویرایش کالا -->
+
 <div
 id="modal"
 class="modal">
@@ -554,11 +1098,315 @@ onclick="deleteItem()">
 </div>
 </div>
 
+<!-- دفتر حساب -->
+
+<div
+id="ledgerModal"
+class="modal">
+
+<div class="sheet ledgerSheet">
+
+<div class="ledgerHeader">
+
+<h2>
+دفتر حساب
+</h2>
+
+<button
+class="ledgerSmallBtn"
+onclick="openAccountEdit(-1)">
+＋ حساب جدید
+</button>
+
+</div>
+
+<div id="ledgerContent">
+</div>
+
+<button
+class="ledgerBack"
+onclick="closeLedger()">
+بستن
+</button>
+
+</div>
+</div>
+
+<!-- پنجره حساب -->
+
+<div
+id="accountModal"
+class="modal">
+
+<div class="sheet">
+
+<h2 id="accountTitle">
+حساب جدید
+</h2>
+
+<input
+id="accountName"
+class="input"
+placeholder="نام طرف حساب">
+
+<input
+id="accountPhone"
+class="input"
+placeholder="شماره تماس"
+inputmode="tel">
+
+<textarea
+id="accountNote"
+class="input textarea"
+placeholder="توضیحات (اختیاری)">
+</textarea>
+
+<div class="actions">
+
+<button
+class="btn"
+onclick="saveAccount()">
+ذخیره
+</button>
+
+<button
+class="btn dark"
+onclick="closeAccountModal()">
+انصراف
+</button>
+
+<button
+id="accountDelete"
+class="btn danger"
+onclick="deleteAccount()">
+حذف
+</button>
+
+</div>
+
+</div>
+</div>
+
+<!-- پنجره حساب و تراکنش‌ها -->
+
+<div
+id="accountDetailModal"
+class="modal">
+
+<div class="sheet ledgerSheet">
+
+<div class="ledgerHeader">
+
+<h2 id="accountDetailTitle">
+حساب
+</h2>
+
+<button
+id="addTransactionButton"
+class="ledgerSmallBtn"
+onclick="openTransactionEdit(-1)">
+＋ ثبت حساب
+</button>
+
+</div>
+
+<div id="accountDetailContent">
+</div>
+
+<button
+class="ledgerBack"
+onclick="closeAccountDetail()">
+بازگشت
+</button>
+
+</div>
+</div>
+
+<!-- پنجره تراکنش -->
+
+<div
+id="transactionModal"
+class="modal">
+
+<div class="sheet">
+
+<h2 id="transactionTitle">
+ثبت حساب
+</h2>
+
+<div class="settingTitle">
+نوع تراکنش
+</div>
+
+<div class="settingRow">
+
+<button
+id="debitTypeButton"
+class="settingOption"
+onclick="setTransactionType('debit')">
+بدهکار
+</button>
+
+<button
+id="creditTypeButton"
+class="settingOption"
+onclick="setTransactionType('credit')">
+بستانکار
+</button>
+
+</div>
+
+<input
+id="transactionAmount"
+class="input"
+placeholder="مبلغ"
+inputmode="numeric">
+
+<textarea
+id="transactionNote"
+class="input textarea"
+placeholder="توضیحات تراکنش">
+</textarea>
+
+<div class="actions">
+
+<button
+class="btn"
+onclick="saveTransaction()">
+ذخیره
+</button>
+
+<button
+class="btn dark"
+onclick="closeTransactionModal()">
+انصراف
+</button>
+
+<button
+id="transactionDelete"
+class="btn danger"
+onclick="deleteTransaction()">
+حذف
+</button>
+
+</div>
+
+</div>
+</div>
+
+<!-- پنجره تنظیمات -->
+
+<div
+id="settingsModal"
+class="modal">
+
+<div class="sheet settingsSheet">
+
+<h2>
+تنظیمات
+</h2>
+
+<div class="settingTitle">
+حالت نمایش
+</div>
+
+<div class="settingRow">
+
+<button
+id="darkOption"
+class="settingOption"
+onclick="setTheme('dark')">
+تیره
+</button>
+
+<button
+id="lightOption"
+class="settingOption"
+onclick="setTheme('light')">
+روشن
+</button>
+
+</div>
+
+<div class="settingTitle">
+رنگ قیمت‌ها
+</div>
+
+<div class="settingRow">
+
+<button
+class="settingOption colorOption colorWhite"
+onclick="setPriceColor('#fff')">
+سفید
+</button>
+
+<button
+class="settingOption colorOption colorBlue"
+onclick="setPriceColor('#64B4FF')">
+آبی
+</button>
+
+<button
+class="settingOption colorOption colorGreen"
+onclick="setPriceColor('#55d98b')">
+سبز
+</button>
+
+<button
+class="settingOption colorOption colorYellow"
+onclick="setPriceColor('#ffd75a')">
+زرد
+</button>
+
+<button
+class="settingOption colorOption colorRed"
+onclick="setPriceColor('#ff6b6b')">
+قرمز
+</button>
+
+</div>
+
+<div class="settingTitle">
+نمایش اعداد
+</div>
+
+<div class="settingRow">
+
+<button
+id="faDigitsOption"
+class="settingOption"
+onclick="setDigits('fa')">
+فارسی
+</button>
+
+<button
+id="enDigitsOption"
+class="settingOption"
+onclick="setDigits('en')">
+لاتین
+</button>
+
+</div>
+
+<button
+class="settingsClose"
+onclick="closeSettings()">
+بستن
+</button>
+
+</div>
+</div>
+
 <script>
 
 const K="priceYarStoresV3";
 
 const MODE_KEY="priceYarAppMode";
+
+const SETTINGS_KEY="priceYarSettingsV1";
+
+/* اطلاعات دفتر حساب جدا از لیست قیمت نگهداری می‌شود */
+const LEDGER_KEY="priceYarLedgerV1";
 
 let data=
 JSON.parse(
@@ -576,9 +1424,52 @@ localStorage.getItem(MODE_KEY)
 ||
 "management";
 
+let settings=
+JSON.parse(
+localStorage.getItem(SETTINGS_KEY)||"null"
+)
+||
+{
+theme:"dark",
+priceColor:"#fff",
+digits:"fa"
+};
+
+/* دفتر حساب */
+let ledgerData=
+JSON.parse(
+localStorage.getItem(LEDGER_KEY)||"null"
+)
+||
+{
+accounts:[]
+};
+
 let edit=-1;
 
 let more=false;
+
+let accountEdit=-1;
+
+let selectedAccountId=null;
+
+let transactionEdit=-1;
+
+let transactionType="debit";
+
+/* وضعیت حرکت کالا */
+
+let swipeState={
+active:false,
+wrap:null,
+row:null,
+startX:0,
+startY:0,
+currentX:0,
+index:-1,
+horizontal:false,
+moved:false
+};
 
 const $=id=>
 document.getElementById(id);
@@ -659,7 +1550,138 @@ more
 :
 "اطلاعات ○";
 
+applySettings();
+
 render();
+
+}
+
+function applySettings(){
+
+document.body.classList.toggle(
+"light",
+settings.theme==="light"
+);
+
+document.documentElement.style.setProperty(
+"--price-color",
+settings.priceColor
+);
+
+const darkOption=$("darkOption");
+const lightOption=$("lightOption");
+
+if(darkOption){
+
+darkOption.classList.toggle(
+"active",
+settings.theme==="dark"
+);
+
+}
+
+if(lightOption){
+
+lightOption.classList.toggle(
+"active",
+settings.theme==="light"
+);
+
+}
+
+const faOption=$("faDigitsOption");
+const enOption=$("enDigitsOption");
+
+if(faOption){
+
+faOption.classList.toggle(
+"active",
+settings.digits==="fa"
+);
+
+}
+
+if(enOption){
+
+enOption.classList.toggle(
+"active",
+settings.digits==="en"
+);
+
+}
+
+document
+.querySelectorAll(".price")
+.forEach(
+el=>{
+el.style.color=
+settings.priceColor;
+}
+);
+
+}
+
+function saveSettings(){
+
+localStorage.setItem(
+SETTINGS_KEY,
+JSON.stringify(settings)
+);
+
+applySettings();
+
+}
+
+function setTheme(theme){
+
+settings.theme=
+theme==="light"
+?
+"light"
+:
+"dark";
+
+saveSettings();
+
+}
+
+function setPriceColor(color){
+
+settings.priceColor=
+color;
+
+saveSettings();
+
+}
+
+function setDigits(type){
+
+settings.digits=
+type==="en"
+?
+"en"
+:
+"fa";
+
+saveSettings();
+
+render();
+
+}
+
+function openSettings(){
+
+applySettings();
+
+$("settingsModal").style.display=
+"flex";
+
+}
+
+function closeSettings(){
+
+$("settingsModal").style.display=
+"none";
 
 }
 
@@ -809,10 +1831,17 @@ delete item.purchasePrice;
 
 function faDigits(value){
 
-return String(
+let text=String(
 value??""
-)
-.replace(
+);
+
+if(settings.digits==="en"){
+
+return text;
+
+}
+
+return text.replace(
 /\d/g,
 d=>"۰۱۲۳۴۵۶۷۸۹"[d]
 );
@@ -860,6 +1889,78 @@ e
 
 }
 
+function saveLedger(){
+
+if(!ledgerData||
+!Array.isArray(ledgerData.accounts)){
+
+ledgerData={
+accounts:[]
+};
+
+}
+
+localStorage.setItem(
+LEDGER_KEY,
+JSON.stringify(ledgerData)
+);
+
+}
+
+function ensureLedger(){
+
+if(
+!ledgerData||
+!Array.isArray(ledgerData.accounts)
+){
+
+ledgerData={
+accounts:[]
+};
+
+}
+
+ledgerData.accounts.forEach(
+account=>{
+
+if(!account.id){
+
+account.id=makeId();
+
+}
+
+if(!Array.isArray(account.transactions)){
+
+account.transactions=[];
+
+}
+
+account.transactions.forEach(
+transaction=>{
+
+if(!transaction.id){
+
+transaction.id=makeId();
+
+}
+
+if(
+transaction.type!=="credit"&&
+transaction.type!=="debit"
+){
+
+transaction.type="debit";
+
+}
+
+});
+
+});
+
+saveLedger();
+
+}
+
 function esc(s){
 
 return String(
@@ -898,7 +1999,7 @@ $("title").textContent=
 $("count").textContent="";
 
 $("list").innerHTML=
-'<div class="empty">برای شروع، از منوی ⋮ یک فروشگاه بسازید یا فایل لیست را وارد کنید.</div>';
+'<div class="empty">برای شروع، از منوی بالا یک فروشگاه بسازید یا فایل لیست را وارد کنید.</div>';
 
 return;
 
@@ -998,6 +2099,44 @@ esc(x.desc)+
 
 }
 
+let wrap=
+document.createElement("div");
+
+wrap.className=
+"swipeWrap";
+
+let bgLeft=
+document.createElement("div");
+
+bgLeft.className=
+"deleteBg left";
+
+let trashLeft=
+document.createElement("div");
+
+trashLeft.className="trash";
+
+trashLeft.innerHTML=
+'<div class="trashCan"></div>';
+
+bgLeft.appendChild(trashLeft);
+
+let bgRight=
+document.createElement("div");
+
+bgRight.className=
+"deleteBg right";
+
+let trashRight=
+document.createElement("div");
+
+trashRight.className="trash";
+
+trashRight.innerHTML=
+'<div class="trashCan"></div>';
+
+bgRight.appendChild(trashRight);
+
 let r=
 document.createElement("div");
 
@@ -1014,13 +2153,363 @@ extra+
 esc(faDigits(x.price))+
 "</div>";
 
-r.onclick=()=>
-openEdit(i);
+r.style.setProperty(
+"--price-color",
+settings.priceColor
+);
+
+r.querySelector(".price").style.color=
+settings.priceColor;
+
+wrap.appendChild(bgLeft);
+wrap.appendChild(bgRight);
+wrap.appendChild(r);
+
+setupSwipe(
+wrap,
+r,
+trashLeft,
+trashRight,
+i
+);
 
 $("list")
-.appendChild(r);
+.appendChild(wrap);
 
 });
+
+applySettings();
+
+}
+
+function setupSwipe(
+wrap,
+row,
+trashLeft,
+trashRight,
+index
+){
+
+let startX=0;
+let startY=0;
+let currentX=0;
+let horizontal=false;
+let moved=false;
+
+function pointerDown(e){
+
+if(e.pointerType==="mouse"&&e.button!==0){
+
+return;
+
+}
+
+startX=e.clientX;
+startY=e.clientY;
+currentX=0;
+horizontal=false;
+moved=false;
+
+row.classList.remove("swiping");
+
+try{
+
+row.setPointerCapture(e.pointerId);
+
+}catch(_){}
+
+}
+
+function pointerMove(e){
+
+if(
+startX===null||
+startY===null
+){
+
+return;
+
+}
+
+const dx=
+e.clientX-startX;
+
+const dy=
+e.clientY-startY;
+
+if(!horizontal){
+
+if(
+Math.abs(dx)<8&&
+Math.abs(dy)<8
+){
+
+return;
+
+}
+
+if(
+Math.abs(dy)>
+Math.abs(dx)
+){
+
+startX=null;
+startY=null;
+return;
+
+}
+
+horizontal=true;
+
+}
+
+if(!horizontal){
+
+return;
+
+}
+
+e.preventDefault();
+
+moved=true;
+
+currentX=dx;
+
+const limit=
+Math.min(
+Math.abs(dx),
+window.innerWidth*0.55
+);
+
+const signed=
+dx<0
+?
+-limit
+:
+limit;
+
+row.classList.add("swiping");
+
+row.style.transform=
+"translateX("+signed+"px)";
+
+const progress=
+Math.min(
+Math.abs(signed)/110,
+1
+);
+
+const opacity=
+Math.min(
+progress,
+1
+);
+
+if(dx>0){
+
+bgLeft.style.opacity=opacity;
+bgRight.style.opacity=0;
+
+trashLeft.classList.toggle(
+"open",
+Math.abs(signed)>35
+);
+
+trashRight.classList.remove("open");
+
+}else{
+
+bgRight.style.opacity=opacity;
+bgLeft.style.opacity=0;
+
+trashRight.classList.toggle(
+"open",
+Math.abs(signed)>35
+);
+
+trashLeft.classList.remove("open");
+
+}
+
+}
+
+function pointerUp(e){
+
+if(
+startX===null
+){
+
+return;
+
+}
+
+const dx=currentX;
+
+startX=null;
+startY=null;
+
+if(!horizontal){
+
+return;
+
+}
+
+const threshold=
+Math.max(
+95,
+Math.min(
+140,
+window.innerWidth*.25
+)
+);
+
+if(
+Math.abs(dx)>=threshold
+){
+
+const direction=
+dx>0
+?
+1
+:
+-1;
+
+row.style.transition=
+"transform .18s ease";
+
+row.style.transform=
+"translateX("+
+(direction*
+(window.innerWidth+100))+
+"px)";
+
+bgLeft.style.opacity=
+dx>0
+?
+1
+:
+0;
+
+bgRight.style.opacity=
+dx<0
+?
+1
+:
+0;
+
+setTimeout(
+()=>{
+
+removeItemByIndex(index);
+
+},
+180
+);
+
+}else{
+
+row.style.transition=
+"transform .18s ease";
+
+row.style.transform=
+"translateX(0)";
+
+bgLeft.style.opacity=0;
+bgRight.style.opacity=0;
+
+trashLeft.classList.remove("open");
+trashRight.classList.remove("open");
+
+}
+
+}
+
+function pointerCancel(){
+
+startX=null;
+startY=null;
+horizontal=false;
+
+row.style.transition=
+"transform .18s ease";
+
+row.style.transform=
+"translateX(0)";
+
+bgLeft.style.opacity=0;
+bgRight.style.opacity=0;
+
+trashLeft.classList.remove("open");
+trashRight.classList.remove("open");
+
+}
+
+row.addEventListener(
+"pointerdown",
+pointerDown,
+{
+passive:true
+}
+);
+
+row.addEventListener(
+"pointermove",
+pointerMove,
+{
+passive:false
+}
+);
+
+row.addEventListener(
+"pointerup",
+pointerUp
+);
+
+row.addEventListener(
+"pointercancel",
+pointerCancel
+);
+
+row.addEventListener(
+"click",
+e=>{
+
+if(moved){
+
+e.preventDefault();
+e.stopPropagation();
+return;
+
+}
+
+openEdit(index);
+
+});
+
+}
+
+function removeItemByIndex(index){
+
+if(!st()||index<0){
+
+return;
+
+}
+
+if(index>=st().items.length){
+
+return;
+
+}
+
+st().items.splice(
+index,
+1
+);
+
+save();
+
+render();
 
 }
 
@@ -1507,19 +2996,6 @@ return;
 
 }
 
-let item=
-st().items[edit];
-
-if(
-!confirm(
-"این کالا حذف شود؟"
-)
-){
-
-return;
-
-}
-
 st().items.splice(
 edit,
 1
@@ -1530,6 +3006,1115 @@ save();
 closeModal();
 
 }
+
+/* =========================================================
+   دفتر حساب
+   ========================================================= */
+
+function accountById(id){
+
+ensureLedger();
+
+return ledgerData.accounts.find(
+account=>
+account.id===id
+);
+
+}
+
+function accountBalance(account){
+
+if(!account){
+
+return 0;
+
+}
+
+let debit=0;
+let credit=0;
+
+(account.transactions||[]).forEach(
+transaction=>{
+
+let amount=
+Number(
+String(
+transaction.amount||""
+)
+.replace(/,/g,"")
+)||0;
+
+if(transaction.type==="credit"){
+
+credit+=amount;
+
+}else{
+
+debit+=amount;
+
+}
+
+});
+
+return debit-credit;
+
+}
+
+function accountTotals(account){
+
+let debit=0;
+let credit=0;
+
+(account.transactions||[]).forEach(
+transaction=>{
+
+let amount=
+Number(
+String(
+transaction.amount||""
+)
+.replace(/,/g,"")
+)||0;
+
+if(transaction.type==="credit"){
+
+credit+=amount;
+
+}else{
+
+debit+=amount;
+
+}
+
+});
+
+return {
+debit:debit,
+credit:credit,
+balance:debit-credit
+};
+
+}
+
+function formatMoney(value){
+
+return faDigits(
+Number(value||0).toLocaleString("en-US")
+);
+
+}
+
+function balanceClass(balance){
+
+if(balance>0){
+
+return "balanceDebit";
+
+}
+
+if(balance<0){
+
+return "balanceCredit";
+
+}
+
+return "balanceZero";
+
+}
+
+function balanceText(balance){
+
+if(balance>0){
+
+return "بدهکار: "+
+formatMoney(balance);
+
+}
+
+if(balance<0){
+
+return "بستانکار: "+
+formatMoney(Math.abs(balance));
+
+}
+
+return "تسویه";
+
+}
+
+function openLedger(){
+
+ensureLedger();
+
+$("ledgerModal").style.display=
+"flex";
+
+renderLedger();
+
+}
+
+function closeLedger(){
+
+$("ledgerModal").style.display=
+"none";
+
+}
+
+function renderLedger(){
+
+ensureLedger();
+
+const box=
+$("ledgerContent");
+
+if(!ledgerData.accounts.length){
+
+box.innerHTML=
+'<div class="ledgerEmpty">'+
+"هنوز حسابی ساخته نشده است.<br>"+
+(
+isSeller()
+?
+"در حالت فروشندگان فقط حساب‌ها قابل مشاهده هستند."
+:
+"برای شروع روی «＋ حساب جدید» بزنید."
+)+
+"</div>";
+
+return;
+
+}
+
+let totalDebit=0;
+let totalCredit=0;
+
+ledgerData.accounts.forEach(
+account=>{
+
+const totals=
+accountTotals(account);
+
+totalDebit+=totals.debit;
+totalCredit+=totals.credit;
+
+});
+
+let html=
+'<div class="ledgerSummary">'+
+'<div class="ledgerSummaryBox">'+
+'<div class="ledgerSummaryTitle">جمع بدهکار</div>'+
+'<div class="ledgerSummaryValue balanceDebit">'+
+formatMoney(totalDebit)+
+"</div>"+
+"</div>"+
+'<div class="ledgerSummaryBox">'+
+'<div class="ledgerSummaryTitle">جمع بستانکار</div>'+
+'<div class="ledgerSummaryValue balanceCredit">'+
+formatMoney(totalCredit)+
+"</div>"+
+"</div>"+
+"</div>";
+
+ledgerData.accounts.forEach(
+account=>{
+
+let totals=
+accountTotals(account);
+
+html+=
+'<div class="accountCard">'+
+
+'<div class="accountTop">'+
+
+'<div>'+
+'<div class="accountName">'+
+esc(account.name)+
+"</div>"+
+
+(
+account.phone
+?
+'<div class="accountPhone">'+
+esc(account.phone)+
+"</div>"
+:
+""
+)+
+
+"</div>"+
+
+'<div class="accountBalance '+
+balanceClass(totals.balance)+
+'">'+
+balanceText(totals.balance)+
+"</div>"+
+
+"</div>"+
+
+(
+account.note
+?
+'<div class="accountNote">'+
+esc(account.note)+
+"</div>"
+:
+""
+)+
+
+'<div class="accountButtons">'+
+
+'<button onclick="openAccountDetail(\''+
+account.id+
+'\')">'+
+"مشاهده"+
+"</button>";
+
+if(!isSeller()){
+
+html+=
+'<button onclick="openAccountEditById(\''+
+account.id+
+'\')">'+
+"ویرایش"+
+"</button>"+
+
+'<button class="danger" onclick="deleteAccountById(\''+
+account.id+
+'\')">'+
+"حذف"+
+"</button>";
+
+}
+
+html+=
+"</div>"+
+"</div>";
+
+});
+
+box.innerHTML=html;
+
+}
+
+function openAccountEdit(index){
+
+if(isSeller()){
+
+alert(
+"در حالت فروشندگان امکان ساخت یا تغییر حساب وجود ندارد."
+);
+
+return;
+
+}
+
+accountEdit=index;
+
+$("accountTitle").textContent=
+index<0
+?
+"حساب جدید"
+:
+"ویرایش حساب";
+
+if(index<0){
+
+$("accountName").value="";
+$("accountPhone").value="";
+$("accountNote").value="";
+$("accountDelete").style.display=
+"none";
+
+}else{
+
+let account=
+ledgerData.accounts[index];
+
+if(!account){
+
+return;
+
+}
+
+$("accountName").value=
+account.name||"";
+
+$("accountPhone").value=
+account.phone||"";
+
+$("accountNote").value=
+account.note||"";
+
+$("accountDelete").style.display=
+"block";
+
+}
+
+$("accountModal").style.display=
+"flex";
+
+setTimeout(
+()=>
+$("accountName").focus(),
+80
+);
+
+}
+
+function openAccountEditById(id){
+
+if(isSeller()){
+
+return;
+
+}
+
+let index=
+ledgerData.accounts.findIndex(
+account=>
+account.id===id
+);
+
+if(index<0){
+
+return;
+
+}
+
+openAccountEdit(index);
+
+}
+
+function closeAccountModal(){
+
+$("accountModal").style.display=
+"none";
+
+}
+
+function saveAccount(){
+
+if(isSeller()){
+
+return;
+
+}
+
+let name=
+$("accountName").value.trim();
+
+if(!name){
+
+alert(
+"نام طرف حساب را وارد کنید."
+);
+
+return;
+
+}
+
+let phone=
+$("accountPhone").value.trim();
+
+let note=
+$("accountNote").value.trim();
+
+if(accountEdit<0){
+
+ledgerData.accounts.push(
+{
+id:makeId(),
+name:name,
+phone:phone,
+note:note,
+transactions:[]
+}
+);
+
+}else{
+
+let account=
+ledgerData.accounts[accountEdit];
+
+if(!account){
+
+return;
+
+}
+
+account.name=name;
+account.phone=phone;
+account.note=note;
+
+}
+
+saveLedger();
+
+closeAccountModal();
+
+renderLedger();
+
+}
+
+function deleteAccount(){
+
+if(isSeller()){
+
+return;
+
+}
+
+if(accountEdit<0){
+
+return;
+
+}
+
+let account=
+ledgerData.accounts[accountEdit];
+
+if(!account){
+
+return;
+
+}
+
+if(
+!confirm(
+"حساب «"+
+account.name+
+"» حذف شود؟\n\n"+
+"تمام تراکنش‌های این حساب هم حذف می‌شوند."
+)
+){
+
+return;
+
+}
+
+ledgerData.accounts.splice(
+accountEdit,
+1
+);
+
+saveLedger();
+
+closeAccountModal();
+
+renderLedger();
+
+}
+
+function deleteAccountById(id){
+
+if(isSeller()){
+
+return;
+
+}
+
+let index=
+ledgerData.accounts.findIndex(
+account=>
+account.id===id
+);
+
+if(index<0){
+
+return;
+
+}
+
+let account=
+ledgerData.accounts[index];
+
+if(
+!confirm(
+"حساب «"+
+account.name+
+"» حذف شود؟\n\n"+
+"تمام تراکنش‌های این حساب هم حذف می‌شوند."
+)
+){
+
+return;
+
+}
+
+ledgerData.accounts.splice(
+index,
+1
+);
+
+saveLedger();
+
+renderLedger();
+
+}
+
+function openAccountDetail(id){
+
+ensureLedger();
+
+let account=
+accountById(id);
+
+if(!account){
+
+return;
+
+}
+
+selectedAccountId=id;
+
+$("accountDetailTitle").textContent=
+account.name;
+
+if(isSeller()){
+
+$("addTransactionButton").style.display=
+"none";
+
+}else{
+
+$("addTransactionButton").style.display=
+"block";
+
+}
+
+renderAccountDetail();
+
+$("accountDetailModal").style.display=
+"flex";
+
+}
+
+function closeAccountDetail(){
+
+$("accountDetailModal").style.display=
+"none";
+
+selectedAccountId=null;
+
+}
+
+function renderAccountDetail(){
+
+let account=
+accountById(selectedAccountId);
+
+if(!account){
+
+return;
+
+}
+
+let totals=
+accountTotals(account);
+
+let html=
+'<div class="ledgerSummary">'+
+
+'<div class="ledgerSummaryBox">'+
+'<div class="ledgerSummaryTitle">بدهکار</div>'+
+'<div class="ledgerSummaryValue balanceDebit">'+
+formatMoney(totals.debit)+
+"</div>"+
+"</div>"+
+
+'<div class="ledgerSummaryBox">'+
+'<div class="ledgerSummaryTitle">بستانکار</div>'+
+'<div class="ledgerSummaryValue balanceCredit">'+
+formatMoney(totals.credit)+
+"</div>"+
+"</div>"+
+
+'<div class="ledgerSummaryBox">'+
+'<div class="ledgerSummaryTitle">مانده</div>'+
+'<div class="ledgerSummaryValue '+
+balanceClass(totals.balance)+
+'">'+
+balanceText(totals.balance)+
+"</div>"+
+"</div>"+
+
+"</div>";
+
+if(account.phone){
+
+html+=
+'<div class="accountNote">'+
+"شماره تماس: "+
+esc(account.phone)+
+"</div>";
+
+}
+
+if(account.note){
+
+html+=
+'<div class="accountNote">'+
+esc(account.note)+
+"</div>";
+
+}
+
+if(!account.transactions.length){
+
+html+=
+'<div class="ledgerEmpty">'+
+"هنوز تراکنشی برای این حساب ثبت نشده است."+
+"</div>";
+
+}else{
+
+account.transactions
+.slice()
+.reverse()
+.forEach(
+transaction=>{
+
+let amount=
+Number(
+String(
+transaction.amount||""
+)
+.replace(/,/g,"")
+)||0;
+
+let typeText=
+transaction.type==="credit"
+?
+"بستانکار"
+:
+"بدهکار";
+
+html+=
+'<div class="transaction '+
+(
+transaction.type==="credit"
+?
+"credit"
+:
+"debit"
+)+
+'">'+
+
+'<div class="transactionTop">'+
+
+'<div class="transactionType">'+
+typeText+
+"</div>"+
+
+'<div class="transactionAmount">'+
+formatMoney(amount)+
+"</div>"+
+
+"</div>"+
+
+(
+transaction.note
+?
+'<div class="transactionNote">'+
+esc(transaction.note)+
+"</div>"
+:
+""
+);
+
+if(!isSeller()){
+
+html+=
+'<div class="transactionActions">'+
+
+'<button onclick="openTransactionEditById(\''+
+transaction.id+
+'\')">'+
+"ویرایش"+
+"</button>"+
+
+'<button class="danger" onclick="deleteTransactionById(\''+
+transaction.id+
+'\')">'+
+"حذف"+
+"</button>"+
+
+"</div>";
+
+}
+
+html+=
+"</div>";
+
+});
+
+}
+
+$("accountDetailContent").innerHTML=
+html;
+
+}
+
+function openTransactionEdit(index){
+
+if(isSeller()){
+
+alert(
+"در حالت فروشندگان امکان ثبت یا تغییر تراکنش وجود ندارد."
+);
+
+return;
+
+}
+
+if(!selectedAccountId){
+
+return;
+
+}
+
+let account=
+accountById(selectedAccountId);
+
+if(!account){
+
+return;
+
+}
+
+transactionEdit=index;
+
+$("transactionTitle").textContent=
+index<0
+?
+"ثبت حساب"
+:
+"ویرایش حساب";
+
+if(index<0){
+
+transactionType="debit";
+
+$("transactionAmount").value="";
+
+$("transactionNote").value="";
+
+$("transactionDelete").style.display=
+"none";
+
+}else{
+
+let transaction=
+account.transactions[index];
+
+if(!transaction){
+
+return;
+
+}
+
+transactionType=
+transaction.type==="credit"
+?
+"credit"
+:
+"debit";
+
+$("transactionAmount").value=
+transaction.amount||"";
+
+$("transactionNote").value=
+transaction.note||"";
+
+$("transactionDelete").style.display=
+"block";
+
+}
+
+updateTransactionTypeButtons();
+
+$("transactionModal").style.display=
+"flex";
+
+setTimeout(
+()=>
+$("transactionAmount").focus(),
+80
+);
+
+}
+
+function openTransactionEditById(id){
+
+if(isSeller()){
+
+return;
+
+}
+
+let account=
+accountById(selectedAccountId);
+
+if(!account){
+
+return;
+
+}
+
+let index=
+account.transactions.findIndex(
+transaction=>
+transaction.id===id
+);
+
+if(index<0){
+
+return;
+
+}
+
+openTransactionEdit(index);
+
+}
+
+function setTransactionType(type){
+
+if(isSeller()){
+
+return;
+
+}
+
+transactionType=
+type==="credit"
+?
+"credit"
+:
+"debit";
+
+updateTransactionTypeButtons();
+
+}
+
+function updateTransactionTypeButtons(){
+
+$("debitTypeButton")
+.classList.toggle(
+"active",
+transactionType==="debit"
+);
+
+$("creditTypeButton")
+.classList.toggle(
+"active",
+transactionType==="credit"
+);
+
+}
+
+function closeTransactionModal(){
+
+$("transactionModal").style.display=
+"none";
+
+}
+
+function saveTransaction(){
+
+if(isSeller()){
+
+return;
+
+}
+
+let account=
+accountById(selectedAccountId);
+
+if(!account){
+
+return;
+
+}
+
+let amount=
+$("transactionAmount")
+.value
+.trim();
+
+if(!amount){
+
+alert(
+"مبلغ را وارد کنید."
+);
+
+return;
+
+}
+
+let numeric=
+Number(
+String(amount)
+.replace(/,/g,"")
+);
+
+if(
+!isFinite(numeric)||
+numeric<=0
+){
+
+alert(
+"مبلغ واردشده معتبر نیست."
+);
+
+return;
+
+}
+
+let note=
+$("transactionNote")
+.value
+.trim();
+
+if(transactionEdit<0){
+
+account.transactions.push(
+{
+id:makeId(),
+type:transactionType,
+amount:String(numeric),
+note:note
+}
+);
+
+}else{
+
+let transaction=
+account.transactions[transactionEdit];
+
+if(!transaction){
+
+return;
+
+}
+
+transaction.type=
+transactionType;
+
+transaction.amount=
+String(numeric);
+
+transaction.note=
+note;
+
+}
+
+saveLedger();
+
+closeTransactionModal();
+
+renderAccountDetail();
+
+renderLedger();
+
+}
+
+function deleteTransaction(){
+
+if(isSeller()){
+
+return;
+
+}
+
+let account=
+accountById(selectedAccountId);
+
+if(!account||transactionEdit<0){
+
+return;
+
+}
+
+if(
+!confirm(
+"این تراکنش حذف شود؟"
+)
+){
+
+return;
+
+}
+
+account.transactions.splice(
+transactionEdit,
+1
+);
+
+saveLedger();
+
+closeTransactionModal();
+
+renderAccountDetail();
+
+renderLedger();
+
+}
+
+function deleteTransactionById(id){
+
+if(isSeller()){
+
+return;
+
+}
+
+let account=
+accountById(selectedAccountId);
+
+if(!account){
+
+return;
+
+}
+
+let index=
+account.transactions.findIndex(
+transaction=>
+transaction.id===id
+);
+
+if(index<0){
+
+return;
+
+}
+
+if(
+!confirm(
+"این تراکنش حذف شود؟"
+)
+){
+
+return;
+
+}
+
+account.transactions.splice(
+index,
+1
+);
+
+saveLedger();
+
+renderAccountDetail();
+
+renderLedger();
+
+}
+
+/* =========================================================
+   ارسال و دریافت لیست قیمت
+   ========================================================= */
 
 function exportPriceList(){
 
@@ -1867,12 +4452,6 @@ inStore.items=[];
 
 }
 
-/*
-فایل واردشده مرجع کامل فروشگاه است.
-تمام کالاهای قبلی این فروشگاه
-با کالاهای داخل فایل جایگزین می‌شوند.
-*/
-
 const newItems=[];
 
 inStore.items.forEach(
@@ -2060,15 +4639,6 @@ e.target.value="";
 
 }
 
-/* تنظیمات فعلاً آماده است تا امکانات بعدی را داخلش اضافه کنیم */
-function openSettings(){
-
-alert(
-"تنظیمات\n\nامکانات تنظیمات در نسخه‌های بعدی اضافه خواهد شد."
-);
-
-}
-
 window.exportFinished=
 function(){};
 
@@ -2094,6 +4664,10 @@ alert(
 );
 
 };
+
+/* =========================================================
+   رویدادها
+   ========================================================= */
 
 $("search")
 .addEventListener(
@@ -2134,9 +4708,88 @@ closeModal();
 
 });
 
+$("settingsModal")
+.addEventListener(
+"click",
+e=>{
+
+if(
+e.target.id==="settingsModal"
+){
+
+closeSettings();
+
+}
+
+});
+
+$("ledgerModal")
+.addEventListener(
+"click",
+e=>{
+
+if(
+e.target.id==="ledgerModal"
+){
+
+closeLedger();
+
+}
+
+});
+
+$("accountModal")
+.addEventListener(
+"click",
+e=>{
+
+if(
+e.target.id==="accountModal"
+){
+
+closeAccountModal();
+
+}
+
+});
+
+$("accountDetailModal")
+.addEventListener(
+"click",
+e=>{
+
+if(
+e.target.id==="accountDetailModal"
+){
+
+closeAccountDetail();
+
+}
+
+});
+
+$("transactionModal")
+.addEventListener(
+"click",
+e=>{
+
+if(
+e.target.id==="transactionModal"
+){
+
+closeTransactionModal();
+
+}
+
+});
+
+/* شروع برنامه */
+
 ensureIds();
 
 ensureItemIds();
+
+ensureLedger();
 
 updateStoreButton();
 
