@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private var pendingIncomingUri: Uri? = null
     private var pendingOpenAdd = false
     private var pendingChooseShareMode = false
+    private var pendingOpenLedger = false
 
     companion object {
         private const val REQUEST_OPEN_FILE = 1002
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
                 processPendingIncomingFile()
                 processPendingOpenAdd()
                 processPendingChooseShareMode()
+                processPendingOpenLedger()
             }
         }
 
@@ -83,6 +85,11 @@ class MainActivity : AppCompatActivity() {
             processPendingChooseShareMode()
         }
 
+        if (incomingIntent.getBooleanExtra("openLedger", false)) {
+            pendingOpenLedger = true
+            processPendingOpenLedger()
+        }
+
         val action = incomingIntent.action
         var uri: Uri? = null
 
@@ -108,6 +115,15 @@ class MainActivity : AppCompatActivity() {
         pendingOpenAdd = false
         webView.evaluateJavascript(
             "window.openAdd && window.openAdd();",
+            null
+        )
+    }
+
+    private fun processPendingOpenLedger() {
+        if (!pageLoaded || !pendingOpenLedger) return
+        pendingOpenLedger = false
+        webView.evaluateJavascript(
+            "window.openLedger && window.openLedger();",
             null
         )
     }
