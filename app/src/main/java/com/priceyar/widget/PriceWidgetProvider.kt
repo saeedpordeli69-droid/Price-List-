@@ -183,6 +183,14 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 )
             )
 
+            views.setOnClickPendingIntent(
+                R.id.widgetLedgerButton,
+                createLedgerPendingIntent(
+                    context,
+                    appWidgetId
+                )
+            )
+
             val infoEnabled =
                 isInfoModeEnabled(context)
 
@@ -316,6 +324,36 @@ class PriceWidgetProvider : AppWidgetProvider() {
             return PendingIntent.getActivity(
                 context,
                 appWidgetId + 30000,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        private fun createLedgerPendingIntent(
+            context: Context,
+            appWidgetId: Int
+        ): PendingIntent {
+
+            val intent =
+                Intent(
+                    context,
+                    MainActivity::class.java
+                )
+
+            intent.putExtra(
+                "openLedger",
+                true
+            )
+
+            intent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+
+            return PendingIntent.getActivity(
+                context,
+                appWidgetId + 40000,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
