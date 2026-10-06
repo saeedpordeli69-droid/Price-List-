@@ -1,0 +1,838 @@
+/* =========================================================
+   PriceYar - Glassmorphism Main Screen
+   فقط ظاهر صفحه اصلی
+   منطق JavaScript دست نخورده می ماند
+   ========================================================= */
+
+:root{
+    --glass-bg:rgba(255,255,255,.075);
+    --glass-bg-strong:rgba(255,255,255,.105);
+    --glass-border:rgba(255,255,255,.13);
+    --glass-border-soft:rgba(255,255,255,.08);
+    --glass-shadow:0 18px 45px rgba(0,0,0,.35);
+    --glass-blue:#35bfff;
+    --glass-cyan:#29e6ff;
+    --glass-purple:#6b63ff;
+    --glass-text:#f5f7ff;
+    --glass-muted:#8e96a8;
+}
+
+
+/* =========================================================
+   BACKGROUND
+   ========================================================= */
+
+html,
+body{
+    background:
+        radial-gradient(
+            circle at 12% 12%,
+            rgba(32,183,255,.12),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 88% 38%,
+            rgba(91,76,255,.11),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 55% 92%,
+            rgba(0,218,255,.08),
+            transparent 30%
+        ),
+        #050608 !important;
+
+    color:#fff;
+}
+
+body{
+    position:relative;
+    overflow-x:hidden;
+}
+
+/* نورهای محو پشت محیط */
+body::before,
+body::after{
+    content:"";
+    position:fixed;
+    width:250px;
+    height:250px;
+    border-radius:50%;
+    pointer-events:none;
+    filter:blur(70px);
+    opacity:.30;
+    z-index:0;
+}
+
+body::before{
+    top:80px;
+    left:-110px;
+    background:#00bfff;
+}
+
+body::after{
+    top:430px;
+    right:-120px;
+    background:#6255ff;
+}
+
+
+/* =========================================================
+   MAIN APP
+   ========================================================= */
+
+.app{
+    position:relative;
+    z-index:1;
+    max-width:680px;
+    padding:28px 14px 42px;
+}
+
+
+/* یک نور بسیار ظریف پشت محتوای اصلی */
+.app::before{
+    content:"";
+    position:absolute;
+    top:110px;
+    left:50%;
+    width:310px;
+    height:310px;
+    transform:translateX(-50%);
+    border-radius:50%;
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,191,255,.11),
+            rgba(85,70,255,.06) 42%,
+            transparent 72%
+        );
+    filter:blur(30px);
+    pointer-events:none;
+    z-index:-1;
+}
+
+
+/* =========================================================
+   HEADER / STORE
+   ========================================================= */
+
+.head{
+    margin-bottom:18px;
+}
+
+.storeBox{
+    position:relative;
+}
+
+.storeBtn{
+    height:66px !important;
+    border-radius:22px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.12),
+            rgba(255,255,255,.045)
+        ) !important;
+
+    border:1px solid var(--glass-border) !important;
+
+    color:#fff !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.10),
+        0 12px 35px rgba(0,0,0,.28);
+
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+
+    font-size:calc(22px * var(--font-scale)) !important;
+    font-weight:900 !important;
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        background .18s ease,
+        box-shadow .18s ease;
+}
+
+.storeBtn:active{
+    transform:scale(.985);
+}
+
+.storeBtn:hover{
+    border-color:rgba(64,202,255,.35) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        0 14px 38px rgba(0,0,0,.35),
+        0 0 28px rgba(30,190,255,.06);
+}
+
+.storeBtn:after{
+    width:38px !important;
+    height:38px !important;
+    border:1px solid rgba(255,255,255,.15) !important;
+
+    background:
+        linear-gradient(
+            rgba(255,255,255,.7),
+            rgba(255,255,255,.7)
+        ) center 11px/20px 2px no-repeat,
+        linear-gradient(
+            rgba(255,255,255,.7),
+            rgba(255,255,255,.7)
+        ) center 21px/13px 2px no-repeat,
+        rgba(255,255,255,.035) !important;
+
+    box-shadow:
+        inset 0 1px 4px rgba(255,255,255,.06);
+}
+
+
+/* =========================================================
+   TOP TOOLS
+   ========================================================= */
+
+.topTools{
+    margin-top:10px;
+}
+
+.ledgerBtn{
+    height:42px !important;
+    border-radius:14px !important;
+
+    background:rgba(255,255,255,.055) !important;
+    border:1px solid rgba(255,255,255,.10) !important;
+
+    color:#dce4f5 !important;
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06),
+        0 8px 22px rgba(0,0,0,.18);
+
+    transition:.18s ease;
+}
+
+.ledgerBtn:active{
+    transform:scale(.97);
+}
+
+.ledgerMiniLogo{
+    opacity:.9;
+}
+
+
+/* وضعیت مدیریت / فروشندگان */
+.modeBadge{
+    color:#7f899d !important;
+    letter-spacing:.1px;
+}
+
+.modeBadge.seller{
+    color:#9ba6bb !important;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.searchWrap{
+    position:relative;
+    margin-top:4px;
+}
+
+.search{
+    height:62px !important;
+    border-radius:21px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.095),
+            rgba(255,255,255,.045)
+        ) !important;
+
+    border:1px solid rgba(255,255,255,.13) !important;
+
+    color:#fff !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.07),
+        0 15px 38px rgba(0,0,0,.28);
+
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+
+    font-size:calc(17px * var(--font-scale)) !important;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.search::placeholder{
+    color:#777f91;
+}
+
+.search:focus{
+    border-color:rgba(42,196,255,.42) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.08),
+        0 15px 38px rgba(0,0,0,.30),
+        0 0 28px rgba(35,188,255,.08);
+}
+
+.searchIcon{
+    color:#8d97aa !important;
+    font-size:27px !important;
+    z-index:2;
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+   ========================================================= */
+
+.quickRow{
+    gap:10px;
+    margin-top:11px;
+}
+
+.add,
+.more{
+    height:56px !important;
+    border-radius:18px !important;
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.07),
+        0 10px 28px rgba(0,0,0,.20);
+
+    transition:
+        transform .16s ease,
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+.add{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(24,177,255,.18),
+            rgba(67,99,255,.10)
+        ) !important;
+
+    color:#55caff !important;
+
+    border:1px solid rgba(62,198,255,.28) !important;
+}
+
+.more{
+    background:rgba(255,255,255,.055) !important;
+    color:#dfe5f0 !important;
+    border:1px solid rgba(255,255,255,.11) !important;
+}
+
+.add:active,
+.more:active{
+    transform:scale(.975);
+}
+
+.add:hover{
+    border-color:rgba(62,211,255,.48) !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.08),
+        0 10px 28px rgba(0,0,0,.25),
+        0 0 24px rgba(30,190,255,.09);
+}
+
+.more.on{
+    color:#50caff !important;
+    border-color:rgba(63,201,255,.42) !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(38,189,255,.13),
+            rgba(90,75,255,.08)
+        ) !important;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+   ========================================================= */
+
+.section{
+    margin:27px 5px 10px;
+    align-items:center;
+}
+
+.section b{
+    font-size:calc(14px * var(--font-scale));
+    font-weight:900;
+
+    color:#e9edf7;
+
+    position:relative;
+}
+
+.section b::before{
+    content:"";
+    display:inline-block;
+
+    width:4px;
+    height:17px;
+
+    margin-left:8px;
+    vertical-align:-3px;
+
+    border-radius:5px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #30d5ff,
+            #6464ff
+        );
+
+    box-shadow:
+        0 0 12px rgba(46,205,255,.32);
+}
+
+.section span{
+    color:#687185 !important;
+    font-size:calc(12px * var(--font-scale));
+}
+
+
+/* =========================================================
+   PRODUCT CARDS
+   ========================================================= */
+
+.rowWrap{
+    margin:9px 0;
+}
+
+.row{
+    min-height:72px !important;
+    padding:14px 17px !important;
+
+    border-radius:20px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.035)
+        ) !important;
+
+    border:1px solid rgba(255,255,255,.085) !important;
+
+    color:#fff !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.055),
+        0 10px 28px rgba(0,0,0,.22);
+
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    transition:
+        transform .16s ease,
+        border-color .18s ease,
+        background .18s ease,
+        box-shadow .18s ease;
+}
+
+.row:active{
+    transform:scale(.988);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.105),
+            rgba(255,255,255,.05)
+        ) !important;
+}
+
+.row:hover{
+    border-color:rgba(255,255,255,.15) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06),
+        0 12px 32px rgba(0,0,0,.27);
+}
+
+.name{
+    color:#f2f5fb !important;
+    font-size:calc(17px * var(--font-scale)) !important;
+    font-weight:850 !important;
+}
+
+.price{
+    font-size:calc(19px * var(--font-scale)) !important;
+    font-weight:950 !important;
+
+    text-shadow:
+        0 0 16px color-mix(
+            in srgb,
+            var(--price-color,#fff) 18%,
+            transparent
+        );
+}
+
+.buy,
+.sub{
+    color:#747d90 !important;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty{
+    margin-top:12px;
+    padding:48px 18px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.035);
+
+    border:1px dashed rgba(255,255,255,.10);
+
+    color:#747e91 !important;
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+}
+
+
+/* =========================================================
+   SEND / UPDATE BUTTONS
+   ========================================================= */
+
+.back{
+    height:51px !important;
+    margin-top:10px !important;
+
+    border-radius:16px !important;
+
+    background:rgba(255,255,255,.045) !important;
+
+    border:1px solid rgba(255,255,255,.09) !important;
+
+    color:#c8d0df !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.05),
+        0 8px 22px rgba(0,0,0,.17);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+
+    font-size:calc(15px * var(--font-scale)) !important;
+    font-weight:800 !important;
+
+    transition:.18s ease;
+}
+
+.back:active{
+    transform:scale(.98);
+}
+
+.back:hover{
+    border-color:rgba(64,199,255,.25) !important;
+    color:#55caff !important;
+}
+
+
+/* =========================================================
+   SETTINGS BUTTON
+   ========================================================= */
+
+.settingsBtn{
+    height:51px !important;
+    margin-top:10px !important;
+
+    border-radius:16px !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.035)
+        ) !important;
+
+    border:1px solid rgba(255,255,255,.10) !important;
+
+    color:#aeb7c9 !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.05),
+        0 8px 22px rgba(0,0,0,.18);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    transition:.18s ease;
+}
+
+.settingsBtn:active{
+    transform:scale(.98);
+}
+
+.settingsBtn:hover{
+    color:#dce4f2 !important;
+    border-color:rgba(255,255,255,.17) !important;
+}
+
+
+/* =========================================================
+   STORE MENU
+   ========================================================= */
+
+.storeMenu{
+    top:72px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25,29,38,.94),
+            rgba(12,15,21,.94)
+        ) !important;
+
+    border:1px solid rgba(255,255,255,.12) !important;
+
+    border-radius:20px !important;
+
+    padding:9px !important;
+
+    box-shadow:
+        0 24px 60px rgba(0,0,0,.55),
+        inset 0 1px 0 rgba(255,255,255,.06) !important;
+
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+}
+
+.storeItem{
+    border-radius:13px !important;
+    color:#dfe5f0;
+    transition:.16s ease;
+}
+
+.storeItem.active{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(38,184,255,.13),
+            rgba(89,75,255,.08)
+        ) !important;
+
+    color:#55caff;
+}
+
+.storeItem:active{
+    transform:scale(.98);
+}
+
+.storeActions{
+    border-top-color:rgba(255,255,255,.08) !important;
+}
+
+.storeAction{
+    height:44px !important;
+    border-radius:12px !important;
+
+    background:rgba(255,255,255,.055) !important;
+    border-color:rgba(255,255,255,.10) !important;
+
+    color:#d6deeb !important;
+}
+
+
+/* =========================================================
+   LIGHT MODE
+   ========================================================= */
+
+body.light{
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(35,185,255,.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 40%,
+            rgba(95,80,255,.08),
+            transparent 32%
+        ),
+        #eef1f6 !important;
+
+    color:#111 !important;
+}
+
+body.light::before{
+    background:#31c8ff;
+    opacity:.16;
+}
+
+body.light::after{
+    background:#766aff;
+    opacity:.12;
+}
+
+body.light .storeBtn,
+body.light .search,
+body.light .row,
+body.light .add,
+body.light .more,
+body.light .back,
+body.light .settingsBtn,
+body.light .ledgerBtn{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.76),
+            rgba(255,255,255,.54)
+        ) !important;
+
+    color:#172033 !important;
+
+    border-color:rgba(255,255,255,.78) !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.9),
+        0 12px 30px rgba(50,65,90,.10);
+}
+
+body.light .name{
+    color:#172033 !important;
+}
+
+body.light .price{
+    color:var(--price-color,#111) !important;
+}
+
+body.light .section b{
+    color:#172033;
+}
+
+body.light .section span{
+    color:#7d8798 !important;
+}
+
+body.light .search::placeholder{
+    color:#8a94a5;
+}
+
+body.light .storeMenu{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.96),
+            rgba(241,244,249,.94)
+        ) !important;
+
+    border-color:rgba(0,0,0,.08) !important;
+
+    box-shadow:
+        0 24px 55px rgba(30,45,70,.18) !important;
+}
+
+body.light .storeItem{
+    color:#1d2738;
+}
+
+body.light .storeItem.active{
+    color:#087eb3 !important;
+    background:rgba(38,185,245,.10) !important;
+}
+
+body.light .storeActions{
+    border-top-color:rgba(0,0,0,.08) !important;
+}
+
+body.light .storeAction{
+    background:rgba(255,255,255,.70) !important;
+    color:#273246 !important;
+    border-color:rgba(0,0,0,.08) !important;
+}
+
+body.light .empty{
+    background:rgba(255,255,255,.48);
+    border-color:rgba(0,0,0,.10);
+    color:#7b8495 !important;
+}
+
+
+/* =========================================================
+   SMALL SCREEN
+   ========================================================= */
+
+@media(max-width:430px){
+
+    .app{
+        padding-left:10px;
+        padding-right:10px;
+        padding-top:24px;
+    }
+
+    .storeBtn{
+        height:62px !important;
+        border-radius:20px !important;
+        font-size:calc(20px * var(--font-scale)) !important;
+    }
+
+    .search{
+        height:59px !important;
+        border-radius:19px !important;
+    }
+
+    .add,
+    .more{
+        height:53px !important;
+        border-radius:16px !important;
+        font-size:calc(14px * var(--font-scale)) !important;
+    }
+
+    .row{
+        min-height:68px !important;
+        border-radius:18px !important;
+        padding:13px 15px !important;
+    }
+
+    .name{
+        font-size:calc(17px * var(--font-scale)) !important;
+    }
+
+    .price{
+        font-size:calc(18px * var(--font-scale)) !important;
+    }
+}
+
+
+/* =========================================================
+   REDUCE MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+        transition:none !important;
+        animation:none !important;
+    }
+}
