@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -47,7 +46,9 @@ class MainActivity : AppCompatActivity() {
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
+
                 pageLoaded = true
+
                 processPendingIncomingFile()
                 processPendingOpenAdd()
                 processPendingChooseShareMode()
@@ -57,19 +58,24 @@ class MainActivity : AppCompatActivity() {
 
         webView.webChromeClient = WebChromeClient()
         webView.addJavascriptInterface(AndroidBridge(), "AndroidBridge")
+
         setContentView(webView)
 
         webView.loadUrl("file:///android_asset/index.html")
+
         handleIncomingIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+
         setIntent(intent)
+
         handleIncomingIntent(intent)
     }
 
-    // دکمه برگشت گوشی فقط یک لایه از رابط برنامه را می‌بندد و هرگز برنامه را نمی‌بندد.
+    // دکمه برگشت گوشی فقط یک لایه از رابط برنامه را می‌بندد.
+    // برنامه را نمی‌بندد.
     override fun onBackPressed() {
         if (!pageLoaded) return
 
@@ -98,17 +104,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         val action = incomingIntent.action
+
         var uri: Uri? = null
 
         if (action == Intent.ACTION_VIEW) {
+
             uri = incomingIntent.data
+
         } else if (action == Intent.ACTION_SEND) {
+
             uri = if (android.os.Build.VERSION.SDK_INT >= 33) {
+
                 incomingIntent.getParcelableExtra(
                     Intent.EXTRA_STREAM,
                     Uri::class.java
                 )
+
             } else {
+
                 @Suppress("DEPRECATION")
                 incomingIntent.getParcelableExtra<Uri>(
                     Intent.EXTRA_STREAM
@@ -117,9 +130,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (uri != null) {
+
             pendingIncomingUri = uri
+
             processPendingIncomingFile()
         }
+    }
+
+    private fun processPendingIncomingFile() {
+        if (!pageLoaded) return
+
+        val uri = pendingIncomingUri ?: return
+
+        pendingIncomingUri = null
+
+        readImportFile(uri)
     }
 
     private fun processPendingOpenAdd() {
@@ -148,6 +173,7 @@ class MainActivity : AppCompatActivity() {
         if (!pageLoaded || !pendingChooseShareMode) return
 
         pendingChooseShareMode = false
+
         showShareModeDialog()
     }
 
@@ -156,6 +182,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showGlassShareModeDialogWithoutData() {
+
         val dialog = createGlassShareDialog(
             title = "ارسال لیست قیمت"
         )
@@ -168,6 +195,7 @@ class MainActivity : AppCompatActivity() {
                 subtitle = "ارسال قیمت فروش بدون اطلاعات خرید",
                 accent = "#55D8FF"
             ) {
+
                 dialog.alert.dismiss()
 
                 webView.evaluateJavascript(
@@ -185,6 +213,7 @@ class MainActivity : AppCompatActivity() {
                 subtitle = "ارسال لیست کامل همراه اطلاعات مدیریت",
                 accent = "#8FA7FF"
             ) {
+
                 dialog.alert.dismiss()
 
                 webView.evaluateJavascript(
@@ -204,7 +233,11 @@ class MainActivity : AppCompatActivity() {
 
         dialog.alert.show()
 
-        dialog.alert.window?.setBackgroundDrawableColor(Color.TRANSPARENT)
+        dialog.alert.window?.setBackgroundDrawable(
+            android.graphics.drawable.ColorDrawable(
+                Color.TRANSPARENT
+            )
+        )
 
         dialog.alert.window?.setLayout(
             dp(340),
@@ -216,6 +249,7 @@ class MainActivity : AppCompatActivity() {
         json: String,
         fileName: String
     ) {
+
         val dialog = createGlassShareDialog(
             title = "ارسال لیست قیمت"
         )
@@ -228,7 +262,9 @@ class MainActivity : AppCompatActivity() {
                 subtitle = "فقط قیمت فروش برای فروشندگان",
                 accent = "#55D8FF"
             ) {
+
                 dialog.alert.dismiss()
+
                 sharePriceListFile(
                     json,
                     fileName,
@@ -243,7 +279,9 @@ class MainActivity : AppCompatActivity() {
                 subtitle = "لیست کامل برای مدیریت",
                 accent = "#8FA7FF"
             ) {
+
                 dialog.alert.dismiss()
+
                 sharePriceListFile(
                     json,
                     fileName,
@@ -260,7 +298,11 @@ class MainActivity : AppCompatActivity() {
 
         dialog.alert.show()
 
-        dialog.alert.window?.setBackgroundDrawableColor(Color.TRANSPARENT)
+        dialog.alert.window?.setBackgroundDrawable(
+            android.graphics.drawable.ColorDrawable(
+                Color.TRANSPARENT
+            )
+        )
 
         dialog.alert.window?.setLayout(
             dp(340),
@@ -278,14 +320,18 @@ class MainActivity : AppCompatActivity() {
     ): GlassDialogParts {
 
         val root = LinearLayout(this).apply {
+
             orientation = LinearLayout.VERTICAL
+
             gravity = Gravity.CENTER_HORIZONTAL
+
             setPadding(
                 dp(20),
                 dp(20),
                 dp(20),
                 dp(16)
             )
+
             background = roundedBackground(
                 "#F018202D",
                 "#4058D5FF",
@@ -295,11 +341,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         val titleView = TextView(this).apply {
+
             text = title
+
             gravity = Gravity.CENTER
-            setTextColor(Color.parseColor("#F5FAFF"))
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
-            setTypeface(null, android.graphics.Typeface.BOLD)
+
+            setTextColor(
+                Color.parseColor("#F5FAFF")
+            )
+
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                20f
+            )
+
+            setTypeface(
+                null,
+                android.graphics.Typeface.BOLD
+            )
+
             setPadding(
                 0,
                 dp(2),
@@ -317,10 +377,20 @@ class MainActivity : AppCompatActivity() {
         )
 
         val subtitle = TextView(this).apply {
+
             text = "نوع لیست موردنظر را انتخاب کنید"
+
             gravity = Gravity.CENTER
-            setTextColor(Color.parseColor("#AFC1D8"))
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+
+            setTextColor(
+                Color.parseColor("#AFC1D8")
+            )
+
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                13f
+            )
+
             setPadding(
                 0,
                 0,
@@ -338,7 +408,9 @@ class MainActivity : AppCompatActivity() {
         )
 
         val options = LinearLayout(this).apply {
+
             orientation = LinearLayout.VERTICAL
+
             gravity = Gravity.CENTER_HORIZONTAL
         }
 
@@ -355,7 +427,12 @@ class MainActivity : AppCompatActivity() {
             .create()
 
         alert.setOnShowListener {
-            alert.window?.setBackgroundDrawableColor(Color.TRANSPARENT)
+
+            alert.window?.setBackgroundDrawable(
+                android.graphics.drawable.ColorDrawable(
+                    Color.TRANSPARENT
+                )
+            )
 
             alert.window?.setLayout(
                 dp(340),
@@ -374,19 +451,37 @@ class MainActivity : AppCompatActivity() {
         subtitle: String,
         accent: String,
         onClick: () -> Unit
-    ): View {
+    ): TextView {
 
-        val box = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
+        val box = TextView(this).apply {
+
+            text = "$title\n$subtitle"
+
             gravity = Gravity.CENTER_VERTICAL
-            isClickable = true
-            isFocusable = true
+
+            setTextColor(
+                Color.parseColor("#F5FAFF")
+            )
+
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                15f
+            )
+
+            setTypeface(
+                null,
+                android.graphics.Typeface.BOLD
+            )
+
             setPadding(
                 dp(16),
-                dp(13),
+                dp(15),
                 dp(16),
-                dp(13)
+                dp(15)
             )
+
+            isClickable = true
+            isFocusable = true
 
             background = roundedBackground(
                 "#CC111925",
@@ -399,44 +494,6 @@ class MainActivity : AppCompatActivity() {
                 onClick()
             }
         }
-
-        val titleView = TextView(this).apply {
-            text = title
-            setTextColor(Color.parseColor("#F5FAFF"))
-            setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                16f
-            )
-            setTypeface(
-                null,
-                android.graphics.Typeface.BOLD
-            )
-        }
-
-        val subtitleView = TextView(this).apply {
-            text = subtitle
-            setTextColor(Color.parseColor("#A9BCD2"))
-            setTextSize(
-                TypedValue.COMPLEX_UNIT_SP,
-                12f
-            )
-            setPadding(
-                0,
-                dp(5),
-                0,
-                0
-            )
-        }
-
-        box.addView(titleView)
-
-        box.addView(
-            subtitleView,
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        )
 
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -457,26 +514,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun createDialogCancelButton(
         onClick: () -> Unit
-    ): View {
+    ): TextView {
 
         return TextView(this).apply {
+
             text = "انصراف"
+
             gravity = Gravity.CENTER
-            setTextColor(Color.parseColor("#AFC1D8"))
+
+            setTextColor(
+                Color.parseColor("#AFC1D8")
+            )
+
             setTextSize(
                 TypedValue.COMPLEX_UNIT_SP,
                 14f
             )
+
             setTypeface(
                 null,
                 android.graphics.Typeface.BOLD
             )
+
             setPadding(
                 dp(10),
                 dp(14),
                 dp(10),
                 dp(6)
             )
+
             isClickable = true
             isFocusable = true
 
@@ -494,9 +560,16 @@ class MainActivity : AppCompatActivity() {
     ): GradientDrawable {
 
         return GradientDrawable().apply {
+
             shape = GradientDrawable.RECTANGLE
-            cornerRadius = dp(radiusDp).toFloat()
-            setColor(Color.parseColor(fillColor))
+
+            cornerRadius =
+                dp(radiusDp).toFloat()
+
+            setColor(
+                Color.parseColor(fillColor)
+            )
+
             setStroke(
                 dp(strokeWidthDp),
                 Color.parseColor(strokeColor)
@@ -505,6 +578,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dp(value: Int): Int {
+
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             value.toFloat(),
@@ -513,6 +587,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dp(value: Float): Int {
+
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             value,
@@ -524,12 +599,16 @@ class MainActivity : AppCompatActivity() {
 
         @JavascriptInterface
         fun saveData(json: String) {
+
             getSharedPreferences(
                 "priceyar",
                 MODE_PRIVATE
             )
                 .edit()
-                .putString("data", json)
+                .putString(
+                    "data",
+                    json
+                )
                 .apply()
 
             updateWidget()
@@ -537,22 +616,31 @@ class MainActivity : AppCompatActivity() {
 
         @JavascriptInterface
         fun loadData(): String {
+
             return getSharedPreferences(
                 "priceyar",
                 MODE_PRIVATE
             )
-                .getString("data", "") ?: ""
+                .getString(
+                    "data",
+                    ""
+                ) ?: ""
         }
 
         @JavascriptInterface
         fun requestShareMode(mode: String) {
+
             webView.post {
 
-                val rawJson = getSharedPreferences(
-                    "priceyar",
-                    MODE_PRIVATE
-                )
-                    .getString("data", "") ?: ""
+                val rawJson =
+                    getSharedPreferences(
+                        "priceyar",
+                        MODE_PRIVATE
+                    )
+                        .getString(
+                            "data",
+                            ""
+                        ) ?: ""
 
                 if (rawJson.isBlank()) {
                     return@post
@@ -561,7 +649,9 @@ class MainActivity : AppCompatActivity() {
                 val json = try {
 
                     val rawRoot =
-                        org.json.JSONObject(rawJson)
+                        org.json.JSONObject(
+                            rawJson
+                        )
 
                     val packageRoot =
                         org.json.JSONObject()
@@ -588,19 +678,22 @@ class MainActivity : AppCompatActivity() {
 
                     packageRoot.put(
                         "stores",
-                        rawRoot.optJSONArray("stores")
-                            ?: org.json.JSONArray()
+                        rawRoot.optJSONArray(
+                            "stores"
+                        ) ?: org.json.JSONArray()
                     )
 
                     packageRoot.put(
                         "deleted",
-                        rawRoot.optJSONObject("deleted")
-                            ?: org.json.JSONObject()
+                        rawRoot.optJSONObject(
+                            "deleted"
+                        ) ?: org.json.JSONObject()
                     )
 
                     packageRoot.toString(2)
 
                 } catch (e: Exception) {
+
                     return@post
                 }
 
@@ -620,7 +713,9 @@ class MainActivity : AppCompatActivity() {
             json: String,
             fileName: String
         ) {
+
             runOnUiThread {
+
                 showShareModeDialogForData(
                     json,
                     fileName
@@ -633,6 +728,7 @@ class MainActivity : AppCompatActivity() {
             json: String,
             fileName: String
         ) {
+
             sharePriceList(
                 json,
                 fileName
@@ -643,7 +739,9 @@ class MainActivity : AppCompatActivity() {
         fun importPriceList() {
 
             val intent =
-                Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                Intent(
+                    Intent.ACTION_OPEN_DOCUMENT
+                ).apply {
 
                     addCategory(
                         Intent.CATEGORY_OPENABLE
@@ -685,7 +783,9 @@ class MainActivity : AppCompatActivity() {
             )
 
             val stores =
-                root.optJSONArray("stores")
+                root.optJSONArray(
+                    "stores"
+                )
 
             if (stores != null) {
 
@@ -696,8 +796,9 @@ class MainActivity : AppCompatActivity() {
                             ?: continue
 
                     val items =
-                        store.optJSONArray("items")
-                            ?: continue
+                        store.optJSONArray(
+                            "items"
+                        ) ?: continue
 
                     for (j in 0 until items.length()) {
 
@@ -715,6 +816,7 @@ class MainActivity : AppCompatActivity() {
             root.toString(2)
 
         } catch (e: Exception) {
+
             json
         }
     }
@@ -747,19 +849,25 @@ class MainActivity : AppCompatActivity() {
                         root.toString(2)
 
                     } catch (e: Exception) {
+
                         json
                     }
                 }
 
             val sharedDirectory =
-                File(cacheDir, "shared")
+                File(
+                    cacheDir,
+                    "shared"
+                )
 
             if (!sharedDirectory.exists()) {
                 sharedDirectory.mkdirs()
             }
 
             val safeFileName =
-                sanitizeFileName(fileName)
+                sanitizeFileName(
+                    fileName
+                )
 
             val file =
                 File(
@@ -780,7 +888,9 @@ class MainActivity : AppCompatActivity() {
                 )
 
             val sendIntent =
-                Intent(Intent.ACTION_SEND).apply {
+                Intent(
+                    Intent.ACTION_SEND
+                ).apply {
 
                     type = "application/json"
 
@@ -812,7 +922,9 @@ class MainActivity : AppCompatActivity() {
                     "ارسال لیست قیمت با"
                 )
 
-            startActivity(chooser)
+            startActivity(
+                chooser
+            )
 
             webView.evaluateJavascript(
                 "window.shareStarted && " +
@@ -857,7 +969,9 @@ class MainActivity : AppCompatActivity() {
         readImportFile(uri)
     }
 
-    private fun readImportFile(uri: Uri) {
+    private fun readImportFile(
+        uri: Uri
+    ) {
 
         try {
 
@@ -866,7 +980,9 @@ class MainActivity : AppCompatActivity() {
                     .openInputStream(uri)
                     ?.use { input ->
                         input.readBytes()
-                            .toString(Charsets.UTF_8)
+                            .toString(
+                                Charsets.UTF_8
+                            )
                     }
 
             if (text.isNullOrBlank()) {
@@ -881,7 +997,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             val safeText =
-                org.json.JSONObject.quote(text)
+                org.json.JSONObject.quote(
+                    text
+                )
 
             webView.evaluateJavascript(
                 "window.receiveImportedPriceList($safeText);",
@@ -916,6 +1034,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateWidget() {
-        PriceWidgetProvider.updateWidget(this)
+        PriceWidgetProvider.updateWidget(
+            this
+        )
     }
 }
