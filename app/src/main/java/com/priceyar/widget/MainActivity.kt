@@ -3,11 +3,11 @@ package com.priceyar.widget
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.webkit.JavascriptInterface
@@ -104,10 +104,15 @@ class MainActivity : AppCompatActivity() {
             uri = incomingIntent.data
         } else if (action == Intent.ACTION_SEND) {
             uri = if (android.os.Build.VERSION.SDK_INT >= 33) {
-                incomingIntent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+                incomingIntent.getParcelableExtra(
+                    Intent.EXTRA_STREAM,
+                    Uri::class.java
+                )
             } else {
                 @Suppress("DEPRECATION")
-                incomingIntent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
+                incomingIntent.getParcelableExtra<Uri>(
+                    Intent.EXTRA_STREAM
+                )
             }
         }
 
@@ -146,83 +151,165 @@ class MainActivity : AppCompatActivity() {
         showShareModeDialog()
     }
 
-    /*
-     * پنجره انتخاب نوع ارسال
-     *
-     * طراحی Glassmorphism ساده و سبک است تا روی همه نسخه‌های اندروید
-     * بدون وابستگی جدید کار کند.
-     *
-     * حالت Dark و Light بر اساس تم فعلی دستگاه تشخیص داده می‌شود.
-     */
     private fun showShareModeDialog() {
-        showGlassShareModeDialog { mode ->
-            webView.evaluateJavascript(
-                "window.AndroidBridge && " +
-                    "window.AndroidBridge.requestShareMode && " +
-                    "window.AndroidBridge.requestShareMode(\"$mode\");",
-                null
-            )
-        }
+        showGlassShareModeDialogWithoutData()
+    }
+
+    private fun showGlassShareModeDialogWithoutData() {
+        val dialog = createGlassShareDialog(
+            title = "ارسال لیست قیمت"
+        )
+
+        val container = dialog.viewContainer
+
+        container.addView(
+            createShareModeButton(
+                title = "👤  ویژه فروشندگان",
+                subtitle = "ارسال قیمت فروش بدون اطلاعات خرید",
+                accent = "#55D8FF"
+            ) {
+                dialog.alert.dismiss()
+
+                webView.evaluateJavascript(
+                    "window.AndroidBridge && " +
+                        "window.AndroidBridge.requestShareMode && " +
+                        "window.AndroidBridge.requestShareMode(\"seller\");",
+                    null
+                )
+            }
+        )
+
+        container.addView(
+            createShareModeButton(
+                title = "🔐  ویژه مدیریت",
+                subtitle = "ارسال لیست کامل همراه اطلاعات مدیریت",
+                accent = "#8FA7FF"
+            ) {
+                dialog.alert.dismiss()
+
+                webView.evaluateJavascript(
+                    "window.AndroidBridge && " +
+                        "window.AndroidBridge.requestShareMode && " +
+                        "window.AndroidBridge.requestShareMode(\"management\");",
+                    null
+                )
+            }
+        )
+
+        container.addView(
+            createDialogCancelButton {
+                dialog.alert.dismiss()
+            }
+        )
+
+        dialog.alert.show()
+
+        dialog.alert.window?.setBackgroundDrawableColor(Color.TRANSPARENT)
+
+        dialog.alert.window?.setLayout(
+            dp(340),
+            android.view.WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 
     private fun showShareModeDialogForData(
         json: String,
         fileName: String
     ) {
-        showGlassShareModeDialog { mode ->
-            if (mode == "seller") {
+        val dialog = createGlassShareDialog(
+            title = "ارسال لیست قیمت"
+        )
+
+        val container = dialog.viewContainer
+
+        container.addView(
+            createShareModeButton(
+                title = "👤  ویژه فروشندگان",
+                subtitle = "فقط قیمت فروش برای فروشندگان",
+                accent = "#55D8FF"
+            ) {
+                dialog.alert.dismiss()
                 sharePriceListFile(
                     json,
                     fileName,
                     "ویژه فروشندگان"
                 )
-            } else {
+            }
+        )
+
+        container.addView(
+            createShareModeButton(
+                title = "🔐  ویژه مدیریت",
+                subtitle = "لیست کامل برای مدیریت",
+                accent = "#8FA7FF"
+            ) {
+                dialog.alert.dismiss()
                 sharePriceListFile(
                     json,
                     fileName,
                     "ویژه مدیریت"
                 )
             }
-        }
+        )
+
+        container.addView(
+            createDialogCancelButton {
+                dialog.alert.dismiss()
+            }
+        )
+
+        dialog.alert.show()
+
+        dialog.alert.window?.setBackgroundDrawableColor(Color.TRANSPARENT)
+
+        dialog.alert.window?.setLayout(
+            dp(340),
+            android.view.WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 
-    private fun showGlassShareModeDialog(
-        onModeSelected: (String) -> Unit
-    ) {
-        val isDark = (resources.configuration.uiMode and
-                Configuration.UI_MODE_NIGHT_MASK) ==
-                Configuration.UI_MODE_NIGHT_YES
+    private data class GlassDialogParts(
+        val alert: AlertDialog,
+        val viewContainer: LinearLayout
+    )
 
-        val dialogView = LinearLayout(this).apply {
+    private fun createGlassShareDialog(
+        title: String
+    ): GlassDialogParts {
+
+        val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
             setPadding(
-                dp(22),
                 dp(20),
-                dp(22),
-                dp(18)
+                dp(20),
+                dp(20),
+                dp(16)
             )
             background = roundedBackground(
-                if (isDark) "#E9151C29" else "#F2FFFFFF",
-                if (isDark) "#4058D5FF" else "#5058B9E8",
-                24f
+                "#F018202D",
+                "#4058D5FF",
+                26f,
+                1
             )
         }
 
-        val title = TextView(this).apply {
-            text = "ارسال لیست قیمت"
-            textSize = 21f
+        val titleView = TextView(this).apply {
+            text = title
             gravity = Gravity.CENTER
-            typeface = android.graphics.Typeface.DEFAULT_BOLD
-            setTextColor(
-                Color.parseColor(
-                    if (isDark) "#F5FAFF" else "#142033"
-                )
+            setTextColor(Color.parseColor("#F5FAFF"))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+            setTypeface(null, android.graphics.Typeface.BOLD)
+            setPadding(
+                0,
+                dp(2),
+                0,
+                dp(16)
             )
         }
 
-        dialogView.addView(
-            title,
+        root.addView(
+            titleView,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -230,18 +317,19 @@ class MainActivity : AppCompatActivity() {
         )
 
         val subtitle = TextView(this).apply {
-            text = "نوع دسترسی گیرنده را انتخاب کنید"
-            textSize = 13f
+            text = "نوع لیست موردنظر را انتخاب کنید"
             gravity = Gravity.CENTER
-            setPadding(0, dp(7), 0, dp(16))
-            setTextColor(
-                Color.parseColor(
-                    if (isDark) "#AFC2D9" else "#607086"
-                )
+            setTextColor(Color.parseColor("#AFC1D8"))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+            setPadding(
+                0,
+                0,
+                0,
+                dp(14)
             )
         }
 
-        dialogView.addView(
+        root.addView(
             subtitle,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -249,245 +337,197 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        val sellerButton = createShareModeButton(
-            icon = "👤",
-            title = "ویژه فروشندگان",
-            description = "فقط قیمت فروش کالاها",
-            isDark = isDark,
-            accent = "#42B8FF"
-        )
-
-        val managementButton = createShareModeButton(
-            icon = "🔐",
-            title = "ویژه مدیریت",
-            description = "قیمت‌ها و اطلاعات مدیریتی",
-            isDark = isDark,
-            accent = "#63D5A2"
-        )
-
-        dialogView.addView(
-            sellerButton,
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(72)
-            ).apply {
-                bottomMargin = dp(10)
-            }
-        )
-
-        dialogView.addView(
-            managementButton,
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(72)
-            )
-        )
-
-        val cancelButton = TextView(this).apply {
-            text = "انصراف"
-            textSize = 14f
-            gravity = Gravity.CENTER
-            typeface = android.graphics.Typeface.DEFAULT_BOLD
-            setTextColor(
-                Color.parseColor(
-                    if (isDark) "#AFC2D9" else "#506176"
-                )
-            )
-            setPadding(0, dp(16), 0, dp(4))
-            isClickable = true
-            isFocusable = true
+        val options = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
         }
 
-        dialogView.addView(
-            cancelButton,
+        root.addView(
+            options,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(48)
+                LinearLayout.LayoutParams.WRAP_CONTENT
             )
         )
 
-        val dialog = AlertDialog.Builder(this)
-            .setView(dialogView)
+        val alert = AlertDialog.Builder(this)
+            .setView(root)
             .create()
 
-        dialog.window?.setBackgroundDrawable(
-            android.graphics.drawable.ColorDrawable(Color.TRANSPARENT)
-        )
+        alert.setOnShowListener {
+            alert.window?.setBackgroundDrawableColor(Color.TRANSPARENT)
 
-        sellerButton.setOnClickListener {
-            dialog.dismiss()
-            onModeSelected("seller")
-        }
-
-        managementButton.setOnClickListener {
-            dialog.dismiss()
-            onModeSelected("management")
-        }
-
-        cancelButton.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.setOnShowListener {
-            dialog.window?.setBackgroundDrawable(
-                android.graphics.drawable.ColorDrawable(Color.TRANSPARENT)
-            )
-
-            dialog.window?.setDimAmount(
-                if (isDark) 0.72f else 0.45f
-            )
-
-            dialog.window?.setLayout(
-                (resources.displayMetrics.widthPixels * 0.88f).toInt(),
-                android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+            alert.window?.setLayout(
+                dp(340),
+                android.view.WindowManager.LayoutParams.WRAP_CONTENT
             )
         }
 
-        dialog.show()
-
-        dialog.window?.setBackgroundDrawable(
-            android.graphics.drawable.ColorDrawable(Color.TRANSPARENT)
-        )
-
-        dialog.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.88f).toInt(),
-            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        return GlassDialogParts(
+            alert = alert,
+            viewContainer = options
         )
     }
 
     private fun createShareModeButton(
-        icon: String,
         title: String,
-        description: String,
-        isDark: Boolean,
-        accent: String
-    ): LinearLayout {
+        subtitle: String,
+        accent: String,
+        onClick: () -> Unit
+    ): View {
 
-        val container = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            setPadding(
-                dp(14),
-                dp(8),
-                dp(14),
-                dp(8)
-            )
-            background = roundedBackground(
-                if (isDark) "#CC202A38" else "#DFFFFFFF",
-                accent,
-                18f
-            )
-            isClickable = true
-            isFocusable = true
-        }
-
-        val iconView = TextView(this).apply {
-            text = icon
-            textSize = 24f
-            gravity = Gravity.CENTER
-        }
-
-        container.addView(
-            iconView,
-            LinearLayout.LayoutParams(
-                dp(44),
-                dp(52)
-            ).apply {
-                marginEnd = dp(8)
-            }
-        )
-
-        val textContainer = LinearLayout(this).apply {
+        val box = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_VERTICAL
+            isClickable = true
+            isFocusable = true
+            setPadding(
+                dp(16),
+                dp(13),
+                dp(16),
+                dp(13)
+            )
+
+            background = roundedBackground(
+                "#CC111925",
+                accent,
+                18f,
+                1
+            )
+
+            setOnClickListener {
+                onClick()
+            }
         }
 
         val titleView = TextView(this).apply {
             text = title
-            textSize = 15f
-            typeface = android.graphics.Typeface.DEFAULT_BOLD
-            setTextColor(Color.parseColor(accent))
-        }
-
-        val descriptionView = TextView(this).apply {
-            text = description
-            textSize = 11.5f
-            setPadding(0, dp(3), 0, 0)
-            setTextColor(
-                Color.parseColor(
-                    if (isDark) "#AFC0D3" else "#66768A"
-                )
+            setTextColor(Color.parseColor("#F5FAFF"))
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                16f
+            )
+            setTypeface(
+                null,
+                android.graphics.Typeface.BOLD
             )
         }
 
-        textContainer.addView(titleView)
-        textContainer.addView(descriptionView)
-
-        container.addView(
-            textContainer,
-            LinearLayout.LayoutParams(
+        val subtitleView = TextView(this).apply {
+            text = subtitle
+            setTextColor(Color.parseColor("#A9BCD2"))
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                12f
+            )
+            setPadding(
                 0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f
-            )
-        )
-
-        val arrow = TextView(this).apply {
-            text = "‹"
-            textSize = 24f
-            gravity = Gravity.CENTER
-            setTextColor(
-                Color.parseColor(
-                    if (isDark) "#9EB4CB" else "#718197"
-                )
+                dp(5),
+                0,
+                0
             )
         }
 
-        container.addView(
-            arrow,
+        box.addView(titleView)
+
+        box.addView(
+            subtitleView,
             LinearLayout.LayoutParams(
-                dp(28),
-                dp(48)
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
             )
         )
 
-        return container
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+
+        params.setMargins(
+            0,
+            dp(4),
+            0,
+            dp(4)
+        )
+
+        box.layoutParams = params
+
+        return box
+    }
+
+    private fun createDialogCancelButton(
+        onClick: () -> Unit
+    ): View {
+
+        return TextView(this).apply {
+            text = "انصراف"
+            gravity = Gravity.CENTER
+            setTextColor(Color.parseColor("#AFC1D8"))
+            setTextSize(
+                TypedValue.COMPLEX_UNIT_SP,
+                14f
+            )
+            setTypeface(
+                null,
+                android.graphics.Typeface.BOLD
+            )
+            setPadding(
+                dp(10),
+                dp(14),
+                dp(10),
+                dp(6)
+            )
+            isClickable = true
+            isFocusable = true
+
+            setOnClickListener {
+                onClick()
+            }
+        }
     }
 
     private fun roundedBackground(
         fillColor: String,
         strokeColor: String,
-        radius: Float
+        radiusDp: Float,
+        strokeWidthDp: Int
     ): GradientDrawable {
+
         return GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
+            cornerRadius = dp(radiusDp).toFloat()
             setColor(Color.parseColor(fillColor))
             setStroke(
-                dp(1),
+                dp(strokeWidthDp),
                 Color.parseColor(strokeColor)
             )
-            cornerRadius = dp(radius.toInt()).toFloat()
         }
     }
 
     private fun dp(value: Int): Int {
-        return (value * resources.displayMetrics.density).toInt()
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            value.toFloat(),
+            resources.displayMetrics
+        ).toInt()
     }
 
-    private fun processPendingIncomingFile() {
-        if (!pageLoaded) return
-
-        val uri = pendingIncomingUri ?: return
-        pendingIncomingUri = null
-
-        readImportFile(uri)
+    private fun dp(value: Float): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            value,
+            resources.displayMetrics
+        ).toInt()
     }
 
     inner class AndroidBridge {
 
         @JavascriptInterface
         fun saveData(json: String) {
-            getSharedPreferences("priceyar", MODE_PRIVATE)
+            getSharedPreferences(
+                "priceyar",
+                MODE_PRIVATE
+            )
                 .edit()
                 .putString("data", json)
                 .apply()
@@ -497,7 +537,10 @@ class MainActivity : AppCompatActivity() {
 
         @JavascriptInterface
         fun loadData(): String {
-            return getSharedPreferences("priceyar", MODE_PRIVATE)
+            return getSharedPreferences(
+                "priceyar",
+                MODE_PRIVATE
+            )
                 .getString("data", "") ?: ""
         }
 
@@ -508,9 +551,12 @@ class MainActivity : AppCompatActivity() {
                 val rawJson = getSharedPreferences(
                     "priceyar",
                     MODE_PRIVATE
-                ).getString("data", "") ?: ""
+                )
+                    .getString("data", "") ?: ""
 
-                if (rawJson.isBlank()) return@post
+                if (rawJson.isBlank()) {
+                    return@post
+                }
 
                 val json = try {
 
@@ -805,14 +851,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         val uri =
-            intentData?.data ?: return
+            intentData?.data
+                ?: return
 
         readImportFile(uri)
     }
 
-    private fun readImportFile(
-        uri: Uri
-    ) {
+    private fun readImportFile(uri: Uri) {
 
         try {
 
