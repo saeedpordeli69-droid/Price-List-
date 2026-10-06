@@ -1,91 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widgetRoot"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:background="#303134"
-    android:padding="6dp">
+    android:padding="4dp"
+    android:background="@android:color/transparent">
 
-    <!-- نوار جستجو -->
     <LinearLayout
-        android:id="@+id/widgetSearchArea"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
+        android:id="@+id/search_box"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="42dp"
         android:gravity="center_vertical"
-        android:background="@drawable/widget_search_line"
-        android:paddingStart="12dp"
-        android:paddingEnd="14dp">
+        android:orientation="horizontal"
+        android:background="@drawable/widget_search_border">
 
         <ImageView
-            android:id="@+id/widgetSearchIcon"
-            android:layout_width="21dp"
-            android:layout_height="21dp"
-            android:layout_marginEnd="9dp"
+            android:id="@+id/icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@drawable/ic_search"
-            android:tint="#B8BBC0"
-            android:contentDescription="جستجو" />
+            android:contentDescription="جستجو"
+            android:alpha="0.95" />
 
         <TextView
-            android:id="@+id/widgetSearchText"
+            android:id="@+id/query"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="جستجوی کالا"
-            android:textColor="#E8EAED"
-            android:textSize="15sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="جستجوی کالا..."
+            android:textColor="#F5FAFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end" />
 
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textColor="#55D8FF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
     </LinearLayout>
 
-    <!-- افزودن -->
-    <ImageView
-        android:id="@+id/widgetAddButton"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="6dp"
-        android:padding="9dp"
-        android:src="@drawable/ic_add"
-        android:contentDescription="افزودن"
-        android:background="@drawable/widget_circle_button" />
-
-    <!-- اطلاعات -->
-    <ImageView
-        android:id="@+id/widgetHelpButton"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="6dp"
-        android:padding="9dp"
-        android:src="@drawable/ic_info"
-        android:contentDescription="اطلاعات"
-        android:background="@drawable/widget_circle_button" />
-
-    <!-- لیست -->
-    <ImageView
-        android:id="@+id/widgetShareButton"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="6dp"
-        android:padding="9dp"
-        android:src="@drawable/ic_list"
-        android:contentDescription="ارسال لیست"
-        android:background="@drawable/widget_circle_button" />
-
-    <!-- دفتر حساب -->
-    <ImageView
-        android:id="@+id/widgetLedgerButton"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="6dp"
-        android:padding="9dp"
-        android:src="@drawable/ic_ledger"
-        android:contentDescription="دفتر حساب"
-        android:background="@drawable/widget_circle_button" />
-
-</LinearLayout>
+    <TextView
+        android:id="@+id/ledger_button"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_gravity="bottom"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:text="▤  دفتر حساب"
+        android:textColor="#DCEBFF"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:background="@drawable/widget_search_border"
+        android:clickable="true"
+        android:focusable="true" />
+</FrameLayout>
