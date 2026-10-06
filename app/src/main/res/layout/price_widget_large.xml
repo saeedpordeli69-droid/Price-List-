@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widgetRoot"
     android:layout_width="match_parent"
@@ -48,6 +49,7 @@
         android:orientation="horizontal"
         android:gravity="center">
 
+        <!-- افزودن -->
         <ImageView
             android:id="@+id/widgetAddButton"
             android:layout_width="42dp"
@@ -58,6 +60,7 @@
             android:contentDescription="افزودن"
             android:background="@drawable/widget_circle_button" />
 
+        <!-- اطلاعات -->
         <ImageView
             android:id="@+id/widgetHelpButton"
             android:layout_width="42dp"
@@ -69,14 +72,27 @@
             android:contentDescription="اطلاعات"
             android:background="@drawable/widget_circle_button" />
 
+        <!-- لیست -->
         <ImageView
             android:id="@+id/widgetShareButton"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
             android:padding="9dp"
             android:src="@drawable/ic_list"
             android:contentDescription="ارسال لیست"
+            android:background="@drawable/widget_circle_button" />
+
+        <!-- دفتر حساب -->
+        <ImageView
+            android:id="@+id/widgetLedgerButton"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="6dp"
+            android:padding="9dp"
+            android:src="@drawable/ic_ledger"
+            android:contentDescription="دفتر حساب"
             android:background="@drawable/widget_circle_button" />
 
     </LinearLayout>
