@@ -23,3 +23,52 @@ body:after{width:330px;height:330px;top:480px;right:-170px;background:radial-gra
 body.light{background:radial-gradient(circle at 15% 10%,rgba(35,202,255,.18),transparent 30%),radial-gradient(circle at 85% 35%,rgba(103,85,255,.13),transparent 30%),#edf1f7!important;color:#111!important}body.light .storeBtn,body.light .search,body.light .row,body.light .add,body.light .more,body.light .back,body.light .settingsBtn,body.light .ledgerBtn{background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(255,255,255,.56))!important;color:#172033!important;border-color:rgba(255,255,255,.90)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.98),0 18px 42px rgba(43,61,90,.13)}body.light .name{color:#172033!important}body.light .price{color:var(--price-color,#111)!important;text-shadow:none}body.light .section b{color:#172033}body.light .section span{color:#7d8798!important}body.light .search::placeholder{color:#8a94a5}body.light .storeMenu{background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(241,244,249,.94))!important;border-color:rgba(0,0,0,.08)!important;box-shadow:0 24px 55px rgba(30,45,70,.18)!important}body.light .storeItem{color:#1d2738}body.light .storeItem.active{color:#087eb3!important;background:rgba(38,185,245,.10)!important}body.light .storeActions{border-top-color:rgba(0,0,0,.08)!important}body.light .storeAction{background:rgba(255,255,255,.70)!important;color:#273246!important;border-color:rgba(0,0,0,.08)!important}body.light .empty{background:rgba(255,255,255,.48)!important;border-color:rgba(0,0,0,.10);color:#7b8495!important}
 @media(max-width:430px){.app{padding-left:10px;padding-right:10px;padding-top:24px}.storeBtn{height:62px!important;border-radius:22px!important;font-size:calc(20px * var(--font-scale))!important}.search{height:59px!important;border-radius:21px!important}.add,.more{height:53px!important;border-radius:18px!important;font-size:calc(14px * var(--font-scale))!important}.row{min-height:72px!important;border-radius:20px!important;padding:13px 15px!important}.name{font-size:calc(17px * var(--font-scale))!important}.price{font-size:calc(18px * var(--font-scale))!important}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+
+/* =========================================================
+   PriceYar — Global Inner Pages Premium Glass Layer
+   Dark + Light | visual only
+   ========================================================= */
+
+/* Forms / sheets */
+.modal{background:rgba(0,0,0,.62)!important;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+.sheet{background:linear-gradient(145deg,rgba(31,37,49,.96),rgba(9,12,18,.97))!important;color:#f5f7ff!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:26px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.11),0 30px 75px rgba(0,0,0,.58)!important;backdrop-filter:blur(32px) saturate(140%);-webkit-backdrop-filter:blur(32px) saturate(140%)}
+.sheet h2,.ledgerHeader h2{font-weight:900!important;color:#f7f9ff!important;letter-spacing:-.2px}
+.input{border-radius:15px!important;background:rgba(255,255,255,.055)!important;color:#fff!important;border:1px solid rgba(255,255,255,.13)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)!important}
+.input::placeholder{color:#758095!important}.input:focus{outline:none;border-color:rgba(54,207,255,.45)!important;box-shadow:0 0 0 3px rgba(54,207,255,.06),inset 0 1px 0 rgba(255,255,255,.09)!important}
+.textarea{min-height:95px}
+.settingTitle{color:#929caf!important;font-weight:800!important}
+.settingRow{gap:8px!important}.settingOption{border-radius:13px!important;background:rgba(255,255,255,.045)!important;color:#d4ddeb!important;border:1px solid rgba(255,255,255,.11)!important;font-weight:800!important;min-height:45px!important}
+.settingOption.active{background:linear-gradient(135deg,rgba(35,205,255,.16),rgba(91,76,255,.11))!important;color:#55d2ff!important;border-color:rgba(60,208,255,.42)!important;box-shadow:0 0 24px rgba(25,200,255,.07)}
+.settingsClose{border-radius:15px!important;background:rgba(255,255,255,.055)!important;color:#d8e0ed!important;border:1px solid rgba(255,255,255,.12)!important;min-height:48px!important;font-weight:850!important}
+.btn{border-radius:14px!important;font-weight:850!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 10px 24px rgba(0,0,0,.22)}
+.btn:not(.dark):not(.danger){background:linear-gradient(135deg,rgba(30,204,255,.20),rgba(83,88,255,.12))!important;border:1px solid rgba(65,208,255,.32)!important;color:#5bd3ff!important}
+.btn.dark{background:rgba(255,255,255,.055)!important;border:1px solid rgba(255,255,255,.11)!important;color:#d3dce9!important}
+.btn.danger{background:rgba(255,90,100,.07)!important;border:1px solid rgba(255,107,107,.25)!important;color:#ff8585!important}
+
+/* Ledger */
+.ledgerHeader{gap:10px}.ledgerMiniLogo{color:#58d2ff!important;filter:drop-shadow(0 0 8px rgba(40,205,255,.25))}
+.ledgerAdd{border-radius:13px!important;background:linear-gradient(135deg,rgba(25,207,255,.18),rgba(80,92,255,.11))!important;border:1px solid rgba(65,208,255,.34)!important;color:#59d3ff!important;font-weight:850!important;min-height:43px!important}
+.ledgerTabs{gap:8px!important}.ledgerTab{border-radius:14px!important;min-height:45px!important;font-weight:900!important}
+.ledgerSearch{border-radius:15px!important;background:rgba(255,255,255,.05)!important;color:#fff!important;border:1px solid rgba(255,255,255,.12)!important;min-height:49px!important}
+.ledgerTotal,.accountRow,.txRow,.summary{border-radius:17px!important;background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;border:1px solid rgba(255,255,255,.11)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 11px 28px rgba(0,0,0,.22)!important}
+.ledgerTotal{border-color:rgba(255,255,255,.15)!important}.totalValue.credit,.txAmount.credit{color:#55d98b!important}.totalValue.debit,.txAmount.debit{color:#ff6b6b!important}
+.accountActions,.txActions{gap:8px!important}.smallBtn{border-radius:12px!important;background:rgba(255,255,255,.055)!important;border:1px solid rgba(255,255,255,.10)!important;color:#d5deeb!important;min-height:40px!important;font-weight:800!important}.smallBtn.danger{color:#ff8585!important;border-color:rgba(255,107,107,.25)!important}
+.txDate,.txNote{color:#8d97a9!important}
+
+/* Popups */
+.actionPopup{padding:20px!important}.popupAction,.popupCancel{width:100%;min-height:48px!important;margin-top:9px;border-radius:14px!important;background:rgba(255,255,255,.055)!important;border:1px solid rgba(255,255,255,.10)!important;color:#dce4f0!important;font-weight:850!important}.popupAction.danger{color:#ff8585!important;border-color:rgba(255,107,107,.25)!important}.popupCancel{color:#929caf!important}
+
+/* Light theme */
+body.light .modal{background:rgba(35,48,68,.28)!important}
+body.light .sheet{background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(239,243,248,.96))!important;color:#172033!important;border-color:rgba(30,45,70,.10)!important;box-shadow:0 30px 70px rgba(35,50,75,.20)!important}
+body.light .sheet h2,body.light .ledgerHeader h2{color:#172033!important}
+body.light .input,body.light .settingOption,body.light .settingsClose,body.light .ledgerSearch,body.light .smallBtn,body.light .popupAction,body.light .popupCancel{background:rgba(255,255,255,.74)!important;color:#172033!important;border-color:rgba(30,45,70,.10)!important}
+body.light .input::placeholder{color:#8994a6!important}.light .settingTitle{color:#758094!important}
+body.light .settingOption.active{background:rgba(35,190,245,.10)!important;color:#087cae!important;border-color:rgba(20,160,210,.30)!important}
+body.light .accountRow,body.light .txRow,body.light .summary,body.light .ledgerTotal{background:rgba(255,255,255,.76)!important;border-color:rgba(30,45,70,.09)!important;box-shadow:0 12px 28px rgba(40,55,80,.08)!important}
+body.light .ledgerSearch{background:rgba(255,255,255,.76)!important}body.light .txDate{color:#7c8799!important}
+body.light .popupAction.danger{color:#d95353!important;border-color:rgba(210,70,70,.20)!important}
+body.light .btn.dark{background:rgba(0,0,0,.045)!important;color:#273246!important;border-color:rgba(0,0,0,.09)!important}
+body.light .btn:not(.dark):not(.danger){background:linear-gradient(135deg,rgba(25,190,245,.13),rgba(90,90,240,.08))!important;color:#087cae!important;border-color:rgba(20,160,210,.25)!important}
+
+@media(max-width:430px){.sheet{border-radius:23px!important}.ledgerAdd{min-height:41px!important}.settingOption{min-height:43px!important}}
