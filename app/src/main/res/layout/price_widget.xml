@@ -77,4 +77,15 @@
         android:contentDescription="ارسال لیست"
         android:background="@drawable/widget_circle_button" />
 
+    <!-- دفتر حساب -->
+    <ImageView
+        android:id="@+id/widgetLedgerButton"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="6dp"
+        android:padding="9dp"
+        android:src="@drawable/ic_ledger"
+        android:contentDescription="دفتر حساب"
+        android:background="@drawable/widget_circle_button" />
+
 </LinearLayout>
