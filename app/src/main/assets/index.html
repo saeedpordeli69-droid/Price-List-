@@ -1079,6 +1079,17 @@ $("search").addEventListener("input",render);
 $("ledgerSearch").addEventListener("input",renderAccounts);  
 ["price","buy","txAmount"].forEach(id=>$(id).addEventListener("input",e=>{e.target.value=formatInputAmount(e.target.value)}));  
 $("txDate").addEventListener("input",e=>{e.target.value=e.target.value.replace(/[^۰-۹0-9\/]/g,"").slice(0,10)});  
+window.handleAndroidBack=function(){
+  if($("txModal").style.display!=="none"){history.back();return true}
+  if($("accountFormModal").style.display!=="none"){history.back();return true}
+  if($("accountModal").style.display!=="none"){history.back();return true}
+  if($("ledgerModal").style.display!=="none"){history.back();return true}
+  if($("settingsModal").style.display!=="none"){history.back();return true}
+  if($("modal").style.display!=="none"){history.back();return true}
+  if($("storeMenu").classList.contains("open")){$("storeMenu").classList.remove("open");return true}
+  return false;
+};
+
 window.addEventListener("popstate",()=>{if($("txModal").style.display!=="none"){$("txModal").style.display="none";return}if($("accountFormModal").style.display!=="none"){$("accountFormModal").style.display="none";return}if($("accountModal").style.display!=="none"){$("accountModal").style.display="none";activeAccount=-1;return}if($("ledgerModal").style.display!=="none"){$("ledgerModal").style.display="none";return}if($("settingsModal").style.display!=="none"){$("settingsModal").style.display="none";return}if($("modal").style.display!=="none"){$("modal").style.display="none";return}});  
 if(!history.state?.priceyarBase)history.replaceState({priceyarBase:true},"");ensureIds();ensureItemIds();ensureLedger();updateStoreButton();applyMode();  
 if(AndroidBridge?.loadData)try{let n=AndroidBridge.loadData();if(n){data=JSON.parse(n);ensureIds();ensureItemIds();localStorage.setItem(K,JSON.stringify(data))}else AndroidBridge.saveData(JSON.stringify(data))}catch(e){}  
