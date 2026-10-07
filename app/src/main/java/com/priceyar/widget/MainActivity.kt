@@ -74,15 +74,24 @@ class MainActivity : AppCompatActivity() {
         handleIncomingIntent(intent)
     }
 
-    // دکمه برگشت گوشی فقط یک لایه از رابط برنامه را می‌بندد.
-    // برنامه را نمی‌بندد.
+    // دکمه برگشت گوشی:
+    // اگر یک لایه داخل برنامه باز باشد، همان لایه بسته می‌شود.
+    // اگر هیچ لایه‌ای باز نباشد، خود برنامه بسته می‌شود.
     override fun onBackPressed() {
-        if (!pageLoaded) return
+
+        if (!pageLoaded) {
+            super.onBackPressed()
+            return
+        }
 
         webView.evaluateJavascript(
-            "(window.handleAndroidBack && window.handleAndroidBack()) || true;",
-            null
-        )
+            "(window.handleAndroidBack && window.handleAndroidBack()) || false;"
+        ) { result ->
+
+            if (result == "false") {
+                super.onBackPressed()
+            }
+        }
     }
 
     private fun handleIncomingIntent(incomingIntent: Intent?) {
