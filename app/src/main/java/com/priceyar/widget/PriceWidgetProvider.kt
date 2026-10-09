@@ -1,3 +1,4 @@
+
 package com.priceyar.widget
 
 import android.app.PendingIntent
@@ -10,7 +11,24 @@ import android.widget.RemoteViews
 
 class PriceWidgetProvider : AppWidgetProvider() {
 
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+
+        if (intent.action == ACTION_TOGGLE_INFO) {
+            val prefs = context.getSharedPreferences(
+                "priceyar", Context.MODE_PRIVATE
+            )
+            val enabled = prefs.getBoolean("infoModeEnabled", false)
+            prefs.edit().putBoolean("infoModeEnabled", !enabled).apply()
+            updateWidget(context)
+        }
+    }
+
+    override fun onUpdate(
+        context: Context,
+        manager: AppWidgetManager,
+        ids: IntArray
+    ) {
         ids.forEach { update(context, manager, it) }
     }
 
@@ -24,19 +42,86 @@ class PriceWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
-        const val ACTION_ADD_PRODUCT = "com.priceyar.widget.ACTION_ADD_PRODUCT"
-        const val ACTION_CHOOSE_SHARE_MODE = "com.priceyar.widget.ACTION_CHOOSE_SHARE_MODE"
+        const val ACTION_ADD_PRODUCT =
+            "com.priceyar.widget.ACTION_ADD_PRODUCT"
+        const val ACTION_CHOOSE_SHARE_MODE =
+            "com.priceyar.widget.ACTION_CHOOSE_SHARE_MODE"
+        const val ACTION_TOGGLE_INFO =
+            "com.priceyar.widget.ACTION_TOGGLE_INFO"
+
+        fun isInfoModeEnabled(context: Context): Boolean {
+            return context.getSharedPreferences(
+                "priceyar", Context.MODE_PRIVATE
+            ).getBoolean("infoModeEnabled", false)
+        }
 
         fun updateWidget(context: Context) {
             val manager = AppWidgetManager.getInstance(context)
-            val ids = manager.getAppWidgetIds(ComponentName(context, PriceWidgetProvider::class.java))
+            val ids = manager.getAppWidgetIds(
+                ComponentName(context, PriceWidgetProvider::class.java)
+            )
             ids.forEach { update(context, manager, it) }
         }
 
         fun refresh(context: Context) = updateWidget(context)
 
-        private fun update(context: Context, manager: AppWidgetManager, id: Int) {
-            val views = RemoteViews(context.packageName, R.layout.widget_price)
+        fun showResult(
+            context: Context,
+            manager: AppWidgetManager,
+            id: Int,
+            name: String,
+            price: String
+        ) {
+            context.getSharedPreferences(
+                "priceyar", Context.MODE_PRIVATE
+            ).edit()
+                .putString("widget_result_name", name)
+                .putString("widget_result_price", price)
+                .apply()
+
+            update(context, manager, id)
+        }
+
+        private fun update(
+            context: Context,
+            manager: AppWidgetManager,
+            id: Int
+        ) {
+            val options = manager.getAppWidgetOptions(id)
+            val width = options.getInt(
+                AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
+                options.getInt(
+                    AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0
+                )
+            )
+            val height = options.getInt(
+                AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,
+                options.getInt(
+                    AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0
+                )
+            )
+
+            val layout = if (width >= 280 && height >= 150) {
+                R.layout.widget_price
+            } else {
+                R.layout.widget_price_compact
+            }
+
+            val views = RemoteViews(context.packageName, layout)
+            val prefs = context.getSharedPreferences(
+                "priceyar", Context.MODE_PRIVATE
+            )
+
+            views.setTextViewText(
+                R.id.widget_result_name,
+                prefs.getString("widget_result_name", "PriceYar") ?: "PriceYar"
+            )
+            views.setTextViewText(
+                R.id.widget_result_price,
+                prefs.getString("widget_result_price", "")?.let {
+                    if (it.isBlank()) "" else "قیمت فروش: $it تومان"
+                } ?: ""
+            )
 
             val searchIntent = Intent(context, SearchActivity::class.java)
             val searchPending = PendingIntent.getActivity(
@@ -74,6 +159,20 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
             views.setOnClickPendingIntent(R.id.share_button, sharePending)
+
+            val infoIntent = Intent(context, PriceWidgetProvider::class.java).apply {
+                action = ACTION_TOGGLE_INFO
+            }
+            val infoPending = PendingIntent.getBroadcast(
+                context, id + 50, infoIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            views.setOnClickPendingIntent(R.id.info_button, infoPending)
+
+            views.setTextViewText(
+                R.id.info_button,
+                if (isInfoModeEnabled(context)) "ℹ✓" else "ℹ"
+            )
 
             manager.updateAppWidget(id, views)
         }
