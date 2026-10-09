@@ -19,6 +19,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 "priceyar", Context.MODE_PRIVATE
             )
             val enabled = prefs.getBoolean("infoModeEnabled", false)
+
             prefs.edit()
                 .putBoolean("infoModeEnabled", !enabled)
                 .apply()
@@ -113,9 +114,9 @@ class PriceWidgetProvider : AppWidgetProvider() {
             )
 
             val layout = if (width >= 280 && height >= 150) {
-                R.layout.price_widget
+                R.layout.price_widget_large
             } else {
-                R.layout.price_widget_compact
+                R.layout.price_widget
             }
 
             val views = RemoteViews(context.packageName, layout)
