@@ -67,7 +67,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
             val ids = manager.getAppWidgetIds(
                 ComponentName(context, PriceWidgetProvider::class.java)
             )
-
             ids.forEach { update(context, manager, it) }
         }
 
@@ -120,7 +119,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
             }
 
             val views = RemoteViews(context.packageName, layout)
-
             val prefs = context.getSharedPreferences(
                 "priceyar", Context.MODE_PRIVATE
             )
@@ -131,11 +129,10 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     ?: "PriceYar"
             )
 
+            val price = prefs.getString("widget_result_price", "") ?: ""
             views.setTextViewText(
                 R.id.widget_result_price,
-                prefs.getString("widget_result_price", "")?.let {
-                    if (it.isBlank()) "" else "قیمت فروش: $it تومان"
-                } ?: ""
+                if (price.isBlank()) "" else "قیمت فروش: $price تومان"
             )
 
             val searchIntent = Intent(
@@ -149,7 +146,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
-
             views.setOnClickPendingIntent(
                 R.id.search_button, searchPending
             )
@@ -171,7 +167,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
-
             views.setOnClickPendingIntent(
                 R.id.add_button, addPending
             )
@@ -193,7 +188,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
-
             views.setOnClickPendingIntent(
                 R.id.ledger_button, ledgerPending
             )
@@ -215,7 +209,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
-
             views.setOnClickPendingIntent(
                 R.id.share_button, sharePending
             )
@@ -233,7 +226,6 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
-
             views.setOnClickPendingIntent(
                 R.id.info_button, infoPending
             )
@@ -241,9 +233,9 @@ class PriceWidgetProvider : AppWidgetProvider() {
             views.setTextViewText(
                 R.id.info_button,
                 if (isInfoModeEnabled(context)) {
-                    "ℹ✓"
+                    "ℹ✓\nاطلاعات"
                 } else {
-                    "ℹ"
+                    "ℹ\nاطلاعات"
                 }
             )
 
