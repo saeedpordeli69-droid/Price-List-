@@ -1,4 +1,3 @@
-
 package com.priceyar.widget
 
 import android.app.PendingIntent
@@ -135,9 +134,13 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 if (price.isBlank()) "" else "قیمت فروش: $price تومان"
             )
 
+            // جست‌وجو از ویجت
             val searchIntent = Intent(
                 context, SearchActivity::class.java
-            )
+            ).apply {
+                putExtra("opened_from_widget", true)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
 
             val searchPending = PendingIntent.getActivity(
                 context,
