@@ -19,7 +19,10 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 "priceyar", Context.MODE_PRIVATE
             )
             val enabled = prefs.getBoolean("infoModeEnabled", false)
-            prefs.edit().putBoolean("infoModeEnabled", !enabled).apply()
+            prefs.edit()
+                .putBoolean("infoModeEnabled", !enabled)
+                .apply()
+
             updateWidget(context)
         }
     }
@@ -42,10 +45,13 @@ class PriceWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
+
         const val ACTION_ADD_PRODUCT =
             "com.priceyar.widget.ACTION_ADD_PRODUCT"
+
         const val ACTION_CHOOSE_SHARE_MODE =
             "com.priceyar.widget.ACTION_CHOOSE_SHARE_MODE"
+
         const val ACTION_TOGGLE_INFO =
             "com.priceyar.widget.ACTION_TOGGLE_INFO"
 
@@ -60,10 +66,13 @@ class PriceWidgetProvider : AppWidgetProvider() {
             val ids = manager.getAppWidgetIds(
                 ComponentName(context, PriceWidgetProvider::class.java)
             )
+
             ids.forEach { update(context, manager, it) }
         }
 
-        fun refresh(context: Context) = updateWidget(context)
+        fun refresh(context: Context) {
+            updateWidget(context)
+        }
 
         fun showResult(
             context: Context,
@@ -88,12 +97,14 @@ class PriceWidgetProvider : AppWidgetProvider() {
             id: Int
         ) {
             val options = manager.getAppWidgetOptions(id)
+
             val width = options.getInt(
                 AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
                 options.getInt(
                     AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0
                 )
             )
+
             val height = options.getInt(
                 AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,
                 options.getInt(
@@ -102,20 +113,23 @@ class PriceWidgetProvider : AppWidgetProvider() {
             )
 
             val layout = if (width >= 280 && height >= 150) {
-                R.layout.widget_price
+                R.layout.price_widget
             } else {
-                R.layout.widget_price_compact
+                R.layout.price_widget_compact
             }
 
             val views = RemoteViews(context.packageName, layout)
+
             val prefs = context.getSharedPreferences(
                 "priceyar", Context.MODE_PRIVATE
             )
 
             views.setTextViewText(
                 R.id.widget_result_name,
-                prefs.getString("widget_result_name", "PriceYar") ?: "PriceYar"
+                prefs.getString("widget_result_name", "PriceYar")
+                    ?: "PriceYar"
             )
+
             views.setTextViewText(
                 R.id.widget_result_price,
                 prefs.getString("widget_result_price", "")?.let {
@@ -123,55 +137,113 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 } ?: ""
             )
 
-            val searchIntent = Intent(context, SearchActivity::class.java)
+            val searchIntent = Intent(
+                context, SearchActivity::class.java
+            )
+
             val searchPending = PendingIntent.getActivity(
-                context, id + 10, searchIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                context,
+                id + 10,
+                searchIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
             )
-            views.setOnClickPendingIntent(R.id.search_button, searchPending)
 
-            val addIntent = Intent(context, MainActivity::class.java).apply {
+            views.setOnClickPendingIntent(
+                R.id.search_button, searchPending
+            )
+
+            val addIntent = Intent(
+                context, MainActivity::class.java
+            ).apply {
                 action = ACTION_ADD_PRODUCT
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                addFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+                )
             }
+
             val addPending = PendingIntent.getActivity(
-                context, id + 20, addIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                context,
+                id + 20,
+                addIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
             )
-            views.setOnClickPendingIntent(R.id.add_button, addPending)
 
-            val ledgerIntent = Intent(context, MainActivity::class.java).apply {
+            views.setOnClickPendingIntent(
+                R.id.add_button, addPending
+            )
+
+            val ledgerIntent = Intent(
+                context, MainActivity::class.java
+            ).apply {
                 putExtra("openLedger", true)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                addFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+                )
             }
+
             val ledgerPending = PendingIntent.getActivity(
-                context, id + 30, ledgerIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                context,
+                id + 30,
+                ledgerIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
             )
-            views.setOnClickPendingIntent(R.id.ledger_button, ledgerPending)
 
-            val shareIntent = Intent(context, MainActivity::class.java).apply {
+            views.setOnClickPendingIntent(
+                R.id.ledger_button, ledgerPending
+            )
+
+            val shareIntent = Intent(
+                context, MainActivity::class.java
+            ).apply {
                 action = ACTION_CHOOSE_SHARE_MODE
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                addFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+                )
             }
-            val sharePending = PendingIntent.getActivity(
-                context, id + 40, shareIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-            views.setOnClickPendingIntent(R.id.share_button, sharePending)
 
-            val infoIntent = Intent(context, PriceWidgetProvider::class.java).apply {
+            val sharePending = PendingIntent.getActivity(
+                context,
+                id + 40,
+                shareIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
+            )
+
+            views.setOnClickPendingIntent(
+                R.id.share_button, sharePending
+            )
+
+            val infoIntent = Intent(
+                context, PriceWidgetProvider::class.java
+            ).apply {
                 action = ACTION_TOGGLE_INFO
             }
+
             val infoPending = PendingIntent.getBroadcast(
-                context, id + 50, infoIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                context,
+                id + 50,
+                infoIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                    PendingIntent.FLAG_IMMUTABLE
             )
-            views.setOnClickPendingIntent(R.id.info_button, infoPending)
+
+            views.setOnClickPendingIntent(
+                R.id.info_button, infoPending
+            )
 
             views.setTextViewText(
                 R.id.info_button,
-                if (isInfoModeEnabled(context)) "ℹ✓" else "ℹ"
+                if (isInfoModeEnabled(context)) {
+                    "ℹ✓"
+                } else {
+                    "ℹ"
+                }
             )
 
             manager.updateAppWidget(id, views)
