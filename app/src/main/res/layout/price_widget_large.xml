@@ -1,100 +1,114 @@
-<?xml version="1.0" encoding="utf-8"?>
 
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widgetRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="#303134"
-    android:padding="6dp">
+    android:padding="6dp"
+    android:background="@drawable/widget_search_border">
 
     <LinearLayout
-        android:id="@+id/widgetSearchArea"
+        android:id="@+id/search_button"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:background="@drawable/widget_search_line"
         android:paddingStart="12dp"
-        android:paddingEnd="14dp">
+        android:paddingEnd="12dp">
 
         <ImageView
-            android:id="@+id/widgetSearchIcon"
-            android:layout_width="21dp"
-            android:layout_height="21dp"
-            android:layout_marginEnd="9dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="10dp"
             android:src="@drawable/ic_search"
-            android:tint="#B8BBC0"
-            android:contentDescription="جستجو" />
+            android:contentDescription="جستجو"
+            android:tint="#B8BBC0" />
 
         <TextView
-            android:id="@+id/widgetSearchText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center_vertical"
             android:text="جستجوی کالا"
             android:textColor="#E8EAED"
             android:textSize="15sp"
-            android:maxLines="1"
-            android:ellipsize="end" />
-
+            android:maxLines="1" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="6dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:gravity="center">
 
-        <!-- افزودن -->
-        <ImageView
-            android:id="@+id/widgetAddButton"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginEnd="6dp"
-            android:padding="9dp"
-            android:src="@drawable/ic_add"
-            android:contentDescription="افزودن"
+        <TextView
+            android:id="@+id/add_button"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:text="＋\nافزودن کالا"
+            android:textColor="#55D8FF"
+            android:textSize="12sp"
             android:background="@drawable/widget_circle_button" />
 
-        <!-- اطلاعات -->
-        <ImageView
-            android:id="@+id/widgetHelpButton"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            android:padding="9dp"
-            android:src="@drawable/ic_info"
-            android:contentDescription="اطلاعات"
+        <TextView
+            android:id="@+id/ledger_button"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:text="▤\nدفتر حساب"
+            android:textColor="#DCEBFF"
+            android:textSize="12sp"
             android:background="@drawable/widget_circle_button" />
 
-        <!-- لیست -->
-        <ImageView
-            android:id="@+id/widgetShareButton"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"
-            android:padding="9dp"
-            android:src="@drawable/ic_list"
-            android:contentDescription="ارسال لیست"
+        <TextView
+            android:id="@+id/share_button"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:text="⇧\nارسال لیست"
+            android:textColor="#DCEBFF"
+            android:textSize="12sp"
             android:background="@drawable/widget_circle_button" />
 
-        <!-- دفتر حساب -->
-        <ImageView
-            android:id="@+id/widgetLedgerButton"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="6dp"
-            android:padding="9dp"
-            android:src="@drawable/ic_ledger"
-            android:contentDescription="دفتر حساب"
+        <TextView
+            android:id="@+id/info_button"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:gravity="center"
+            android:text="ℹ\nاطلاعات"
+            android:textColor="#DCEBFF"
+            android:textSize="12sp"
             android:background="@drawable/widget_circle_button" />
-
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/widget_result_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="PriceYar"
+        android:textColor="#F5FAFF"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:maxLines="1" />
+
+    <TextView
+        android:id="@+id/widget_result_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#55D8FF"
+        android:textSize="12sp"
+        android:maxLines="1" />
 
 </LinearLayout>
