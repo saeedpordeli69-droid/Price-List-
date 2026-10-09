@@ -1,103 +1,106 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp"
-    android:background="@drawable/widget_search_border">
+    android:padding="10dp"
+    android:background="#202124">
 
     <TextView
         android:id="@+id/search_button"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        android:text="⌕   جستجوی کالا"
-        android:textColor="#F5FAFF"
+        android:layout_height="42dp"
+        android:gravity="center"
+        android:text="جستجوی کالا"
+        android:textColor="#E8EAED"
         android:textSize="15sp"
         android:background="@drawable/widget_search_border" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/add_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="42dp"
             android:layout_weight="1"
-            android:layout_margin="3dp"
+            android:layout_marginEnd="4dp"
             android:gravity="center"
-            android:text="＋\nافزودن کالا"
-            android:textColor="#55D8FF"
+            android:text="＋ افزودن کالا"
+            android:textColor="#FFFFFF"
             android:textSize="13sp"
-            android:background="@drawable/widget_search_border" />
+            android:background="@drawable/widget_circle_button" />
 
         <TextView
             android:id="@+id/ledger_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="42dp"
             android:layout_weight="1"
-            android:layout_margin="3dp"
+            android:layout_marginStart="4dp"
             android:gravity="center"
-            android:text="▤\nدفتر حساب"
-            android:textColor="#DCEBFF"
+            android:text="دفتر حساب"
+            android:textColor="#FFFFFF"
             android:textSize="13sp"
-            android:background="@drawable/widget_search_border" />
+            android:background="@drawable/widget_circle_button" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/share_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="42dp"
             android:layout_weight="1"
-            android:layout_margin="3dp"
+            android:layout_marginEnd="4dp"
             android:gravity="center"
-            android:text="⇧\nارسال لیست"
-            android:textColor="#DCEBFF"
+            android:text="ارسال لیست"
+            android:textColor="#FFFFFF"
             android:textSize="13sp"
-            android:background="@drawable/widget_search_border" />
+            android:background="@drawable/widget_circle_button" />
 
         <TextView
             android:id="@+id/info_button"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="42dp"
             android:layout_weight="1"
-            android:layout_margin="3dp"
+            android:layout_marginStart="4dp"
             android:gravity="center"
-            android:text="ℹ\nاطلاعات"
-            android:textColor="#DCEBFF"
+            android:text="ℹ اطلاعات"
+            android:textColor="#FFFFFF"
             android:textSize="13sp"
-            android:background="@drawable/widget_search_border" />
+            android:background="@drawable/widget_circle_button" />
+
     </LinearLayout>
 
     <TextView
         android:id="@+id/widget_result_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="4dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="PriceYar"
-        android:textColor="#F5FAFF"
-        android:textStyle="bold"
-        android:textSize="13sp"
-        android:maxLines="1" />
+        android:textColor="#E8EAED"
+        android:textSize="14sp"
+        android:maxLines="1"
+        android:ellipsize="end" />
 
     <TextView
         android:id="@+id/widget_result_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#55D8FF"
-        android:textSize="12sp"
-        android:maxLines="1" />
+        android:gravity="center"
+        android:textColor="#E8EAED"
+        android:textSize="13sp"
+        android:maxLines="1"
+        android:ellipsize="end" />
 
 </LinearLayout>
