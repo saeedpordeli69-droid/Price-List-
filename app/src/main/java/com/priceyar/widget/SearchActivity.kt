@@ -4,6 +4,7 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
@@ -144,31 +145,33 @@ class SearchActivity : Activity() {
                     )
                 }
 
-                override fun afterTextChanged(
-                    s: Editable?
-                ) {
+                override fun afterTextChanged(s: Editable?) {
                 }
             }
         )
 
         input.setOnEditorActionListener { _, actionId, _ ->
-
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-
-                searchProducts(
-                    input.text.toString().trim()
-                )
-
+                searchProducts(input.text.toString().trim())
                 true
-
             } else {
-
                 false
             }
         }
     }
 
     override fun onBackPressed() {
+
+        if (intent.getBooleanExtra("opened_from_widget", false)) {
+            val homeIntent = Intent(Intent.ACTION_MAIN).apply {
+                addCategory(Intent.CATEGORY_HOME)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+
+            startActivity(homeIntent)
+            finish()
+            return
+        }
 
         val imm =
             getSystemService(
@@ -187,9 +190,7 @@ class SearchActivity : Activity() {
 
         resultsLayout.removeAllViews()
 
-        if (query.isBlank()) {
-            return
-        }
+        if (query.isBlank()) return
 
         val prefs =
             getSharedPreferences(
@@ -197,37 +198,23 @@ class SearchActivity : Activity() {
                 Context.MODE_PRIVATE
             )
 
-        val json =
-            prefs.getString(
-                "data",
-                null
-            )
+        val json = prefs.getString("data", null)
 
-        if (json.isNullOrBlank()) {
-            return
-        }
+        if (json.isNullOrBlank()) return
 
         val infoMode =
             PriceWidgetProvider.isInfoModeEnabled(this)
 
         try {
-
-            val rootObject =
-                org.json.JSONObject(json)
+            val rootObject = org.json.JSONObject(json)
 
             val stores =
-                rootObject.optJSONArray("stores")
-                    ?: return
+                rootObject.optJSONArray("stores") ?: return
 
-            if (stores.length() == 0) {
-                return
-            }
+            if (stores.length() == 0) return
 
             var activeStoreIndex =
-                rootObject.optInt(
-                    "activeStore",
-                    0
-                )
+                rootObject.optInt("activeStore", 0)
 
             if (
                 activeStoreIndex < 0 ||
@@ -237,89 +224,37 @@ class SearchActivity : Activity() {
             }
 
             val store =
-                stores.optJSONObject(
-                    activeStoreIndex
-                ) ?: return
+                stores.optJSONObject(activeStoreIndex) ?: return
 
             val items =
-                store.optJSONArray("items")
-                    ?: return
+                store.optJSONArray("items") ?: return
 
-            val normalizedQuery =
-                query.trim().lowercase()
-
+            val normalizedQuery = query.trim().lowercase()
             var found = 0
 
             for (i in 0 until items.length()) {
+                val item = items.optJSONObject(i) ?: continue
+                val name = item.optString("name", "")
 
-                val item =
-                    items.optJSONObject(i)
-                        ?: continue
+                if (name.isBlank()) continue
 
-                val name =
-                    item.optString(
-                        "name",
-                        ""
-                    )
+                if (name.lowercase().contains(normalizedQuery)) {
+                    val price = item.optString("price", "")
 
-                if (name.isBlank()) {
-                    continue
-                }
-
-                if (
-                    name.lowercase().contains(
-                        normalizedQuery
-                    )
-                ) {
-
-                    val price =
-                        item.optString(
-                            "price",
-                            ""
-                        )
-
-                    var buyPrice =
-                        item.optString(
-                            "buyPrice",
-                            ""
-                        )
-
+                    var buyPrice = item.optString("buyPrice", "")
                     if (buyPrice.isBlank()) {
-                        buyPrice =
-                            item.optString(
-                                "buy",
-                                ""
-                            )
+                        buyPrice = item.optString("buy", "")
                     }
-
                     if (buyPrice.isBlank()) {
-                        buyPrice =
-                            item.optString(
-                                "purchasePrice",
-                                ""
-                            )
+                        buyPrice = item.optString("purchasePrice", "")
                     }
 
-                    var description =
-                        item.optString(
-                            "description",
-                            ""
-                        )
-
+                    var description = item.optString("description", "")
                     if (description.isBlank()) {
-                        description =
-                            item.optString(
-                                "desc",
-                                ""
-                            )
+                        description = item.optString("desc", "")
                     }
-
                     if (description.isBlank()) {
-                        description =
-                            item.optString(
-                                "details",
-                                ""
-                            )
+                        description = item.optString("details", "")
                     }
 
                     addResult(
@@ -339,10 +274,7 @@ class SearchActivity : Activity() {
             }
 
         } catch (_: Exception) {
-
-            showMessage(
-                "خطا در خواندن اطلاعات کالاها."
-            )
+            showMessage("خطا در خواندن اطلاعات کالاها.")
         }
     }
 
@@ -353,32 +285,18 @@ class SearchActivity : Activity() {
         description: String,
         infoMode: Boolean
     ) {
-
         val card = LinearLayout(this)
-
         card.orientation = LinearLayout.VERTICAL
         card.gravity = Gravity.CENTER_VERTICAL
-
-        card.setPadding(
-            dp(18),
-            dp(12),
-            dp(18),
-            dp(12)
-        )
+        card.setPadding(dp(18), dp(12), dp(18), dp(12))
 
         val background = GradientDrawable()
-
         background.setColor(cardColor)
         background.cornerRadius = dp(16).toFloat()
-        background.setStroke(
-            dp(1),
-            borderColor
-        )
-
+        background.setStroke(dp(1), borderColor)
         card.background = background
 
         val nameText = TextView(this)
-
         nameText.text = name
         nameText.textSize = 16f
         nameText.setTextColor(textColor)
@@ -393,21 +311,11 @@ class SearchActivity : Activity() {
         )
 
         if (price.isNotBlank()) {
-
             val priceText = TextView(this)
-
-            priceText.text =
-                "قیمت فروش: $price تومان"
-
+            priceText.text = "قیمت فروش: $price تومان"
             priceText.textSize = 15f
             priceText.setTextColor(textColor)
-
-            priceText.setPadding(
-                0,
-                dp(4),
-                0,
-                0
-            )
+            priceText.setPadding(0, dp(4), 0, 0)
 
             card.addView(
                 priceText,
@@ -418,25 +326,12 @@ class SearchActivity : Activity() {
             )
         }
 
-        if (
-            infoMode &&
-            buyPrice.isNotBlank()
-        ) {
-
+        if (infoMode && buyPrice.isNotBlank()) {
             val buyPriceText = TextView(this)
-
-            buyPriceText.text =
-                "قیمت خرید: $buyPrice تومان"
-
+            buyPriceText.text = "قیمت خرید: $buyPrice تومان"
             buyPriceText.textSize = 15f
             buyPriceText.setTextColor(textColor)
-
-            buyPriceText.setPadding(
-                0,
-                dp(4),
-                0,
-                0
-            )
+            buyPriceText.setPadding(0, dp(4), 0, 0)
 
             card.addView(
                 buyPriceText,
@@ -447,29 +342,12 @@ class SearchActivity : Activity() {
             )
         }
 
-        if (
-            infoMode &&
-            description.isNotBlank()
-        ) {
-
-            val descriptionText =
-                TextView(this)
-
-            descriptionText.text =
-                description
-
+        if (infoMode && description.isNotBlank()) {
+            val descriptionText = TextView(this)
+            descriptionText.text = description
             descriptionText.textSize = 14f
-            descriptionText.setTextColor(
-                secondaryColor
-            )
-
-            descriptionText.setPadding(
-                0,
-                dp(8),
-                0,
-                0
-            )
-
+            descriptionText.setTextColor(secondaryColor)
+            descriptionText.setPadding(0, dp(8), 0, 0)
             descriptionText.maxLines = 10
             descriptionText.ellipsize = null
 
@@ -488,44 +366,22 @@ class SearchActivity : Activity() {
                 LinearLayout.LayoutParams.WRAP_CONTENT
             )
 
-        params.setMargins(
-            0,
-            dp(8),
-            0,
-            0
-        )
-
-        resultsLayout.addView(
-            card,
-            params
-        )
+        params.setMargins(0, dp(8), 0, 0)
+        resultsLayout.addView(card, params)
 
         card.setOnClickListener {
-
-            updateWidget(
-                name,
-                price
-            )
-
+            updateWidget(name, price)
             finish()
         }
     }
 
     private fun showMessage(message: String) {
-
         val text = TextView(this)
-
         text.text = message
         text.textSize = 15f
         text.setTextColor(secondaryColor)
         text.gravity = Gravity.CENTER
-
-        text.setPadding(
-            dp(10),
-            dp(30),
-            dp(10),
-            dp(10)
-        )
+        text.setPadding(dp(10), dp(30), dp(10), dp(10))
 
         resultsLayout.addView(
             text,
@@ -536,27 +392,15 @@ class SearchActivity : Activity() {
         )
     }
 
-    private fun updateWidget(
-        name: String,
-        price: String
-    ) {
-
-        val manager =
-            AppWidgetManager.getInstance(this)
+    private fun updateWidget(name: String, price: String) {
+        val manager = AppWidgetManager.getInstance(this)
 
         val component =
-            ComponentName(
-                this,
-                PriceWidgetProvider::class.java
-            )
+            ComponentName(this, PriceWidgetProvider::class.java)
 
-        val ids =
-            manager.getAppWidgetIds(
-                component
-            )
+        val ids = manager.getAppWidgetIds(component)
 
         for (id in ids) {
-
             PriceWidgetProvider.showResult(
                 this,
                 manager,
@@ -568,12 +412,8 @@ class SearchActivity : Activity() {
     }
 
     private fun dp(value: Int): Int {
-
         return (
-            value *
-                resources
-                    .displayMetrics
-                    .density
-            ).toInt()
+            value * resources.displayMetrics.density
+        ).toInt()
     }
 }
