@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="top"
     android:padding="8dp"
     android:background="#38383A">
 
@@ -12,6 +12,7 @@
         android:id="@+id/search_button"
         android:layout_width="match_parent"
         android:layout_height="42dp"
+        android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="⌕ جستجوی کالا..."
         android:textColor="#FFFFFF"
@@ -22,17 +23,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="6dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="start|center_vertical">
 
         <TextView
             android:id="@+id/add_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center"
             android:text="＋"
             android:textColor="#FFFFFF"
@@ -41,9 +40,9 @@
 
         <TextView
             android:id="@+id/ledger_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center"
             android:text="▤"
             android:textColor="#FFFFFF"
@@ -52,9 +51,9 @@
 
         <TextView
             android:id="@+id/share_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
             android:gravity="center"
             android:text="↗"
             android:textColor="#FFFFFF"
@@ -63,9 +62,8 @@
 
         <TextView
             android:id="@+id/info_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:gravity="center"
             android:text="!"
             android:textColor="#FFFFFF"
