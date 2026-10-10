@@ -5,10 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:paddingStart="7dp"
-    android:paddingEnd="7dp"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
+    android:padding="4dp"
     android:background="#171A20">
 
     <TextView
@@ -17,13 +14,11 @@
         android:layout_height="40dp"
         android:layout_weight="1"
         android:layout_marginEnd="6dp"
-        android:gravity="center"
         android:background="@drawable/widget_search_border"
+        android:gravity="center"
         android:text="⌕"
-        android:textColor="#8CC8FF"
+        android:textColor="#FFFFFF"
         android:textSize="27sp"
-        android:fontFamily="sans-serif"
-        android:includeFontPadding="false"
         android:clickable="true"
         android:focusable="true" />
 
@@ -31,14 +26,12 @@
         android:id="@+id/add_button"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:layout_marginEnd="6dp"
-        android:gravity="center"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/widget_circle_button"
+        android:gravity="center"
         android:text="＋"
-        android:textColor="#8CC8FF"
+        android:textColor="#FFFFFF"
         android:textSize="24sp"
-        android:fontFamily="sans-serif-light"
-        android:includeFontPadding="false"
         android:clickable="true"
         android:focusable="true" />
 
@@ -46,13 +39,12 @@
         android:id="@+id/ledger_button"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:layout_marginEnd="6dp"
-        android:gravity="center"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/widget_circle_button"
+        android:gravity="center"
         android:text="▤"
-        android:textColor="#8CC8FF"
+        android:textColor="#FFFFFF"
         android:textSize="21sp"
-        android:includeFontPadding="false"
         android:clickable="true"
         android:focusable="true" />
 
@@ -60,13 +52,12 @@
         android:id="@+id/share_button"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:layout_marginEnd="6dp"
-        android:gravity="center"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/widget_circle_button"
+        android:gravity="center"
         android:text="↗"
-        android:textColor="#8CC8FF"
+        android:textColor="#FFFFFF"
         android:textSize="23sp"
-        android:includeFontPadding="false"
         android:clickable="true"
         android:focusable="true" />
 
@@ -74,12 +65,11 @@
         android:id="@+id/info_button"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:gravity="center"
         android:background="@drawable/widget_circle_button"
+        android:gravity="center"
         android:text="ⓘ"
-        android:textColor="#8CC8FF"
+        android:textColor="#FFFFFF"
         android:textSize="21sp"
-        android:includeFontPadding="false"
         android:clickable="true"
         android:focusable="true" />
 
