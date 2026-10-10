@@ -1,31 +1,30 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:padding="8dp"
-    android:background="#202124">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="10dp"
+    android:background="#38383A">
 
     <TextView
         android:id="@+id/search_button"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1.5"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:gravity="center"
-        android:text="⌕  جستجوی کالا"
-        android:textColor="#E8EAED"
-        android:textSize="14sp"
-        android:textStyle="bold"
+        android:text="⌕  جستجوی کالا..."
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
         android:maxLines="1"
-        android:ellipsize="end"
         android:background="@drawable/widget_search_border" />
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -36,9 +35,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="＋"
-            android:textColor="#E8EAED"
-            android:textSize="27sp"
-            android:background="@android:color/transparent" />
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:background="@drawable/widget_circle_button" />
 
         <TextView
             android:id="@+id/ledger_button"
@@ -47,9 +46,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="▤"
-            android:textColor="#E8EAED"
-            android:textSize="23sp"
-            android:background="@android:color/transparent" />
+            android:textColor="#FFFFFF"
+            android:textSize="26sp"
+            android:background="@drawable/widget_circle_button" />
 
         <TextView
             android:id="@+id/share_button"
@@ -57,10 +56,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="➤"
-            android:textColor="#E8EAED"
-            android:textSize="23sp"
-            android:background="@android:color/transparent" />
+            android:text="↗"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:background="@drawable/widget_circle_button" />
 
         <TextView
             android:id="@+id/info_button"
@@ -68,10 +67,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="ⓘ"
-            android:textColor="#E8EAED"
-            android:textSize="23sp"
-            android:background="@android:color/transparent" />
+            android:text="!"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:background="@drawable/widget_circle_button" />
 
     </LinearLayout>
 
