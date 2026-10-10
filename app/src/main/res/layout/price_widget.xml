@@ -9,79 +9,92 @@
     android:paddingEnd="7dp"
     android:paddingTop="5dp"
     android:paddingBottom="5dp"
-    android:background="#17191E"
-    android:baselineAligned="false">
+    android:background="#17191E">
 
     <TextView
         android:id="@+id/search_button"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_weight="1"
-        android:layout_marginEnd="7dp"
+        android:layout_marginEnd="5dp"
         android:gravity="center"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
+        android:background="@drawable/widget_search_border"
         android:text="⌕"
         android:textColor="#80BEFF"
-        android:textSize="27sp"
-        android:maxLines="1"
-        android:background="@drawable/widget_search_border" />
+        android:textSize="25sp"
+        android:fontFamily="sans-serif-medium"
+        android:includeFontPadding="false"
+        android:clickable="true"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/add_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="6dp"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="5dp"
         android:gravity="center"
+        android:background="@drawable/widget_circle_button"
         android:text="＋"
         android:textColor="#80BEFF"
-        android:textSize="25sp"
-        android:background="@drawable/widget_circle_button" />
+        android:textSize="23sp"
+        android:fontFamily="sans-serif"
+        android:includeFontPadding="false"
+        android:clickable="true"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/ledger_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="6dp"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="5dp"
         android:gravity="center"
+        android:background="@drawable/widget_circle_button"
         android:text="▤"
         android:textColor="#80BEFF"
         android:textSize="20sp"
-        android:background="@drawable/widget_circle_button" />
+        android:includeFontPadding="false"
+        android:clickable="true"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/share_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="6dp"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="5dp"
         android:gravity="center"
+        android:background="@drawable/widget_circle_button"
         android:text="↗"
         android:textColor="#80BEFF"
         android:textSize="22sp"
-        android:background="@drawable/widget_circle_button" />
+        android:includeFontPadding="false"
+        android:clickable="true"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/info_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
         android:gravity="center"
+        android:background="@drawable/widget_circle_button"
         android:text="ⓘ"
         android:textColor="#80BEFF"
-        android:textSize="22sp"
-        android:background="@drawable/widget_circle_button" />
+        android:textSize="20sp"
+        android:includeFontPadding="false"
+        android:clickable="true"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/widget_result_name"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:text="" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/widget_result_price"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:text="" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 </LinearLayout>
