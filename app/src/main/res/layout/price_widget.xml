@@ -1,10 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="250dp"
-    android:minHeight="48dp"
-    android:minResizeWidth="250dp"
-    android:minResizeHeight="48dp"
-    android:updatePeriodMillis="0"
-    android:initialLayout="@layout/price_widget"
-    android:resizeMode="horizontal|vertical"
-    android:widgetCategory="home_screen" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="4dp"
+    android:background="#38383A">
+
+    <TextView
+        android:id="@+id/search_button"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1.5"
+        android:gravity="center"
+        android:text="⌕ جستجو"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:background="@drawable/widget_search_border" />
+
+    <TextView
+        android:id="@+id/add_button"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="0.55"
+        android:gravity="center"
+        android:text="＋"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:background="@drawable/widget_circle_button" />
+
+    <TextView
+        android:id="@+id/ledger_button"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="0.55"
+        android:gravity="center"
+        android:text="▤"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
+        android:background="@drawable/widget_circle_button" />
+
+    <TextView
+        android:id="@+id/share_button"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="0.55"
+        android:gravity="center"
+        android:text="↗"
+        android:textColor="#FFFFFF"
+        android:textSize="19sp"
+        android:background="@drawable/widget_circle_button" />
+
+    <TextView
+        android:id="@+id/info_button"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="0.55"
+        android:gravity="center"
+        android:text="!"
+        android:textColor="#FFFFFF"
+        android:textSize="19sp"
+        android:background="@drawable/widget_circle_button" />
+
+    <TextView
+        android:id="@+id/widget_result_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/widget_result_price"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="" />
+
+</LinearLayout>
