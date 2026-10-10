@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
@@ -14,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:gravity="center"
-        android:text="⌕  جستجوی کالا..."
+        android:text="⌕ جستجوی کالا..."
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         android:maxLines="1"
