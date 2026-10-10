@@ -5,76 +5,86 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:padding="4dp"
-    android:background="#38383A">
+    android:paddingStart="7dp"
+    android:paddingEnd="7dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:background="#292A2E"
+    android:baselineAligned="false">
 
     <TextView
         android:id="@+id/search_button"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1"
+        android:layout_marginEnd="7dp"
         android:gravity="center"
-        android:text="⌕ جستجو"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="⌕ جستجوی کالا..."
+        android:textColor="#F5F7FA"
+        android:textSize="13sp"
+        android:textStyle="bold"
         android:maxLines="1"
         android:ellipsize="end"
         android:background="@drawable/widget_search_border" />
 
     <TextView
         android:id="@+id/add_button"
-        android:layout_width="0dp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_weight="0.55"
+        android:layout_marginEnd="6dp"
         android:gravity="center"
         android:text="＋"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:background="@drawable/widget_circle_button" />
 
     <TextView
         android:id="@+id/ledger_button"
-        android:layout_width="0dp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_weight="0.55"
+        android:layout_marginEnd="6dp"
         android:gravity="center"
         android:text="▤"
         android:textColor="#FFFFFF"
-        android:textSize="17sp"
+        android:textSize="19sp"
         android:background="@drawable/widget_circle_button" />
 
     <TextView
         android:id="@+id/share_button"
-        android:layout_width="0dp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_weight="0.55"
+        android:layout_marginEnd="6dp"
         android:gravity="center"
         android:text="↗"
         android:textColor="#FFFFFF"
-        android:textSize="19sp"
+        android:textSize="21sp"
         android:background="@drawable/widget_circle_button" />
 
     <TextView
         android:id="@+id/info_button"
-        android:layout_width="0dp"
+        android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_weight="0.55"
         android:gravity="center"
         android:text="!"
         android:textColor="#FFFFFF"
-        android:textSize="19sp"
+        android:textSize="21sp"
+        android:textStyle="bold"
         android:background="@drawable/widget_circle_button" />
 
     <TextView
         android:id="@+id/widget_result_name"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:text="" />
 
     <TextView
         android:id="@+id/widget_result_price"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:text="" />
 
 </LinearLayout>
