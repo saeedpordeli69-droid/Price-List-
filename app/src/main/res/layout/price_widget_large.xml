@@ -6,8 +6,9 @@
     android:orientation="vertical"
     android:gravity="top|center_horizontal"
     android:padding="8dp"
-    android:background="#38383A">
+    android:background="#171A20">
 
+    <!-- Search -->
     <TextView
         android:id="@+id/search_button"
         android:layout_width="match_parent"
@@ -19,8 +20,11 @@
         android:textSize="13sp"
         android:maxLines="1"
         android:ellipsize="end"
-        android:background="@drawable/widget_search_border" />
+        android:background="@drawable/widget_search_border"
+        android:clickable="true"
+        android:focusable="true" />
 
+    <!-- Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -28,61 +32,92 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-        <TextView
+        <!-- Add -->
+        <FrameLayout
             android:id="@+id/add_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:text="＋"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:background="@drawable/widget_circle_button" />
+            android:background="@drawable/widget_circle_button"
+            android:clickable="true"
+            android:focusable="true">
 
-        <TextView
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_add"
+                android:contentDescription="افزودن کالا" />
+        </FrameLayout>
+
+        <!-- Ledger -->
+        <FrameLayout
             android:id="@+id/ledger_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:text="▤"
-            android:textColor="#FFFFFF"
-            android:textSize="19sp"
-            android:background="@drawable/widget_circle_button" />
+            android:background="@drawable/widget_circle_button"
+            android:clickable="true"
+            android:focusable="true">
 
-        <TextView
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_ledger"
+                android:contentDescription="دفتر حساب" />
+        </FrameLayout>
+
+        <!-- Share -->
+        <FrameLayout
             android:id="@+id/share_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:text="↗"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:background="@drawable/widget_circle_button" />
+            android:background="@drawable/widget_circle_button"
+            android:clickable="true"
+            android:focusable="true">
 
-        <TextView
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_share"
+                android:contentDescription="ارسال لیست" />
+        </FrameLayout>
+
+        <!-- Info -->
+        <FrameLayout
             android:id="@+id/info_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:gravity="center"
-            android:text="!"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:background="@drawable/widget_circle_button" />
+            android:background="@drawable/widget_circle_button"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_info"
+                android:contentDescription="اطلاعات" />
+        </FrameLayout>
 
     </LinearLayout>
 
+    <!-- Hidden result fields required by the app -->
     <TextView
         android:id="@+id/widget_result_name"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="" />
+        android:text=""
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/widget_result_price"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="" />
+        android:text=""
+        android:visibility="gone" />
 
 </LinearLayout>
