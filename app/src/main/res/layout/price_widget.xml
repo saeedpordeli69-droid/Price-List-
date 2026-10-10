@@ -1,89 +1,11 @@
+
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:padding="8dp"
-    android:background="#38383A">
-
-    <TextView
-        android:id="@+id/search_button"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="⌕ جستجو"
-        android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:background="@drawable/widget_search_border" />
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/add_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="＋"
-            android:textColor="#FFFFFF"
-            android:textSize="25sp"
-            android:background="@drawable/widget_circle_button" />
-
-        <TextView
-            android:id="@+id/ledger_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="▤"
-            android:textColor="#FFFFFF"
-            android:textSize="21sp"
-            android:background="@drawable/widget_circle_button" />
-
-        <TextView
-            android:id="@+id/share_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="↗"
-            android:textColor="#FFFFFF"
-            android:textSize="23sp"
-            android:background="@drawable/widget_circle_button" />
-
-        <TextView
-            android:id="@+id/info_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="!"
-            android:textColor="#FFFFFF"
-            android:textSize="23sp"
-            android:background="@drawable/widget_circle_button" />
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/widget_result_name"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="" />
-
-    <TextView
-        android:id="@+id/widget_result_price"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="" />
-
-</LinearLayout>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="48dp"
+    android:minResizeWidth="250dp"
+    android:minResizeHeight="48dp"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/price_widget"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen" />
