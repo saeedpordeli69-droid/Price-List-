@@ -8,6 +8,7 @@
     android:padding="4dp"
     android:background="#171A20">
 
+    <!-- Search -->
     <TextView
         android:id="@+id/search_button"
         android:layout_width="0dp"
@@ -15,13 +16,15 @@
         android:layout_weight="1"
         android:layout_marginEnd="6dp"
         android:background="@drawable/widget_search_border"
-        android:gravity="center"
-        android:text="⌕"
-        android:textColor="#FFFFFF"
-        android:textSize="27sp"
+        android:gravity="center_vertical|start"
+        android:paddingStart="12dp"
+        android:drawableStart="@drawable/ic_search"
+        android:drawableTint="#99FFFFFF"
+        android:text=""
         android:clickable="true"
         android:focusable="true" />
 
+    <!-- Add -->
     <TextView
         android:id="@+id/add_button"
         android:layout_width="38dp"
@@ -29,12 +32,12 @@
         android:layout_marginEnd="5dp"
         android:background="@drawable/widget_circle_button"
         android:gravity="center"
-        android:text="＋"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:drawableTop="@drawable/ic_add"
+        android:drawableTint="#FFFFFFFF"
         android:clickable="true"
         android:focusable="true" />
 
+    <!-- Ledger -->
     <TextView
         android:id="@+id/ledger_button"
         android:layout_width="38dp"
@@ -42,12 +45,12 @@
         android:layout_marginEnd="5dp"
         android:background="@drawable/widget_circle_button"
         android:gravity="center"
-        android:text="▤"
-        android:textColor="#FFFFFF"
-        android:textSize="21sp"
+        android:drawableTop="@drawable/ic_ledger"
+        android:drawableTint="#FFFFFFFF"
         android:clickable="true"
         android:focusable="true" />
 
+    <!-- Share -->
     <TextView
         android:id="@+id/share_button"
         android:layout_width="38dp"
@@ -55,24 +58,24 @@
         android:layout_marginEnd="5dp"
         android:background="@drawable/widget_circle_button"
         android:gravity="center"
-        android:text="↗"
-        android:textColor="#FFFFFF"
-        android:textSize="23sp"
+        android:drawableTop="@drawable/ic_share"
+        android:drawableTint="#FFFFFFFF"
         android:clickable="true"
         android:focusable="true" />
 
+    <!-- Info -->
     <TextView
         android:id="@+id/info_button"
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:background="@drawable/widget_circle_button"
         android:gravity="center"
-        android:text="ⓘ"
-        android:textColor="#FFFFFF"
-        android:textSize="21sp"
+        android:drawableTop="@drawable/ic_info"
+        android:drawableTint="#FFFFFFFF"
         android:clickable="true"
         android:focusable="true" />
 
+    <!-- Hidden result fields required by the app -->
     <TextView
         android:id="@+id/widget_result_name"
         android:layout_width="wrap_content"
