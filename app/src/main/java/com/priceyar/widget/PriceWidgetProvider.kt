@@ -15,8 +15,10 @@ class PriceWidgetProvider : AppWidgetProvider() {
 
         if (intent.action == ACTION_TOGGLE_INFO) {
             val prefs = context.getSharedPreferences(
-                "priceyar", Context.MODE_PRIVATE
+                "priceyar",
+                Context.MODE_PRIVATE
             )
+
             val enabled = prefs.getBoolean("infoModeEnabled", false)
 
             prefs.edit()
@@ -57,15 +59,20 @@ class PriceWidgetProvider : AppWidgetProvider() {
 
         fun isInfoModeEnabled(context: Context): Boolean {
             return context.getSharedPreferences(
-                "priceyar", Context.MODE_PRIVATE
+                "priceyar",
+                Context.MODE_PRIVATE
             ).getBoolean("infoModeEnabled", false)
         }
 
         fun updateWidget(context: Context) {
             val manager = AppWidgetManager.getInstance(context)
             val ids = manager.getAppWidgetIds(
-                ComponentName(context, PriceWidgetProvider::class.java)
+                ComponentName(
+                    context,
+                    PriceWidgetProvider::class.java
+                )
             )
+
             ids.forEach { update(context, manager, it) }
         }
 
@@ -81,7 +88,8 @@ class PriceWidgetProvider : AppWidgetProvider() {
             price: String
         ) {
             context.getSharedPreferences(
-                "priceyar", Context.MODE_PRIVATE
+                "priceyar",
+                Context.MODE_PRIVATE
             ).edit()
                 .putString("widget_result_name", name)
                 .putString("widget_result_price", price)
@@ -100,14 +108,16 @@ class PriceWidgetProvider : AppWidgetProvider() {
             val width = options.getInt(
                 AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
                 options.getInt(
-                    AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0
+                    AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,
+                    0
                 )
             )
 
             val height = options.getInt(
                 AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT,
                 options.getInt(
-                    AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0
+                    AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT,
+                    0
                 )
             )
 
@@ -118,8 +128,10 @@ class PriceWidgetProvider : AppWidgetProvider() {
             }
 
             val views = RemoteViews(context.packageName, layout)
+
             val prefs = context.getSharedPreferences(
-                "priceyar", Context.MODE_PRIVATE
+                "priceyar",
+                Context.MODE_PRIVATE
             )
 
             views.setTextViewText(
@@ -128,15 +140,23 @@ class PriceWidgetProvider : AppWidgetProvider() {
                     ?: "PriceYar"
             )
 
-            val price = prefs.getString("widget_result_price", "") ?: ""
+            val price = prefs.getString(
+                "widget_result_price",
+                ""
+            ) ?: ""
+
             views.setTextViewText(
                 R.id.widget_result_price,
-                if (price.isBlank()) "" else "قیمت فروش: $price تومان"
+                if (price.isBlank()) {
+                    ""
+                } else {
+                    "قیمت فروش: $price تومان"
+                }
             )
 
-            // جست‌وجو از ویجت
             val searchIntent = Intent(
-                context, SearchActivity::class.java
+                context,
+                SearchActivity::class.java
             ).apply {
                 putExtra("opened_from_widget", true)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -149,12 +169,15 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
+
             views.setOnClickPendingIntent(
-                R.id.search_button, searchPending
+                R.id.search_button,
+                searchPending
             )
 
             val addIntent = Intent(
-                context, MainActivity::class.java
+                context,
+                MainActivity::class.java
             ).apply {
                 action = ACTION_ADD_PRODUCT
                 addFlags(
@@ -170,12 +193,15 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
+
             views.setOnClickPendingIntent(
-                R.id.add_button, addPending
+                R.id.add_button,
+                addPending
             )
 
             val ledgerIntent = Intent(
-                context, MainActivity::class.java
+                context,
+                MainActivity::class.java
             ).apply {
                 putExtra("openLedger", true)
                 addFlags(
@@ -191,12 +217,15 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
+
             views.setOnClickPendingIntent(
-                R.id.ledger_button, ledgerPending
+                R.id.ledger_button,
+                ledgerPending
             )
 
             val shareIntent = Intent(
-                context, MainActivity::class.java
+                context,
+                MainActivity::class.java
             ).apply {
                 action = ACTION_CHOOSE_SHARE_MODE
                 addFlags(
@@ -212,12 +241,15 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
+
             views.setOnClickPendingIntent(
-                R.id.share_button, sharePending
+                R.id.share_button,
+                sharePending
             )
 
             val infoIntent = Intent(
-                context, PriceWidgetProvider::class.java
+                context,
+                PriceWidgetProvider::class.java
             ).apply {
                 action = ACTION_TOGGLE_INFO
             }
@@ -229,17 +261,10 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
-            views.setOnClickPendingIntent(
-                R.id.info_button, infoPending
-            )
 
-            views.setTextViewText(
+            views.setOnClickPendingIntent(
                 R.id.info_button,
-                if (isInfoModeEnabled(context)) {
-                    "ℹ✓\nاطلاعات"
-                } else {
-                    "ℹ\nاطلاعات"
-                }
+                infoPending
             )
 
             manager.updateAppWidget(id, views)
