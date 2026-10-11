@@ -67,7 +67,10 @@ class PriceWidgetProvider : AppWidgetProvider() {
         fun updateWidget(context: Context) {
             val manager = AppWidgetManager.getInstance(context)
             val ids = manager.getAppWidgetIds(
-                ComponentName(context, PriceWidgetProvider::class.java)
+                ComponentName(
+                    context,
+                    PriceWidgetProvider::class.java
+                )
             )
 
             ids.forEach { update(context, manager, it) }
@@ -131,38 +134,68 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 Context.MODE_PRIVATE
             )
 
+            // رنگ دکمه اطلاعات بر اساس وضعیت واقعی
+            val infoEnabled = prefs.getBoolean(
+                "infoModeEnabled",
+                false
+            )
+
+            val infoBackground = if (infoEnabled) {
+                R.drawable.widget_circle_button_active
+            } else {
+                R.drawable.widget_circle_button
+            }
+
+            views.setInt(
+                R.id.info_button,
+                "setBackgroundResource",
+                infoBackground
+            )
+
             views.setTextViewText(
                 R.id.widget_result_name,
                 prefs.getString("widget_result_name", "PriceYar")
                     ?: "PriceYar"
             )
 
-            val price = prefs.getString("widget_result_price", "") ?: ""
+            val price = prefs.getString(
+                "widget_result_price",
+                ""
+            ) ?: ""
 
             views.setTextViewText(
                 R.id.widget_result_price,
-                if (price.isBlank()) "" else "قیمت فروش: $price تومان"
+                if (price.isBlank()) {
+                    ""
+                } else {
+                    "قیمت فروش: $price تومان"
+                }
             )
 
             val searchIntent = Intent(
-                context, SearchActivity::class.java
+                context,
+                SearchActivity::class.java
             ).apply {
                 putExtra("opened_from_widget", true)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
 
             val searchPending = PendingIntent.getActivity(
-                context, id + 10, searchIntent,
+                context,
+                id + 10,
+                searchIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
 
             views.setOnClickPendingIntent(
-                R.id.search_button, searchPending
+                R.id.search_button,
+                searchPending
             )
 
             val addIntent = Intent(
-                context, MainActivity::class.java
+                context,
+                MainActivity::class.java
             ).apply {
                 action = ACTION_ADD_PRODUCT
                 addFlags(
@@ -172,17 +205,21 @@ class PriceWidgetProvider : AppWidgetProvider() {
             }
 
             val addPending = PendingIntent.getActivity(
-                context, id + 20, addIntent,
+                context,
+                id + 20,
+                addIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
 
             views.setOnClickPendingIntent(
-                R.id.add_button, addPending
+                R.id.add_button,
+                addPending
             )
 
             val ledgerIntent = Intent(
-                context, MainActivity::class.java
+                context,
+                MainActivity::class.java
             ).apply {
                 putExtra("openLedger", true)
                 addFlags(
@@ -192,17 +229,21 @@ class PriceWidgetProvider : AppWidgetProvider() {
             }
 
             val ledgerPending = PendingIntent.getActivity(
-                context, id + 30, ledgerIntent,
+                context,
+                id + 30,
+                ledgerIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
 
             views.setOnClickPendingIntent(
-                R.id.ledger_button, ledgerPending
+                R.id.ledger_button,
+                ledgerPending
             )
 
             val shareIntent = Intent(
-                context, MainActivity::class.java
+                context,
+                MainActivity::class.java
             ).apply {
                 action = ACTION_CHOOSE_SHARE_MODE
                 addFlags(
@@ -212,29 +253,36 @@ class PriceWidgetProvider : AppWidgetProvider() {
             }
 
             val sharePending = PendingIntent.getActivity(
-                context, id + 40, shareIntent,
+                context,
+                id + 40,
+                shareIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
 
             views.setOnClickPendingIntent(
-                R.id.share_button, sharePending
+                R.id.share_button,
+                sharePending
             )
 
             val infoIntent = Intent(
-                context, PriceWidgetProvider::class.java
+                context,
+                PriceWidgetProvider::class.java
             ).apply {
                 action = ACTION_TOGGLE_INFO
             }
 
             val infoPending = PendingIntent.getBroadcast(
-                context, id + 50, infoIntent,
+                context,
+                id + 50,
+                infoIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or
                     PendingIntent.FLAG_IMMUTABLE
             )
 
             views.setOnClickPendingIntent(
-                R.id.info_button, infoPending
+                R.id.info_button,
+                infoPending
             )
 
             manager.updateAppWidget(id, views)
