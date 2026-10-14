@@ -238,6 +238,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         @JavascriptInterface
+        fun sharePriceListDirect(json: String, fileName: String, mode: String) {
+            runOnUiThread {
+                sharePriceListFile(
+                    json,
+                    fileName,
+                    if (mode == "seller") "ویژه فروشندگان" else "ویژه مدیریت"
+                )
+            }
+        }
+
+        @JavascriptInterface
         fun exportPriceList(json: String, fileName: String) {
             sharePriceList(json, fileName)
         }
