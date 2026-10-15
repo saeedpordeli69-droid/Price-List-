@@ -145,27 +145,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showShareModeDialogWithoutData() {
-        AlertDialog.Builder(this)
-            .setTitle("ارسال لیست قیمت")
-            .setItems(
-                arrayOf(
-                    "👤 ویژه فروشندگان",
-                    "🔐 ویژه مدیریت"
-                )
-            ) { _, which ->
-                when (which) {
-                    0 -> webView.evaluateJavascript(
-                        "window.AndroidBridge && window.AndroidBridge.requestShareMode && window.AndroidBridge.requestShareMode(\"seller\");",
-                        null
-                    )
-                    1 -> webView.evaluateJavascript(
-                        "window.AndroidBridge && window.AndroidBridge.requestShareMode && window.AndroidBridge.requestShareMode(\"management\");",
-                        null
-                    )
-                }
-            }
-            .setNegativeButton("انصراف", null)
-            .show()
+        // ویجت از همان منوی شیشه‌ای داخل index.html استفاده می‌کند.
+        // انتخاب هر گزینه از طریق exportPriceList و sharePriceListDirect انجام می‌شود.
+        webView.evaluateJavascript(
+            "window.openShareMenu && window.openShareMenu();",
+            null
+        )
     }
 
     private fun processPendingIncomingFile() {
