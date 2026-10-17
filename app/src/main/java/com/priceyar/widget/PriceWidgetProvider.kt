@@ -1,3 +1,4 @@
+
 package com.priceyar.widget
 
 import android.app.PendingIntent
@@ -172,6 +173,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 }
             )
 
+            // جست‌وجو
             val searchIntent = Intent(
                 context,
                 SearchActivity::class.java
@@ -193,6 +195,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 searchPending
             )
 
+            // افزودن کالا
             val addIntent = Intent(
                 context,
                 MainActivity::class.java
@@ -217,6 +220,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 addPending
             )
 
+            // دفتر حساب
             val ledgerIntent = Intent(
                 context,
                 MainActivity::class.java
@@ -241,15 +245,12 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 ledgerPending
             )
 
+            // ارسال لیست: بدون باز کردن MainActivity
             val shareIntent = Intent(
                 context,
-                MainActivity::class.java
+                WidgetShareActivity::class.java
             ).apply {
-                action = ACTION_CHOOSE_SHARE_MODE
-                addFlags(
-                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP
-                )
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
 
             val sharePending = PendingIntent.getActivity(
@@ -265,6 +266,7 @@ class PriceWidgetProvider : AppWidgetProvider() {
                 sharePending
             )
 
+            // روشن و خاموش کردن اطلاعات
             val infoIntent = Intent(
                 context,
                 PriceWidgetProvider::class.java
