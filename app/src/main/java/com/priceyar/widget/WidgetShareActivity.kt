@@ -1,4 +1,3 @@
-
 package com.priceyar.widget
 
 import android.app.Activity
